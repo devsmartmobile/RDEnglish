@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c8j-VH-Tps">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Edict View Controller-->
+        <scene sceneID="8ob-Xy-5sh">
+            <objects>
+                <viewController id="c8j-VH-Tps" customClass="EdictViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NqB-ty-NnD"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ebe-O8-F52"/>
+                    </layoutGuides>
+                    <view key="view" tag="-1000" contentMode="scaleToFill" id="Qwx-tQ-del">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" tag="-1001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="paper_background" translatesAutoresizingMaskIntoConstraints="NO" id="jap-IK-8sa">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="-1002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dI1-Zq-dqc" customClass="EdictTextView">
+                                <rect key="frame" x="0.0" y="20" width="375" height="586"/>
+                            </scrollView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="-1003" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4r-g3-g0l">
+                                <rect key="frame" x="0.0" y="20" width="375" height="586"/>
+                                <attributedString key="attributedText"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <dataDetectorType key="dataDetectorTypes" calendarEvent="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="c8j-VH-Tps" id="WJY-Gf-1lw"/>
+                                </connections>
+                            </textView>
+                            <textField opaque="NO" clipsSubviews="YES" tag="-1004" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Search English" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fIB-LG-aT9">
+                                <rect key="frame" x="0.0" y="605" width="375" height="62"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="62" id="qCD-2E-ymV"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="c8j-VH-Tps" id="MYY-Cq-b4Q"/>
+                                </connections>
+                            </textField>
+                            <view tag="-1005" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bqq-Zd-8bM" customClass="GADBannerView">
+                                <rect key="frame" x="0.0" y="20" width="375" height="61"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="61" id="tCx-xy-5xL"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" tag="-1006" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1dY-ua-Z6P">
+                                <rect key="frame" x="311" y="81" width="64" height="64"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="64" id="2OO-Yh-XA8"/>
+                                    <constraint firstAttribute="height" constant="64" id="Ph8-d4-RyF"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="Switch"/>
+                                <connections>
+                                    <action selector="didPressOnPhonetic:" destination="c8j-VH-Tps" eventType="touchUpInside" id="J7G-3c-EZU"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="jap-IK-8sa" secondAttribute="bottom" id="1N4-TQ-ycV"/>
+                            <constraint firstAttribute="trailing" secondItem="jap-IK-8sa" secondAttribute="trailing" id="5G5-5g-I73"/>
+                            <constraint firstItem="jap-IK-8sa" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="9Uk-tP-gsi"/>
+                            <constraint firstAttribute="trailing" secondItem="Bqq-Zd-8bM" secondAttribute="trailing" id="9fb-sb-iOY"/>
+                            <constraint firstItem="Bqq-Zd-8bM" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="AFB-dy-P87"/>
+                            <constraint firstAttribute="trailing" secondItem="dI1-Zq-dqc" secondAttribute="trailing" id="Bhh-Cc-Oev"/>
+                            <constraint firstAttribute="trailing" secondItem="fIB-LG-aT9" secondAttribute="trailing" id="CZt-GK-HlA"/>
+                            <constraint firstItem="l4r-g3-g0l" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="EzU-mi-NHo"/>
+                            <constraint firstAttribute="trailing" secondItem="1dY-ua-Z6P" secondAttribute="trailing" id="Gvw-5h-t93"/>
+                            <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="fIB-LG-aT9" secondAttribute="bottom" id="H4H-Et-NgA"/>
+                            <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="dI1-Zq-dqc" secondAttribute="bottom" constant="61" id="N5l-7e-2tp"/>
+                            <constraint firstAttribute="trailing" secondItem="l4r-g3-g0l" secondAttribute="trailing" id="ReQ-af-mwD"/>
+                            <constraint firstItem="l4r-g3-g0l" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="YjY-b9-YGS"/>
+                            <constraint firstItem="dI1-Zq-dqc" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="d8U-aR-Cld"/>
+                            <constraint firstItem="1dY-ua-Z6P" firstAttribute="top" secondItem="Bqq-Zd-8bM" secondAttribute="bottom" id="edi-b9-e1N"/>
+                            <constraint firstItem="Bqq-Zd-8bM" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="hZM-RM-smh"/>
+                            <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="l4r-g3-g0l" secondAttribute="bottom" constant="61" id="ikT-yJ-aya"/>
+                            <constraint firstItem="fIB-LG-aT9" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="p9e-wH-cFy"/>
+                            <constraint firstItem="jap-IK-8sa" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="sDQ-MH-b9H"/>
+                            <constraint firstItem="dI1-Zq-dqc" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="vtb-ZD-5eN"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="banerView" destination="Bqq-Zd-8bM" id="vOJ-b5-om9"/>
+                        <outlet property="bottomConstraintSearchEnglish" destination="H4H-Et-NgA" id="TCx-dB-Us5"/>
+                        <outlet property="bottomConstraintTextInput" destination="ikT-yJ-aya" id="VCp-C0-GA4"/>
+                        <outlet property="bottomSpaceSearchText" destination="N5l-7e-2tp" id="23p-Y8-eh3"/>
+                        <outlet property="scrollText" destination="dI1-Zq-dqc" id="XoJ-b9-a5f"/>
+                        <outlet property="searchText" destination="fIB-LG-aT9" id="xo8-ij-rer"/>
+                        <outlet property="textViewInput" destination="l4r-g3-g0l" id="sbW-Tg-Fyk"/>
+                        <outlet property="topConstraintButtonSwitch" destination="edi-b9-e1N" id="jvB-2o-eQZ"/>
+                        <outlet property="topConstraintScrollText" destination="vtb-ZD-5eN" id="gQw-11-4ux"/>
+                        <outlet property="topConstraintTextViewInput" destination="EzU-mi-NHo" id="zXT-An-VT6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1jO-B0-Qyy" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="749.27536231884062" y="-321.19565217391306"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Switch" width="128" height="128"/>
+        <image name="paper_background" width="1000" height="1000"/>
+    </resources>
+</document>
