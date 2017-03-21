@@ -36,6 +36,7 @@
 }
 @property (weak, nonatomic) IBOutlet UIButton *buttonPhonetic;
 @property (copy , nonatomic)NSString *textBuffer;
+@property (assign , nonatomic)NSUInteger fontSizeBuffer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintButtonSwitch;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintTextViewInput;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintScrollText;
@@ -122,6 +123,7 @@
 #pragma mark - handle view of viewcontroller
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
     //setup swip left and right
     UISwipeGestureRecognizer *swipRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showWordView:)];
     swipRight.direction = UISwipeGestureRecognizerDirectionRight;
@@ -310,7 +312,7 @@
         [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"Phonetic"] forState:UIControlStateNormal];
     }else
     {
-        if (![self.textViewInput.text isEqualToString:self.textBuffer]) {
+        if (![self.textViewInput.text isEqualToString:self.textBuffer] || [RDConstant sharedRDConstant].fontSizeView !=self.fontSizeBuffer) {
             [self setupPhoneticWordForText:self.textViewInput.text];
         }else
         {
@@ -421,6 +423,7 @@
     if (!self.scrollText.isHidden) {
         [self setupPhoneticWordForText:self.textViewInput.text];
     }
+
 }
 
 
@@ -758,6 +761,7 @@
             self.textViewInput.hidden = YES;
             self.scrollText.hidden = NO;
             self.textBuffer = text;
+            self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
             [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
 
         });

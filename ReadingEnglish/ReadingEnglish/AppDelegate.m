@@ -18,7 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [RDConstant sharedRDConstant].fontSizeView = 16;
+    [RDConstant sharedRDConstant].fontSizeView = 15;
     // Override point for customization after application launch.
     // Use Firebase library to configure APIs
     [FIRApp configure];
