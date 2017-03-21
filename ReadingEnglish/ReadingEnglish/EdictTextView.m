@@ -133,7 +133,7 @@
         }else
         {
         line_break:
-            xOriginal= 10.0f;
+            xOriginal= 3.0f;
             yOriginal +=maxHeight - 5.f;
             textToPrint.totalHeight = yOriginal;
             maxWidth = 0.0f;
