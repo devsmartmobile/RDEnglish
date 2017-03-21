@@ -66,11 +66,11 @@
 }
 -(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withTag:(NSInteger)tag
 {
-    UIFont *fontForlable = [UIFont fontWithName:_fontName size:_fontSize];
+    UIFont *fontForlable = [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView];
     // get frame size for key string
-    CGSize sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:_fontSize] }];
+    CGSize sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
     // get frame size for value string
-    CGSize sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:_fontSize] }];
+    CGSize sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
     
     maxWidth =MAX(sizeKey.width,sizePhonetic.width);
     maxHeight = MAX(maxHeight, sizePhonetic.height+sizeKey.height);
@@ -81,7 +81,7 @@
     labelPhonetic.font = fontForlable;
     UIFontDescriptor * fontD = [labelPhonetic.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
-    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:_fontSize-2];
+    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView-2];
     labelPhonetic.text = phonetic;
     //            rgb(192, 57, 43)
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
@@ -170,11 +170,11 @@
 }
 -(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withTextView:(EdictTextView*)textview withTag:(NSInteger)tag
 {
-    UIFont *fontForlable = [UIFont fontWithName:_fontName size:_fontSize];
+    UIFont *fontForlable = [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView];
     // get frame size for key string
-    CGSize sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:_fontSize] }];
+    CGSize sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
     // get frame size for value string
-    CGSize sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:_fontSize] }];
+    CGSize sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
     
     maxWidth =MAX(sizeKey.width,sizePhonetic.width);
     maxHeight = MAX(maxHeight, sizePhonetic.height+sizeKey.height);
@@ -186,7 +186,7 @@
     labelPhonetic.font = fontForlable;
     UIFontDescriptor * fontD = [labelPhonetic.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
-    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:_fontSize-2];
+    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView-2];
     labelPhonetic.text = phonetic;
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
     labelPhonetic.frame = CGRectMake(xOriginal, yOriginal, sizePhonetic.width, sizePhonetic.height);

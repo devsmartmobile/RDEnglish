@@ -17,7 +17,7 @@
 
 #define debug 1
 
-@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate>
+@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate>
 {
     BOOL isShowPhonetic;
     BOOL isLoadPhonetic;
@@ -149,7 +149,7 @@
     [self.banerView loadRequest:request];
 
     // Do any additional setup after loading the view.
-    self.textViewInput.font = [UIFont fontWithName:[UtilsXML utilXMLInstance].fontNames[0] size:18];
+    self.textViewInput.font = [UIFont fontWithName:[UtilsXML utilXMLInstance].fontNames[0] size:[RDConstant sharedRDConstant].fontSizeView];
     self.textViewInput.delegate = self;
     self.textViewInput.userInteractionEnabled = YES;
     self.scrollText.hidden= YES;
@@ -216,7 +216,10 @@
 - (IBAction)didPressOnPrint:(id)sender {
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
-    
+    if (self.scrollText.isHidden) {
+        
+        return ;
+    }
     if ([UIPrintInteractionController isPrintingAvailable])
     {
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -274,6 +277,7 @@
     
     synthesizer = [[AVSpeechSynthesizer alloc]init];
     utterance = [AVSpeechUtterance speechUtteranceWithString:self.textViewInput.text];
+    synthesizer.delegate = self;
     utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-us"];
     [utterance setRate:0.4f];
     [synthesizer speakUtterance:utterance];
@@ -296,6 +300,7 @@
     [stack closeStack];
     [KxMenu dismissMenu];
     if ([self.textViewInput.text isEqualToString:@""]) {
+        [self.textViewInput becomeFirstResponder];
         return;
     }
     if (isShowPhonetic) {
@@ -324,6 +329,7 @@
 {
     [stack closeStack];
     [KxMenu dismissMenu];
+    [self openCamera:nil];
 
 }
 - (IBAction)didPressOnSearch:(id)sender {
@@ -335,7 +341,7 @@
 {
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
-    [self showMenu:nil];
+    [self showMenuForSetting];
 }
 
 #pragma mark - handle stactk menu of viewcontroller
@@ -352,7 +358,7 @@
     speaker_on = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"audio_play"] highlightedImage:nil title:@""];
     print = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"paper_printer"] highlightedImage:nil title:@""];
     settingItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"settings"] highlightedImage:nil title:@""];
-    save = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"save"] highlightedImage:nil title:@""];
+    save = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"take-picture"] highlightedImage:nil title:@""];
 
     NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem,save, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
@@ -407,9 +413,14 @@
 {
 }
 
-- (void) pushMenuItem:(id)sender
+- (void)pushMenuItemSetting:(id)sender
 {
-    NSLog(@"%@", sender);
+    KxMenuItem *menu= (KxMenuItem*)sender;
+    [RDConstant sharedRDConstant].fontSizeView = menu.fontSize;
+    self.textViewInput.font = [UIFont systemFontOfSize:menu.fontSize];
+    if (!self.scrollText.isHidden) {
+        [self setupPhoneticWordForText:self.textViewInput.text];
+    }
 }
 
 
@@ -448,9 +459,6 @@
 }
 - (void)stackMenu:(UPStackMenu *)menu didTouchItem:(UPStackMenuItem *)item atIndex:(NSUInteger)index
 {
-    if ([self.textViewInput.text isEqualToString:@""]) {
-        return;
-    }
     [stack closeStack];
     switch (index) {
 //        case 0:
@@ -544,28 +552,28 @@
       
       [KxMenuItem menuItem:@"Share this"
                      image:[UIImage imageNamed:@"action_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
+                    target:nil
+                    action:NULL],
       
       [KxMenuItem menuItem:@"Check this menu"
                      image:nil
-                    target:self
-                    action:@selector(pushMenuItem:)],
+                    target:nil
+                    action:NULL],
       
       [KxMenuItem menuItem:@"Reload page"
                      image:[UIImage imageNamed:@"reload"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
+                    target:nil
+                    action:NULL],
       
       [KxMenuItem menuItem:@"Search"
                      image:[UIImage imageNamed:@"search_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
+                    target:nil
+                    action:NULL],
       
       [KxMenuItem menuItem:@"Go home"
                      image:[UIImage imageNamed:@"home_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
+                    target:nil
+                    action:NULL],
       ];
     
     KxMenuItem *first = menuItems[0];
@@ -583,6 +591,64 @@
     [KxMenu showMenuInView:self.textViewInput
                   fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
                  menuItems:menuItems];
+}
+- (void)showMenuForSetting
+{
+    NSArray *menuItems =
+    @[
+      
+      [KxMenuItem menuItem:@"Choose font size for view"
+                     image:nil
+                    target:nil
+                    action:NULL],
+      
+      [KxMenuItem menuItem:@"font size 14"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSetting:)],
+      
+      [KxMenuItem menuItem:@"font size 15"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItemSetting:)],
+      
+      [KxMenuItem menuItem:@"font size 16"
+                     image:[UIImage imageNamed:@"reload"]
+                    target:self
+                    action:@selector(pushMenuItemSetting:)],
+      
+      [KxMenuItem menuItem:@"font size 17"
+                     image:[UIImage imageNamed:@"search_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSetting:)],
+      
+      [KxMenuItem menuItem:@"font size 18"
+                     image:[UIImage imageNamed:@"home_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSetting:)],
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.fontSize = 15;
+    KxMenuItem *two = menuItems[1];
+    two.fontSize = 14;
+    KxMenuItem *three = menuItems[2];
+    three.fontSize = 15;
+    KxMenuItem *four = menuItems[3];
+    four.fontSize = 16;
+    KxMenuItem *five = menuItems[4];
+    five.fontSize = 17;
+    KxMenuItem *six = menuItems[5];
+    six.fontSize = 18;
+
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentCenter;
+    [KxMenu sharedMenu].htmlString = nil;
+    [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
+    [KxMenu sharedMenu].textAudio = nil;
+    [KxMenu showMenuInView:self.view
+                      fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
+                     menuItems:menuItems];
 }
 
 #pragma mark - handle Func Common of viewcontroller
@@ -659,16 +725,33 @@
 
     }else
     {
-        [self recognizeImageWithTesseract:[UIImage imageWithContentsOfFile:[(NSURL*)userInfor.object absoluteString]]];
+        UIImage *img =[UIImage imageWithContentsOfFile:[(NSURL*)userInfor.object absoluteString]];
+        
+        if (!img) {
+            NSData *dataimg2 = [NSData dataWithContentsOfURL:[NSURL URLWithString:[(NSURL*)userInfor.object absoluteString]]];
+            img = [UIImage imageWithData:dataimg2];
+        }
+
+        if (img) {
+            [self recognizeImageWithTesseract:img WithData:nil];
+
+        }
+//        else
+//        {
+////            NSString *PDFPath = [[NSBundle mainBundle] pathForResource:[(NSURL*)userInfor.object absoluteString] ofType:@"pdf"];
+////            NSData *dataimg2 = [NSData dataWithContentsOfURL:[NSURL URLWithString:[(NSURL*)userInfor.object absoluteString]]];
+//
+//        }
 
     }
 
 }
 #pragma mark - handle Func OCR of viewcontroller
 
--(void)recognizeImageWithTesseract:(UIImage *)image
+-(void)recognizeImageWithTesseract:(UIImage *)image WithData:(NSData*)pdfData
 {
-    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
     // Create a new `G8RecognitionOperation` to perform the OCR asynchronously
     // It is assumed that there is a .traineddata file for the language pack
     // you want Tesseract to use in the "tessdata" folder in the root of the
@@ -697,15 +780,26 @@
     // Optionally limit the region in the image on which Tesseract should
     // perform recognition to a rectangle
     //operation.tesseract.rect = CGRectMake(20, 20, 100, 100);
-    
+    operation.tesseract.image = image;
     // Specify the function block that should be executed when Tesseract
     // finishes performing recognition on the image
     operation.recognitionCompleteBlock = ^(G8Tesseract *tesseract) {
         // Fetch the recognized text
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSString *recognizedText = tesseract.recognizedText;
-        
-        [self setupPhoneticWordForText:recognizedText];
-        
+        if (recognizedText) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.textViewInput.text = nil;
+                self.textViewInput.text = recognizedText;
+                if (isShowPhonetic) {
+                    self.textViewInput.hidden = NO;
+                    self.scrollText.hidden = YES;
+                    [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"Phonetic"] forState:UIControlStateNormal];
+                    isShowPhonetic = NO;
+                }
+            });
+        }
         
     };
     
@@ -764,7 +858,15 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     [picker dismissViewControllerAnimated:YES completion:nil];
-    [self recognizeImageWithTesseract:image];
+    [self recognizeImageWithTesseract:image WithData:nil];
+}
+#pragma mark - handle audio speak text
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
+    isPlayAudio = NO;
+
 }
 
 @end

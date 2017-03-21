@@ -328,7 +328,7 @@ typedef enum {
              menuItems:(NSArray *)menuItems
 {
     _menuItems = menuItems;
-    _contentView = [self mkContentView];
+    _contentView = [self mkContentViewForDictionary];
     UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectMake(_contentView.bounds.origin.x + 10.0f, _contentView.bounds.origin.y + 10.0f, _contentView.bounds.size.width - 20.0f, _contentView.bounds.size.height - 20.0f)];
     [webV.layer setCornerRadius:0.6];
     [webV loadHTMLString:[KxMenu  sharedMenu].htmlString baseURL:[[NSBundle mainBundle] bundleURL]];
@@ -365,6 +365,35 @@ typedef enum {
                      }];
     [_contentView bringSubviewToFront:webV];
 
+}
+- (void)showMenuInViewForDictionary:(UIView *)view
+              fromRect:(CGRect)rect
+             menuItems:(NSArray *)menuItems
+{
+    _menuItems = menuItems;
+    _contentView = [self mkContentView];
+    [self addSubview:_contentView];
+    
+    [self setupFrameInView:view fromRect:rect];
+    
+    KxMenuOverlay *overlay = [[KxMenuOverlay alloc] initWithFrame:view.bounds];
+    [overlay addSubview:self];
+    [view addSubview:overlay];
+    
+    _contentView.hidden = YES;
+    const CGRect toFrame = self.frame;
+    self.frame = (CGRect){self.arrowPoint, 1, 1};
+    
+    [UIView animateWithDuration:0.2
+                     animations:^(void) {
+                         
+                         self.alpha = 1.0f;
+                         self.frame = toFrame;
+                         
+                     } completion:^(BOOL completed) {
+                         _contentView.hidden = NO;
+                     }];
+    
 }
 
 - (void)dismissMenu:(BOOL) animated
@@ -437,7 +466,7 @@ typedef enum {
     
     for (KxMenuItem *menuItem in _menuItems) {
 
-        const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+        const CGSize titleSize = [menuItem.title sizeWithFont:[UIFont boldSystemFontOfSize:menuItem.fontSize]];
         const CGSize imageSize = menuItem.image.size;
 
         const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + kMarginY * 2;
@@ -523,7 +552,7 @@ typedef enum {
             
             UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleFrame];
             titleLabel.text = menuItem.title;
-            titleLabel.font = titleFont;
+            titleLabel.font = [UIFont boldSystemFontOfSize:menuItem.fontSize];
             titleLabel.textAlignment = menuItem.alignment;
             titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor whiteColor];
             titleLabel.backgroundColor = [UIColor clearColor];
@@ -556,6 +585,160 @@ typedef enum {
         itemY += maxItemHeight;
         ++itemNum;
     }    
+    
+    contentView.frame = (CGRect){0, 0, maxItemWidth, itemY + kMarginY * 2};
+    
+    return contentView;
+}
+- (UIView *) mkContentViewForDictionary
+{
+    for (UIView *v in self.subviews) {
+        [v removeFromSuperview];
+    }
+    
+    if (!_menuItems.count)
+        return nil;
+    
+    const CGFloat kMinMenuItemHeight = 32.f;
+    const CGFloat kMinMenuItemWidth = 32.f;
+    const CGFloat kMarginX = 10.f;
+    const CGFloat kMarginY = 5.f;
+    
+    UIFont *titleFont = [KxMenu titleFont];
+    if (!titleFont) titleFont = [UIFont boldSystemFontOfSize:16];
+    
+    CGFloat maxImageWidth = 0;
+    CGFloat maxItemHeight = 0;
+    CGFloat maxItemWidth = 0;
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        
+        const CGSize imageSize = menuItem.image.size;
+        if (imageSize.width > maxImageWidth)
+            maxImageWidth = imageSize.width;
+    }
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        
+        const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+        const CGSize imageSize = menuItem.image.size;
+        
+        const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + kMarginY * 2;
+        const CGFloat itemWidth = (menuItem.image ? maxImageWidth + kMarginX : 0) + titleSize.width + kMarginX * 4;
+        
+        if (itemHeight > maxItemHeight)
+            maxItemHeight = itemHeight;
+        
+        if (itemWidth > maxItemWidth)
+            maxItemWidth = itemWidth;
+    }
+    
+    maxItemWidth  = MAX(maxItemWidth, kMinMenuItemWidth);
+    maxItemHeight = MAX(maxItemHeight, kMinMenuItemHeight);
+    
+    const CGFloat titleX = kMarginX * 2 + (maxImageWidth > 0 ? maxImageWidth + kMarginX : 0);
+    const CGFloat titleWidth = maxItemWidth - titleX - kMarginX;
+    
+    UIImage *selectedImage = [KxMenuView selectedImage:(CGSize){maxItemWidth, maxItemHeight + 2}];
+    UIImage *gradientLine = [KxMenuView gradientLine: (CGSize){maxItemWidth - kMarginX * 4, 1}];
+    
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectZero];
+    contentView.autoresizingMask = UIViewAutoresizingNone;
+    contentView.backgroundColor = [UIColor clearColor];
+    contentView.opaque = NO;
+    
+    CGFloat itemY = kMarginY * 2;
+    NSUInteger itemNum = 0;
+    
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        
+        const CGRect itemFrame = (CGRect){0, itemY, maxItemWidth, maxItemHeight};
+        
+        UIView *itemView = [[UIView alloc] initWithFrame:itemFrame];
+        itemView.autoresizingMask = UIViewAutoresizingNone;
+        itemView.backgroundColor = [UIColor clearColor];
+        itemView.opaque = NO;
+        
+        [contentView addSubview:itemView];
+        
+        if (menuItem.enabled) {
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.tag = itemNum;
+            button.frame = itemView.bounds;
+            button.enabled = menuItem.enabled;
+            button.backgroundColor = [UIColor clearColor];
+            button.opaque = NO;
+            button.autoresizingMask = UIViewAutoresizingNone;
+            
+            [button addTarget:self
+                       action:@selector(performAction:)
+             forControlEvents:UIControlEventTouchUpInside];
+            
+            [button setBackgroundImage:selectedImage forState:UIControlStateHighlighted];
+            
+            [itemView addSubview:button];
+        }
+        
+        if (menuItem.title.length) {
+            
+            CGRect titleFrame;
+            
+            if (!menuItem.enabled && !menuItem.image) {
+                
+                titleFrame = (CGRect){
+                    kMarginX * 2,
+                    kMarginY,
+                    maxItemWidth - kMarginX * 4,
+                    maxItemHeight - kMarginY * 2
+                };
+                
+            } else {
+                
+                titleFrame = (CGRect){
+                    titleX,
+                    kMarginY,
+                    titleWidth,
+                    maxItemHeight - kMarginY * 2
+                };
+            }
+            
+            UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleFrame];
+            titleLabel.text = menuItem.title;
+            titleLabel.font = titleFont;
+            titleLabel.textAlignment = menuItem.alignment;
+            titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor whiteColor];
+            titleLabel.backgroundColor = [UIColor clearColor];
+            titleLabel.autoresizingMask = UIViewAutoresizingNone;
+            //titleLabel.backgroundColor = [UIColor greenColor];
+            [itemView addSubview:titleLabel];
+        }
+        
+        if (menuItem.image) {
+            
+            const CGRect imageFrame = {kMarginX * 2, kMarginY, maxImageWidth, maxItemHeight - kMarginY * 2};
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.image = menuItem.image;
+            imageView.clipsToBounds = YES;
+            imageView.contentMode = UIViewContentModeCenter;
+            imageView.autoresizingMask = UIViewAutoresizingNone;
+            [itemView addSubview:imageView];
+        }
+        
+        if (itemNum < _menuItems.count - 1) {
+            
+            UIImageView *gradientView = [[UIImageView alloc] initWithImage:gradientLine];
+            gradientView.frame = (CGRect){kMarginX * 2, maxItemHeight + 1, gradientLine.size};
+            gradientView.contentMode = UIViewContentModeLeft;
+            [itemView addSubview:gradientView];
+            
+            itemY += 2;
+        }
+        
+        itemY += maxItemHeight;
+        ++itemNum;
+    }
     
     contentView.frame = (CGRect){0, 0, maxItemWidth, itemY + kMarginY * 2};
     
@@ -850,6 +1033,33 @@ static UIFont *gTitleFont;
     _menuView = [[KxMenuView alloc] init];
     [_menuView showMenuInView:view fromRect:rect menuItems:menuItems];    
 }
+- (void) showMenuInViewForDictionary:(UIView *)view
+               fromRect:(CGRect)rect
+              menuItems:(NSArray *)menuItems
+{
+    NSParameterAssert(view);
+    NSParameterAssert(menuItems.count);
+    
+    if (_menuView) {
+        
+        [_menuView dismissMenu:NO];
+        _menuView = nil;
+    }
+    
+    if (!_observing) {
+        
+        _observing = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(orientationWillChange:)
+                                                     name:UIApplicationWillChangeStatusBarOrientationNotification
+                                                   object:nil];
+    }
+    
+    
+    _menuView = [[KxMenuView alloc] init];
+    [_menuView showMenuInViewForDictionary:view fromRect:rect menuItems:menuItems];
+}
 
 - (void) dismissMenu
 {
@@ -875,7 +1085,14 @@ static UIFont *gTitleFont;
                fromRect:(CGRect)rect
               menuItems:(NSArray *)menuItems
 {
-    [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems];
+    KxMenu *menu = (KxMenu*)[self sharedMenu];
+    if (menu.typeSHow == MENU_TYPE_SHOWING_DETAIL_DICTIONARY) {
+        [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems];
+    }else
+    {
+        [[self sharedMenu] showMenuInViewForDictionary:view fromRect:rect menuItems:menuItems];
+
+    }
 }
 
 + (void) dismissMenu

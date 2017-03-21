@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "RDConstant.h"
 @import Firebase;
 
 @interface AppDelegate ()
@@ -17,6 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [RDConstant sharedRDConstant].fontSizeView = 16;
     // Override point for customization after application launch.
     // Use Firebase library to configure APIs
     [FIRApp configure];

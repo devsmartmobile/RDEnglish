@@ -47,6 +47,8 @@ typedef enum : NSUInteger {
 @property (readwrite, nonatomic) SEL action;
 @property (readwrite, nonatomic, strong) UIColor *foreColor;
 @property (readwrite, nonatomic) NSTextAlignment alignment;
+@property (readwrite, nonatomic) UISlider *slider;
+@property (assign, nonatomic) NSUInteger fontSize;
 
 + (instancetype) menuItem:(NSString *) title
                     image:(UIImage *) image
@@ -62,7 +64,6 @@ typedef enum : NSUInteger {
 + (void) showMenuInView:(UIView *)view
                fromRect:(CGRect)rect
               menuItems:(NSArray *)menuItems;
-
 + (void) dismissMenu;
 
 + (UIColor *) tintColor;
