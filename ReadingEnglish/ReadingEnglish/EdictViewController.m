@@ -550,32 +550,103 @@
                     target:nil
                     action:NULL],
       
-      [KxMenuItem menuItem:@"Share this"
-                     image:[UIImage imageNamed:@"action_icon"]
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"Check this menu"
+      [KxMenuItem menuItem:@"ACTION MENU 1234456"
                      image:nil
                     target:nil
                     action:NULL],
       
-      [KxMenuItem menuItem:@"Reload page"
-                     image:[UIImage imageNamed:@"reload"]
+      [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                     image:nil
                     target:nil
                     action:NULL],
       
-      [KxMenuItem menuItem:@"Search"
-                     image:[UIImage imageNamed:@"search_icon"]
+      [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                     image:nil
                     target:nil
                     action:NULL],
       
-      [KxMenuItem menuItem:@"Go home"
-                     image:[UIImage imageNamed:@"home_icon"]
+      [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                     image:nil
+                    target:nil
+                    action:NULL],
+      
+      [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                     image:nil
                     target:nil
                     action:NULL],
       ];
-    
+    if (self.view.frame.size.height > 736) {
+        menuItems =
+        @[
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456 1234456 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL]
+          
+          ];
+        
+    }
+    if (self.view.frame.size.height <586) {
+        menuItems =
+        @[
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456 "
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                         image:nil
+                        target:nil
+                        action:NULL],
+          
+          ];
+
+    }
     KxMenuItem *first = menuItems[0];
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentCenter;
