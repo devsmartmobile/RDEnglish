@@ -265,15 +265,13 @@
 }
 -(UIImage*)getImageFromView:(EdictTextView*)view
 {
-       view.hidden = YES;
-    UIImageView *imageview = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 598, 842)];
-    UIImage * imageRenderbackground = [UIImage imageNamed:@"paper_background"];
-    imageview.image =imageRenderbackground;
-    imageview.contentMode = UIViewContentModeScaleToFill;
+    view.hidden = YES;
+    UIView * imageRenderbackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 598, 842)];
+    imageRenderbackground.backgroundColor = [UIColor whiteColor];
     
         UIGraphicsBeginImageContextWithOptions(CGSizeMake(598, 842), view.opaque, 0.0);
         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-        [imageview.layer renderInContext:UIGraphicsGetCurrentContext()];
+        [imageRenderbackground.layer renderInContext:UIGraphicsGetCurrentContext()];
         for (UILabel *label in view.subviews) {
 //            [label  drawViewHierarchyInRect:label.frame afterScreenUpdates:YES];
 //            [label.layer drawInContext:UIGraphicsGetCurrentContext()];

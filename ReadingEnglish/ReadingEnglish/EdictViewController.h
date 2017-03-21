@@ -11,7 +11,9 @@
 #import "EdictDatabase.h"
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
+#import <TesseractOCR/TesseractOCR.h>
 
-@interface EdictViewController : UIViewController <UITextViewDelegate>
+@interface EdictViewController : UIViewController <UITextViewDelegate,G8TesseractDelegate,
+UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *textViewInput;
 @end

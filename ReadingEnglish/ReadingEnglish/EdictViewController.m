@@ -12,11 +12,12 @@
 #import "MBProgressHUD.h"
 #import "UPStackMenu.h"
 #import "KxMenu.h"
+
 @import GoogleMobileAds;
 
 #define debug 1
 
-@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate>
+@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate>
 {
     BOOL isShowPhonetic;
     BOOL isLoadPhonetic;
@@ -29,8 +30,12 @@
     UPStackMenuItem *speaker_on;
     UPStackMenuItem *speaker_off;
     UPStackMenuItem *print;
+    UPStackMenuItem *save;
+    CGRect keyboardFrameBeginRect;
 
 }
+@property (weak, nonatomic) IBOutlet UIButton *buttonPhonetic;
+@property (copy , nonatomic)NSString *textBuffer;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintButtonSwitch;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintTextViewInput;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintScrollText;
@@ -45,8 +50,12 @@
 - (IBAction)didPressOnPhonetic:(id)sender;
 - (IBAction)didPressOnSearch:(id)sender;
 - (IBAction)didPressOnSetting:(id)sender;
+- (IBAction)openCamera:(id)sender;
+- (IBAction)recognizeSampleImage:(id)sender;
+
 @property (weak, nonatomic) IBOutlet UIButton *btPhoneticWord;
 @property (weak, nonatomic) IBOutlet EdictTextView *scrollText;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
@@ -61,7 +70,7 @@
     // Do something here
     NSDictionary* keyboardInfo = [notif userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
     [UIView animateWithDuration:0.1 animations:^{
         if (self.bottomSpaceSearchText.constant == 61) {
             self.bottomSpaceSearchText.constant = keyboardFrameBeginRect.size.height +self.bottomSpaceSearchText.constant ;
@@ -78,15 +87,23 @@
         self.topConstraintScrollText.constant = 0.f;
         self.topConstraintTextViewInput.constant = 0.f;
         self.banerView.hidden = YES;
-        self.topConstraintButtonSwitch.constant = - self.banerView.frame.size.height;
+        self.topConstraintButtonSwitch.constant = - (self.banerView.frame.size.height - 9);
 
     }];
+}
+-(void)hiddenKeyBoard:(UISwipeGestureRecognizer*)sender
+{
+    [self.textViewInput resignFirstResponder];
+    [self.searchText resignFirstResponder];
+    [stack closeStack];
+    [KxMenu dismissMenu];
+    
 }
 - (void)keyboardDidHide: (NSNotification *) notif{
     // Do something here
     NSDictionary* keyboardInfo = [notif userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
+    keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
 
     [UIView animateWithDuration:0.1 animations:^{
         self.bottomSpaceSearchText.constant = self.bottomSpaceSearchText.constant - keyboardFrameBeginRect.size.height;
@@ -96,7 +113,7 @@
         self.topConstraintScrollText.constant = self.banerView.frame.size.height;
         self.topConstraintTextViewInput.constant = self.banerView.frame.size.height;
         self.banerView.hidden = NO;
-        self.topConstraintButtonSwitch.constant = 0.0;
+        self.topConstraintButtonSwitch.constant = 9.0f;
     }];
     
     
@@ -113,6 +130,10 @@
     [self.textViewInput addGestureRecognizer:swipLeft];
     [self.scrollText addGestureRecognizer:swipRight];
 
+    UISwipeGestureRecognizer *swipDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(hiddenKeyBoard:)];
+    swipDown.direction = UISwipeGestureRecognizerDirectionDown;
+    [self.view addGestureRecognizer:swipDown];
+    self.view.userInteractionEnabled = YES;
     //setup gogle Admod
     // Replace this ad unit ID with your own ad unit ID.
     self.banerView.adUnitID = @"ca-app-pub-6290218846561932/6053256005";
@@ -131,7 +152,6 @@
     self.textViewInput.font = [UIFont fontWithName:[UtilsXML utilXMLInstance].fontNames[0] size:18];
     self.textViewInput.delegate = self;
     self.textViewInput.userInteractionEnabled = YES;
-    self.textViewInput.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.scrollText.hidden= YES;
     isShowPhonetic = NO;
     isLoadPhonetic = NO;
@@ -154,19 +174,25 @@
 
     //setting content stack
 //    rgb(127, 140, 141)
-    contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-    UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Add_icon"]];
-    [contentView setBackgroundColor:[UIColor colorWithRed:127/255. green:140/255. blue:141/255. alpha:1.]];
+    contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
+    UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"circle-add"]];
+//    [contentView setBackgroundColor:[UIColor colorWithRed:127/255. green:140/255. blue:141/255. alpha:1.]];
+    [contentView setBackgroundColor:[UIColor clearColor]];
+
     [contentView.layer setCornerRadius:30];
-    [icon setContentMode:UIViewContentModeScaleAspectFit];
-    [icon setFrame:CGRectInset(contentView.frame, 10, 10)];
+    [icon setContentMode:UIViewContentModeScaleToFill];
+    [icon setFrame:CGRectInset(contentView.frame, 0, 0)];
     [contentView addSubview:icon];
     [self setupStackMenu:0];
     
 //    [[UITextView appearance] setTintColor:[UIColor blackColor]];
 //    [[UITextField appearance] setTintColor:[UIColor blackColor]];
     self.banerView.hidden = YES;
-    self.topConstraintButtonSwitch.constant = - self.banerView.frame.size.height;
+    self.topConstraintButtonSwitch.constant = - (self.banerView.frame.size.height -9);
+    //
+    // Create a queue to perform recognition operations
+    self.operationQueue = [[NSOperationQueue alloc] init];
+
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -234,12 +260,15 @@
 }
 
 - (IBAction)didPressOnReading:(id)sender {
+    [stack closeStack];
+    [KxMenu dismissMenu];
+
     if (isPlayAudio) {
         [self didPressOffReading:sender];
         return;
     }
     isPlayAudio = YES;
-    [speaker_on changeImageItem:[UIImage imageNamed:@"speaker_on"]];
+    [speaker_on changeImageItem:[UIImage imageNamed:@"audio_on_off"]];
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
     
@@ -251,7 +280,10 @@
     
 }
 - (IBAction)didPressOffReading:(id)sender {
-    [speaker_on changeImageItem:[UIImage imageNamed:@"speaker_off"]];
+    [stack closeStack];
+    [KxMenu dismissMenu];
+
+    [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
     [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
@@ -261,6 +293,8 @@
 - (IBAction)didPressOnPhonetic:(id)sender {
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
+    [stack closeStack];
+    [KxMenu dismissMenu];
     if ([self.textViewInput.text isEqualToString:@""]) {
         return;
     }
@@ -268,16 +302,34 @@
         self.textViewInput.hidden = NO;
         self.scrollText.hidden = YES;
         isShowPhonetic = NO;
+        [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"Phonetic"] forState:UIControlStateNormal];
     }else
     {
-        [self setupPhoneticWordForText];
+        if (![self.textViewInput.text isEqualToString:self.textBuffer]) {
+            [self setupPhoneticWordForText:self.textViewInput.text];
+        }else
+        {
+            self.textViewInput.hidden = YES;
+            self.scrollText.hidden = NO;
+            isShowPhonetic = YES;
+            [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
+
+        }
         
     }
     [self.view bringSubviewToFront:self.btPhoneticWord];
     
 }
+- (IBAction)didPressOnSave:(id)sender
+{
+    [stack closeStack];
+    [KxMenu dismissMenu];
 
+}
 - (IBAction)didPressOnSearch:(id)sender {
+    [stack closeStack];
+    [KxMenu dismissMenu];
+
 }
 - (IBAction)didPressOnSetting:(id)sender
 {
@@ -297,11 +349,12 @@
     [stack setDelegate:self];
     
 //    UPStackMenuItem *getPhonetic = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"Switch"] highlightedImage:nil title:@""];
-    speaker_on = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"speaker_off"] highlightedImage:nil title:@""];
-    print = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"printer_icon"] highlightedImage:nil title:@""];
-    settingItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"Gear_icon"] highlightedImage:nil title:@""];
-    
-    NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem, nil];
+    speaker_on = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"audio_play"] highlightedImage:nil title:@""];
+    print = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"paper_printer"] highlightedImage:nil title:@""];
+    settingItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"settings"] highlightedImage:nil title:@""];
+    save = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"save"] highlightedImage:nil title:@""];
+
+    NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem,save, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
         [item setTitleColor:[UIColor blackColor]];
     }];
@@ -415,7 +468,9 @@
         case 2:
             [self didPressOnSetting:nil];;
             break;
-
+        case 3:
+            [self didPressOnSave:nil];;
+            break;
         default:
             break;
     }
@@ -515,7 +570,8 @@
     
     KxMenuItem *first = menuItems[0];
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
-    first.alignment = NSTextAlignmentCenter;    [KxMenu sharedMenu].htmlString = htmlString;
+    first.alignment = NSTextAlignmentCenter;
+    [KxMenu sharedMenu].htmlString = htmlString;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_DETAIL_DICTIONARY;
     [KxMenu sharedMenu].textAudio = audioText;
     if (self.textViewInput.hidden) {
@@ -530,16 +586,19 @@
 }
 
 #pragma mark - handle Func Common of viewcontroller
--(void)setupPhoneticWordForText
+-(void)setupPhoneticWordForText:(NSString*)text
 {
+    for (UILabel *lable in self.scrollText.subviews) {
+        [lable removeFromSuperview];
+    }
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Do something...
         NSMutableArray *arrWord  = [NSMutableArray array];
-        NSArray *arrBreakLine = [self.textViewInput.text componentsSeparatedByString:@"\n"];
+        NSArray *arrBreakLine = [text componentsSeparatedByString:@"\n"];
         for (NSString *str in arrBreakLine) {
-            NSString *strRemove = [str removeSpecifiCharacter];
-            [arrWord addObjectsFromArray:[strRemove componentsSeparatedByString:@" "]];
+//            NSString *strRemove = [str removeSpecifiCharacter];
+            [arrWord addObjectsFromArray:[str componentsSeparatedByString:@" "]];
             [arrWord addObject:@"\n"];
         }
         NSArray *arrPhonetic = [[EdictDatabase database] getEdictInfosWithArrWord:arrWord];
@@ -552,11 +611,18 @@
             [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame];
         });
         isShowPhonetic = YES;
-        
+        self.banerView.hidden = NO;
+        self.topConstraintButtonSwitch.constant = 9.0f;
+        self.topConstraintScrollText.constant = self.banerView.frame.size.height;
+        self.topConstraintTextViewInput.constant = self.banerView.frame.size.height;
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             self.textViewInput.hidden = YES;
             self.scrollText.hidden = NO;
+            self.textBuffer = text;
+            [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
+
         });
     });
     
@@ -580,16 +646,125 @@
     NSString *str = [NSString stringWithContentsOfURL:(NSURL*)userInfor.object encoding:NSUTF8StringEncoding error:nil];
     //this is not the way to display this on the screen
     if (str) {
-        self.textViewInput.text = nil;
-        self.textViewInput.text = str;
-        [self setupPhoneticWordForText];
-        self.banerView.hidden = YES;
-        self.topConstraintButtonSwitch.constant = self.banerView.frame.size.height;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.textViewInput.text = nil;
+            self.textViewInput.text = str;
+            if (isShowPhonetic) {
+                self.textViewInput.hidden = NO;
+                self.scrollText.hidden = YES;
+                [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"Phonetic"] forState:UIControlStateNormal];
+                isShowPhonetic = NO;
+            }
+        });
+
+    }else
+    {
+        [self recognizeImageWithTesseract:[UIImage imageWithContentsOfFile:[(NSURL*)userInfor.object absoluteString]]];
 
     }
 
 }
-- (void)dealloc {
+#pragma mark - handle Func OCR of viewcontroller
+
+-(void)recognizeImageWithTesseract:(UIImage *)image
+{
+    
+    // Create a new `G8RecognitionOperation` to perform the OCR asynchronously
+    // It is assumed that there is a .traineddata file for the language pack
+    // you want Tesseract to use in the "tessdata" folder in the root of the
+    // project AND that the "tessdata" folder is a referenced folder and NOT
+    // a symbolic group in your project
+    G8RecognitionOperation *operation = [[G8RecognitionOperation alloc] initWithLanguage:@"eng"];
+    
+    // Use the original Tesseract engine mode in performing the recognition
+    // (see G8Constants.h) for other engine mode options
+    operation.tesseract.engineMode = G8OCREngineModeTesseractOnly;
+    
+    // Let Tesseract automatically segment the page into blocks of text
+    // based on its analysis (see G8Constants.h) for other page segmentation
+    // mode options
+    operation.tesseract.pageSegmentationMode = G8PageSegmentationModeAutoOnly;
+    
+    // Optionally limit the time Tesseract should spend performing the
+    // recognition
+    //operation.tesseract.maximumRecognitionTime = 1.0;
+    
+    // Set the delegate for the recognition to be this class
+    // (see `progressImageRecognitionForTesseract` and
+    // `shouldCancelImageRecognitionForTesseract` methods below)
+    operation.delegate = self;
+    
+    // Optionally limit the region in the image on which Tesseract should
+    // perform recognition to a rectangle
+    //operation.tesseract.rect = CGRectMake(20, 20, 100, 100);
+    
+    // Specify the function block that should be executed when Tesseract
+    // finishes performing recognition on the image
+    operation.recognitionCompleteBlock = ^(G8Tesseract *tesseract) {
+        // Fetch the recognized text
+        NSString *recognizedText = tesseract.recognizedText;
+        
+        [self setupPhoneticWordForText:recognizedText];
+        
+        
+    };
+    
+    
+    // Finally, add the recognition operation to the queue
+    [self.operationQueue addOperation:operation];
+
+}
+/**
+ *  This function is part of Tesseract's delegate. It will be called
+ *  periodically as the recognition happens so you can observe the progress.
+ *
+ *  @param tesseract The `G8Tesseract` object performing the recognition.
+ */
+- (void)progressImageRecognitionForTesseract:(G8Tesseract *)tesseract {
+    NSLog(@"progress: %lu", (unsigned long)tesseract.progress);
+}
+
+/**
+ *  This function is part of Tesseract's delegate. It will be called
+ *  periodically as the recognition happens so you can cancel the recogntion
+ *  prematurely if necessary.
+ *
+ *  @param tesseract The `G8Tesseract` object performing the recognition.
+ *
+ *  @return Whether or not to cancel the recognition.
+ */
+- (BOOL)shouldCancelImageRecognitionForTesseract:(G8Tesseract *)tesseract {
+    return NO;  // return YES, if you need to cancel recognition prematurely
+}
+
+- (IBAction)openCamera:(id)sender
+{
+    UIImagePickerController *imgPicker = [UIImagePickerController new];
+    imgPicker.delegate = self;
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        imgPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:imgPicker animated:YES completion:nil];
+    }
+}
+
+- (IBAction)recognizeSampleImage:(id)sender {
+}
+
+- (IBAction)clearCache:(id)sender
+{
+    [G8Tesseract clearCache];
+}
+
+#pragma mark - UIImagePickerController Delegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    [self recognizeImageWithTesseract:image];
 }
 
 @end

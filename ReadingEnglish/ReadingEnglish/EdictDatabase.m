@@ -10,6 +10,7 @@
 #import "EdictInfo.h"
 #import "UtilsXML.h"
 #import "HTMLParser.h"
+#import "NSString+FDEdict.h"
 
 @implementation EdictDatabase
 
@@ -45,7 +46,8 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     self.strDetail = nil;
     self.strDetail = [NSMutableArray array];
     for (NSString* str in arrWord) {
-        NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[str lowercaseString],@"'"] ;
+        NSString *strRemove = [str removeSpecifiCharacter];
+        NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[strRemove lowercaseString],@"'"] ;
         sqlite3_stmt *statement;
         if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
             NSInteger i = 0;
@@ -80,7 +82,9 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
 - (NSString *)getEdictInfosWithWord:(NSString*)arrWord
 {
     NSString *strPhonetic = [NSString string];
-        NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[arrWord lowercaseString],@"'"] ;
+    NSString *strRemove = [arrWord removeSpecifiCharacter];
+
+        NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[strRemove lowercaseString],@"'"] ;
         sqlite3_stmt *statement;
         if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
             NSInteger i = 0;
