@@ -38,6 +38,10 @@ typedef enum : NSUInteger {
     MENU_TYPE_SHOWING_DETAIL_DICTIONARY,
     MENU_TYPE_SHOWING_MENU,
 } MENU_TYPE_SHOWING;
+typedef enum : NSUInteger {
+    MENU_TYPE_AIRPRINT,
+    MENU_TYPE_CANONPRINT,
+} MENU_TYPE_PRINT;
 
 @interface KxMenuItem : NSObject
 
@@ -49,7 +53,8 @@ typedef enum : NSUInteger {
 @property (readwrite, nonatomic) NSTextAlignment alignment;
 @property (readwrite, nonatomic) UISlider *slider;
 @property (assign, nonatomic) NSUInteger fontSize;
-
+@property (assign, nonatomic) NSUInteger languagecode;
+@property (assign, nonatomic) MENU_TYPE_PRINT typePrint;
 + (instancetype) menuItem:(NSString *) title
                     image:(UIImage *) image
                    target:(id)target

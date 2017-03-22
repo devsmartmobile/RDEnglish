@@ -10,5 +10,7 @@
 
 @interface RDConstant : NSObject
 @property (assign,nonatomic) NSInteger fontSizeView;
+@property (assign,nonatomic) NSInteger langCode;
+
 +(instancetype)sharedRDConstant;
 @end

@@ -14,6 +14,7 @@
 		7D9A114D1E810724001F5127 /* RDConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9A114C1E810724001F5127 /* RDConstant.m */; };
 		7D9A114E1E8114A9001F5127 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; };
 		7D9A114F1E8114A9001F5127 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DD12FEC1E829628001AAB80 /* RDBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */; };
 		935D9CC8CD3217A16BB31D5C /* libPods-ReadingEnglish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */; };
 		E8F96E531E804D750046FD82 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E521E804D750046FD82 /* main.m */; };
 		E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E551E804D750046FD82 /* AppDelegate.m */; };
@@ -61,6 +62,9 @@
 		7D9A11451E80CE5C001F5127 /* tessdata-rus */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "tessdata-rus"; sourceTree = "<group>"; };
 		7D9A114B1E810724001F5127 /* RDConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDConstant.h; sourceTree = "<group>"; };
 		7D9A114C1E810724001F5127 /* RDConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDConstant.m; sourceTree = "<group>"; };
+		7DD12FE91E829548001AAB80 /* ReadingEnglishHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadingEnglishHeader.h; sourceTree = "<group>"; };
+		7DD12FEA1E829628001AAB80 /* RDBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDBaseViewController.h; sourceTree = "<group>"; };
+		7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDBaseViewController.m; sourceTree = "<group>"; };
 		E09A2C081696FCC4EBF1C441 /* Pods-ReadingEnglish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.debug.xcconfig"; sourceTree = "<group>"; };
 		E0F5A174196CCCC6C1CB07AF /* Pods-ReadingEnglish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.release.xcconfig"; sourceTree = "<group>"; };
 		E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReadingEnglish.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +188,8 @@
 				E8F96E6B1E804D9D0046FD82 /* EdictInfo.m */,
 				E8F96E6C1E804D9D0046FD82 /* EDictLabel.h */,
 				E8F96E6D1E804D9D0046FD82 /* EDictLabel.m */,
+				7DD12FEA1E829628001AAB80 /* RDBaseViewController.h */,
+				7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */,
 				E8F96E6E1E804D9D0046FD82 /* EdictTextView.h */,
 				E8F96E6F1E804D9D0046FD82 /* EdictTextView.m */,
 				E8F96E701E804D9D0046FD82 /* EdictViewController.h */,
@@ -234,6 +240,7 @@
 				E8F96E841E804DAB0046FD82 /* UtilsXML.m */,
 				7D9A114B1E810724001F5127 /* RDConstant.h */,
 				7D9A114C1E810724001F5127 /* RDConstant.m */,
+				7DD12FE91E829548001AAB80 /* ReadingEnglishHeader.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -377,6 +384,7 @@
 				E8F96E7D1E804D9D0046FD82 /* PhoneticTextView.m in Sources */,
 				E8F96E851E804DAB0046FD82 /* FDDeviceHardware.m in Sources */,
 				E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */,
+				7DD12FEC1E829628001AAB80 /* RDBaseViewController.m in Sources */,
 				E8F96E781E804D9D0046FD82 /* EdictInfo.m in Sources */,
 				E8F96E531E804D750046FD82 /* main.m in Sources */,
 			);

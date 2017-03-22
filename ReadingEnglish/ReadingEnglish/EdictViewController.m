@@ -31,6 +31,8 @@
     UPStackMenuItem *speaker_off;
     UPStackMenuItem *print;
     UPStackMenuItem *save;
+    UPStackMenuItem *exportFile;
+
     CGRect keyboardFrameBeginRect;
 
 }
@@ -124,6 +126,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
+    self.textViewInput.text = @"Input text to search phonetic";
+    self.textViewInput.textColor = [UIColor lightGrayColor]; //optional
     //setup swip left and right
     UISwipeGestureRecognizer *swipRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showWordView:)];
     swipRight.direction = UISwipeGestureRecognizerDirectionRight;
@@ -205,7 +209,7 @@
 //    rgb(236, 240, 241)
 //    rgb(44, 62, 80)
     [self.view setBackgroundColor:[UIColor colorWithRed:236 green:240 blue:241 alpha:0.1]];
-    self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
+//    self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     self.searchText.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
 
 }
@@ -219,51 +223,14 @@
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
     if (self.scrollText.isHidden) {
-        
+        if (![self.textViewInput.text isEqualToString:@""]) {
+            
+            [self didPressOnPhonetic:nil];
+        }
         return ;
     }
-    if ([UIPrintInteractionController isPrintingAvailable])
-    {
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            // Do something...
-            // Available
-            [self.scrollText imageWithView:self.scrollText withCompleteBlock:^(NSArray *arrPaper) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
-                    pic.delegate = self;
-                    UIPrintInfo *printInfo = [UIPrintInfo printInfo];
-                    printInfo.outputType = UIPrintInfoOutputGeneral;
-                    printInfo.jobName = @"Print";
-                    printInfo.duplex = UIPrintInfoDuplexLongEdge;
-                    pic.printInfo = printInfo;
-                    pic.printingItems = arrPaper;
-                    if ([FDDeviceHardware deviceFamily]==UIDeviceFamilyiPhone) {
-                        [pic presentAnimated:YES completionHandler:^(UIPrintInteractionController * _Nonnull printInteractionController, BOOL completed, NSError * _Nullable error) {
-                            if (completed) {
-                            }
-                        }];
-
-                    }else
-                    {
-                        [pic presentFromRect:CGRectMake(stack.center.x , stack.center.y, 64, 64) inView:self.view animated:YES completionHandler:^(UIPrintInteractionController * _Nonnull printInteractionController, BOOL completed, NSError * _Nullable error) {
-                            if (completed) {
-                            }
-                        }];
-                    }
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];
-                    
-                });
-                
-            }];
-        });
-        
-    } else {
-        // Not Available
-    }
+    [self showMenuForSettingPrinter];
 }
-
 - (IBAction)didPressOnReading:(id)sender {
     [stack closeStack];
     [KxMenu dismissMenu];
@@ -280,7 +247,8 @@
     synthesizer = [[AVSpeechSynthesizer alloc]init];
     utterance = [AVSpeechUtterance speechUtteranceWithString:self.textViewInput.text];
     synthesizer.delegate = self;
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:@"en-us"];
+//    aus
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:[UtilsXML utilXMLInstance].langCodes[[RDConstant sharedRDConstant].langCode]];
     [utterance setRate:0.4f];
     [synthesizer speakUtterance:utterance];
     
@@ -327,6 +295,27 @@
     [self.view bringSubviewToFront:self.btPhoneticWord];
     
 }
+ - (IBAction)didPressOnExportFile:(id)sender
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        // Do something...
+        // Available
+        [self.scrollText imageWithView:self.scrollText withFrame:self.scrollText.frame withCompleteBlock:^(NSArray *arrPaper) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSData *pdfData = [NSData dataWithContentsOfFile:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]];
+                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[@"Test", pdfData] applicationActivities:nil];
+                
+                [self presentViewController:activityViewController animated:YES completion:nil];                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
+            });
+            
+        }];
+    });
+
+}
+
 - (IBAction)didPressOnSave:(id)sender
 {
     [stack closeStack];
@@ -361,8 +350,9 @@
     print = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"paper_printer"] highlightedImage:nil title:@""];
     settingItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"settings"] highlightedImage:nil title:@""];
     save = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"take-picture"] highlightedImage:nil title:@""];
+    exportFile = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"Export_File"] highlightedImage:nil title:@""];
 
-    NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem,save, nil];
+    NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem,save,exportFile, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
         [item setTitleColor:[UIColor blackColor]];
     }];
@@ -425,8 +415,28 @@
     }
 
 }
+- (void)pushMenuItemSettingLanguageCodes:(id)sender
+{
+    KxMenuItem *menu= (KxMenuItem*)sender;
+    [RDConstant sharedRDConstant].langCode = menu.languagecode;
+}
 
+- (void)pushMenuItemPrinterSelect:(id)sender
+{
+    KxMenuItem *menu= (KxMenuItem*)sender;
+    switch (menu.typePrint) {
+        case MENU_TYPE_AIRPRINT:
+            [self openAirtPrint];
+            break;
+        case MENU_TYPE_CANONPRINT:
+            [self openCannonPrintScreen];
 
+            break;
+
+        default:
+            break;
+    }
+}
 
 - (void)setStackIconClosed:(BOOL)closed
 {
@@ -482,6 +492,10 @@
         case 3:
             [self didPressOnSave:nil];;
             break;
+        case 4:
+           [self didPressOnExportFile:nil];;
+            break;
+
         default:
             break;
     }
@@ -489,6 +503,24 @@
 
 
 #pragma mark - handle Text View of viewcontroller
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"Input text to search phonetic"]) {
+        textView.text = @"";
+        self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
+    }
+    [textView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.text = @"Input text to search phonetic";
+        textView.textColor = [UIColor lightGrayColor]; //optional
+    }
+    [textView resignFirstResponder];
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self.searchText resignFirstResponder];
@@ -700,6 +732,36 @@
                      image:[UIImage imageNamed:@"home_icon"]
                     target:self
                     action:@selector(pushMenuItemSetting:)],
+      [KxMenuItem menuItem:@"Choose Language type specker"
+                     image:nil
+                    target:nil
+                    action:NULL],
+      
+      [KxMenuItem menuItem:@"English (Australia)"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSettingLanguageCodes:)],
+      
+      [KxMenuItem menuItem:@"English (Ireland)"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItemSettingLanguageCodes:)],
+      
+      [KxMenuItem menuItem:@"English (South Africa)"
+                     image:[UIImage imageNamed:@"reload"]
+                    target:self
+                    action:@selector(pushMenuItemSettingLanguageCodes:)],
+      
+      [KxMenuItem menuItem:@"English (United Kingdom)"
+                     image:[UIImage imageNamed:@"search_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSettingLanguageCodes:)],
+      
+      [KxMenuItem menuItem:@"English (United States)"
+                     image:[UIImage imageNamed:@"home_icon"]
+                    target:self
+                    action:@selector(pushMenuItemSettingLanguageCodes:)]
+
       ];
     
     KxMenuItem *first = menuItems[0];
@@ -714,15 +776,77 @@
     five.fontSize = 17;
     KxMenuItem *six = menuItems[5];
     six.fontSize = 18;
+    KxMenuItem *seven = menuItems[6];
+    seven.fontSize = 15;
+    KxMenuItem *eight = menuItems[7];
+    eight.languagecode = 0;
+    eight.fontSize = 15;
+    KxMenuItem *neight = menuItems[8];
+    neight.languagecode = 1;
+    neight.fontSize = 15;
+    KxMenuItem *ten = menuItems[9];
+    ten.languagecode = 2;
+    ten.fontSize = 15;
+    KxMenuItem *menu1 = menuItems[10];
+    menu1.fontSize = 15;
+    menu1.languagecode = 3;
+    KxMenuItem *menu2 = menuItems[11];
+    menu2.languagecode = 4;
+    menu2.fontSize = 15;
 
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
-    first.alignment = NSTextAlignmentCenter;
+    first.alignment = NSTextAlignmentLeft;
+    seven.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    seven.alignment = NSTextAlignmentLeft;
+
     [KxMenu sharedMenu].htmlString = nil;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
     [KxMenu sharedMenu].textAudio = nil;
     [KxMenu showMenuInView:self.view
                       fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
                      menuItems:menuItems];
+}
+- (void)showMenuForSettingPrinter
+{
+    NSArray *menuItems =
+    @[
+      
+      [KxMenuItem menuItem:@"Choose Printer"
+                     image:nil
+                    target:nil
+                    action:NULL],
+      
+      [KxMenuItem menuItem:@"Print with AirPrint"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItemPrinterSelect:)],
+      
+      [KxMenuItem menuItem:@"Print with Canon"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItemPrinterSelect:)],
+      
+      
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.fontSize = 15;
+    KxMenuItem *two = menuItems[1];
+    two.fontSize = 14;
+    two.typePrint = MENU_TYPE_AIRPRINT;
+    KxMenuItem *three = menuItems[2];
+    three.fontSize = 15;
+    three.typePrint = MENU_TYPE_CANONPRINT;
+
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentLeft;
+    
+        [KxMenu sharedMenu].htmlString = nil;
+    [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
+    [KxMenu sharedMenu].textAudio = nil;
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
+                 menuItems:menuItems];
 }
 
 #pragma mark - handle Func Common of viewcontroller
@@ -790,6 +914,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.textViewInput.text = nil;
             self.textViewInput.text = str;
+            self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
             if (isShowPhonetic) {
                 self.textViewInput.hidden = NO;
                 self.scrollText.hidden = YES;
@@ -943,5 +1068,191 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     isPlayAudio = NO;
 
 }
+#pragma mark - handle canon print app
 
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
+        if ([[UIScreen mainScreen] scale] == 2.0) {
+            UIGraphicsBeginImageContextWithOptions(newSize, YES, 2.0);
+        } else {
+            UIGraphicsBeginImageContext(newSize);
+        }
+    } else {
+        UIGraphicsBeginImageContext(newSize);
+    }
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (void)createCanonDataAndOpenApp
+{
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        // Do something...
+        // Available
+        [self.scrollText imageWithView:self.scrollText withFrame:CGRectMake(0, 0, 1101, 1654) withCompleteBlock:^(NSArray *arrPaper) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSURL *pdfURL = [NSURL URLWithString:@"canonij1pdf://"];
+                NSString *pt = @"pdfToCPIS";
+                /*Creating a Data Object*/
+                
+                NSData *data = [NSData dataWithContentsOfFile:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]];
+                
+                /* Getting the generalPasteboard */
+                UIPasteboard *pb = [UIPasteboard generalPasteboard];
+                /* Setting NSData Object of PDF */
+                [pb setData:data forPasteboardType:pt];
+                
+                [[UIApplication sharedApplication] openURL:pdfURL];
+                //    [self closeHudInView:self.view];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
+            });
+            
+        }];
+    });
+
+}
+
+- (void)openCannonApp {
+//    [self openLoadingHudInView:self.view text:TEXT_PROCESSING];
+    [self performSelector:@selector(createCanonDataAndOpenApp) withObject:nil afterDelay:1.0f];
+}
+
+- (void)openCannonPrintScreen {
+    NSURL *photoURL = [NSURL URLWithString:@"canonij1pdf://"];
+    if ([[UIApplication sharedApplication] canOpenURL:photoURL] == YES) {
+        /* Launch CPIS by Using URL Scheme if the Latest Version of
+         CPIS is Installed. */
+        if (U_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+            UIAlertController *alert = [UIAlertController
+                                        alertControllerWithTitle:@""
+                                        message:@"TEXT_PRINT_OPEN_CANON_APP_ADDRESS"
+                                        preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"TEXT_BUTTON_CANCEL"
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+            [alert
+             addAction:[UIAlertAction
+                        actionWithTitle:@"TEXT_PRINT_OPEN_CANON_APP_CONFIRMATION"
+                        style:UIAlertActionStyleDestructive
+                        handler:^(UIAlertAction *_Nonnull action) {
+                            [self openCannonApp];
+                        }]];
+            [self presentViewController:alert animated:NO completion:nil];
+        } else {
+            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+            [[[UIAlertView alloc]
+              initWithTitle:@""
+              message:@"TEXT_PRINT_OPEN_CANON_APP_ADDRESS"
+              delegate:(id<UIAlertViewDelegate>)self
+              cancelButtonTitle:@"TEXT_BUTTON_CANCEL"
+              otherButtonTitles:@"TEXT_PRINT_OPEN_CANON_APP_CONFIRMATION", nil] show];
+#pragma clang diagnostic pop
+        }
+    } else {
+        /* Encourage Users to Install CPIS if CPIS is not Installed.
+         */
+        NSString *message = @"TEXT_PRINT_CANNON_APP_APPSTORE_INSTALL_HELP";
+        NSString *titleAlert = @"TEXT_PRINT_CANNON_APP_NOT_INSTALLED";
+        NSString *cancelButtonAlert = @"TEXT_BUTTON_CANCEL";
+        NSString *acceptButtonAlert = @"TEXT_BUTTON_OK";
+        
+        if (U_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
+            UIAlertController *alert = [UIAlertController
+                                        alertControllerWithTitle:titleAlert
+                                        message:message
+                                        preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:cancelButtonAlert
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+            [alert addAction:[UIAlertAction
+                              actionWithTitle:acceptButtonAlert
+                              style:UIAlertActionStyleDestructive
+                              handler:^(UIAlertAction *_Nonnull action) {
+                                  [self openAppstoreForCannon];
+                              }]];
+            [self presentViewController:alert animated:NO completion:nil];
+        } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+            [[[UIAlertView alloc] initWithTitle:titleAlert
+                                        message:message
+                                       delegate:(id<UIAlertViewDelegate>)self
+                              cancelButtonTitle:cancelButtonAlert
+                              otherButtonTitles:acceptButtonAlert, nil] show];
+#pragma clang diagnostic pop
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView
+willDismissWithButtonIndex:(NSInteger)buttonIndex
+NS_DEPRECATED_IOS(2_0, 9_0) {
+    if (buttonIndex != alertView.cancelButtonIndex) {
+        if ([alertView.title isEqualToString:@"TEXT_PRINT_CANNON_APP_NOT_INSTALLED"]) {
+            [self openAppstoreForCannon];
+        } else if ([alertView.message
+                    isEqualToString:@"TEXT_PRINT_OPEN_CANON_APP_ADDRESS"]) {
+            [self openCannonApp];
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView
+clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0) {
+}
+
+- (void)openAppstoreForCannon {
+    NSString *iTunesLink = TEXT_APPSTORE_CANNON_APP_LINK;
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:iTunesLink]];
+}
+-(void)openAirtPrint
+{
+    if ([UIPrintInteractionController isPrintingAvailable])
+    {
+        
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        // Do something...
+        // Available
+        [self.scrollText imageWithView:self.scrollText withFrame:self.scrollText.frame withCompleteBlock:^(NSArray *arrPaper) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];
+                pic.delegate = self;
+                UIPrintInfo *printInfo = [UIPrintInfo printInfo];
+                printInfo.outputType = UIPrintInfoOutputGeneral;
+                printInfo.jobName = @"Print";
+                printInfo.duplex = UIPrintInfoDuplexLongEdge;
+                pic.printInfo = printInfo;
+                pic.printingItems = arrPaper;
+                if ([FDDeviceHardware deviceFamily]==UIDeviceFamilyiPhone) {
+                    [pic presentAnimated:YES completionHandler:^(UIPrintInteractionController * _Nonnull printInteractionController, BOOL completed, NSError * _Nullable error) {
+                        if (completed) {
+                        }
+                    }];
+                    
+                }else
+                {
+                    [pic presentFromRect:CGRectMake(stack.center.x , stack.center.y, 64, 64) inView:self.view animated:YES completionHandler:^(UIPrintInteractionController * _Nonnull printInteractionController, BOOL completed, NSError * _Nullable error) {
+                        if (completed) {
+                        }
+                    }];
+                }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                
+            });
+            
+        }];
+    });
+    } else {
+        // Not Available
+    }
+    
+}
 @end

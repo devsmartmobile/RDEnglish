@@ -8,6 +8,8 @@
 
 #import "RDConstant.h"
 NSString *const RDConstantFontSizeViewKey = @"RDConstantFontSizeViewKey";
+NSString *const RDConstantLangCodeKey = @"RDConstantLangCodeKey";
+
 static RDConstant *RDConstantSharedSingletonDatabase = nil;
 @interface RDConstant ()
 {
@@ -32,4 +34,15 @@ static RDConstant *RDConstantSharedSingletonDatabase = nil;
 {
     return [[[NSUserDefaults standardUserDefaults] valueForKey:RDConstantFontSizeViewKey] integerValue];
 }
+-(void)setLangCode:(NSInteger)langCode
+{
+    defaut= [NSUserDefaults standardUserDefaults];
+    [defaut setObject:[NSNumber numberWithInteger:langCode] forKey:RDConstantLangCodeKey];
+    [defaut synchronize];
+}
+-(NSInteger)langCode
+{
+    return [[[NSUserDefaults standardUserDefaults] valueForKey:RDConstantLangCodeKey] integerValue];
+}
+
 @end

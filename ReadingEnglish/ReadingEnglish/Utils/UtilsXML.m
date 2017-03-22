@@ -51,5 +51,57 @@ static UtilsXML *FDConstantsSharedSingleton = nil;
     }
     return _fontNames;
 }
+- (NSArray *)langCodes {
+    if (_langCodes == nil) {
+        // Get system font name
+        _langCodes = @[
+                       @"en-AU",
+                       @"en-IE",
+                       @"en-ZA",
+                       @"en-GB",
+                       @"en-US"
+                       ];
+    }
+    return _langCodes;
+}
+- (NSString *)drawImagesToPdf:(NSArray*)images {
+    //[Spec]: create pdf size 1101x1654
+    CGFloat pageWidth = 1101;
+    CGFloat pageHeight = 1654;
+    CGSize pageSize = CGSizeMake(pageWidth, pageHeight);
+    NSInteger numberAddressSide = [images count];
+    NSString *fileName = @"ReadingEnglishByPhoneticHightlight.pdf";
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *pdfFileName =
+    [documentsDirectory stringByAppendingPathComponent:fileName];
+    UIGraphicsBeginPDFContextToFile(
+                                    pdfFileName, CGRectMake(0, 0, pageWidth, pageHeight * numberAddressSide),
+                                    nil);
+    UIImage *image;
+    for (int i = 0; i < numberAddressSide; i++) {
+        UIImage *img = images[i] ;
+        //    [imagePreview removeSubviewImageView];
+        //    imagePreview = nil;
+        // Do not need to resize
+        //      img = [img imageWithSize:CGSizeMake(1181, 1748)];
+        
+        // [Spec]crop image left: 40, top 35, width 1101, height 1654
+        CGRect cropRect = CGRectMake(0, 0, 1101, 1654);
+        CGImageRef imageRef = CGImageCreateWithImageInRect([img CGImage], cropRect);
+        img = nil;
+        image = [UIImage imageWithCGImage:imageRef];
+        
+        CGImageRelease(imageRef);
+        UIGraphicsBeginPDFPageWithInfo(
+                                       CGRectMake(0, 0, pageSize.width, pageSize.height), nil);
+        [image drawInRect:CGRectMake(0, 0, pageWidth, pageHeight)];
+        
+        image = nil;
+    }
+    UIGraphicsEndPDFContext();
+    return pdfFileName;
+}
 
 @end

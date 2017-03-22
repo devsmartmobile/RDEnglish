@@ -11,8 +11,9 @@
 
 @interface UtilsXML : NSObject
 @property(strong, nonatomic) NSArray *fontNames;
+@property(strong, nonatomic) NSArray *langCodes;
 
 + (UtilsXML*)utilXMLInstance ;
-
+- (NSString *)drawImagesToPdf:(NSArray*)images;
 -(NSString*)getPhoneticFromHTML:(NSString*)html;
 @end

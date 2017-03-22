@@ -19,9 +19,9 @@
 
 -(void)setupEdictTextViewWithFrame:(CGRect)framePaper;
 -(void)setupEdictTextViewWithFrameForPrint:(CGRect)framePaper withCompleteBlock:(void (^)(NSArray *arrPaper))completion;
-- (void) imageWithView:(UIView *)view withCompleteBlock:(void (^)(NSArray *arrPaper))completion;
+- (void) imageWithView:(UIView *)view withFrame:(CGRect)frame withCompleteBlock:(void (^)(NSArray *arrPaper))completion;
 -(UIImage*)crop:(CGRect)frame withImage:(UIImage*)image;
--(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withTag:(NSInteger)tag;
--(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withTextView:(EdictTextView*)textview withTag:(NSInteger)tag;
+-(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withSizeKey:(CGSize)sizeKey withSizePhonetic:(CGSize)sizePhonetic  withTag:(NSInteger)tag;
+-(void)addSubviewWithKey :(NSString*)key withPhonetic:(NSString*)phonetic withTextView:(EdictTextView*)textview withSizeKey:(CGSize)sizeKey withSizePhonetic:(CGSize)sizePhonetic withTag:(NSInteger)tag;
 
 @end
