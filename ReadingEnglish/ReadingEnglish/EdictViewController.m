@@ -301,7 +301,7 @@
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Do something...
         // Available
-        [self.scrollText imageWithView:self.scrollText withFrame:self.scrollText.frame withCompleteBlock:^(NSArray *arrPaper) {
+        [self.scrollText imageWithView:self.scrollText withFrame:CGRectMake(0, 0, 1101, 1654) withCompleteBlock:^(NSArray *arrPaper) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 NSData *pdfData = [NSData dataWithContentsOfFile:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]];

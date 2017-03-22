@@ -125,7 +125,7 @@
 			<string>Owner</string>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>dict.app.ReadingEnglish</string>
+				<string>com.adobe.pdf</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Pdf</string>
