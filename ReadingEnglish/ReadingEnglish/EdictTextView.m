@@ -153,7 +153,7 @@
             goto line_break;
         }
         // calcule origin of text view when need to break line
-        if ((xOriginal) <= (framePaper.size.width - (maxWidth))) {
+        if ((xOriginal) <= (framePaper.size.width - (maxWidth + framePaper.size.width > 842 ? 550.f : 0.0f))) {
             [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:i];
             xOriginal += maxWidth + 2.0;
         }else
@@ -187,7 +187,7 @@
                 [label removeFromSuperview];
             }
             textToPrint = nil;
-            textToPrint = [[EdictTextView alloc]  initWithFrame:CGRectMake(0.0, 0.0, 598, 842)];
+            textToPrint = [[EdictTextView alloc]  initWithFrame:framePaper];
             textToPrint.totalHeight = 0.0f;
             xOriginal = 2.0f;
             yOriginal = 0.0f;
@@ -298,10 +298,10 @@
 -(UIImage*)getImageFromView:(EdictTextView*)view
 {
     view.hidden = YES;
-    UIView * imageRenderbackground = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 598, 842)];
+    UIView * imageRenderbackground = [[UIView alloc] initWithFrame:view.frame];
     imageRenderbackground.backgroundColor = [UIColor whiteColor];
     
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(598, 842), view.opaque, 0.0);
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.frame.size.width, view.frame.size.height), view.opaque, 0.0);
         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
         [imageRenderbackground.layer renderInContext:UIGraphicsGetCurrentContext()];
         for (UILabel *label in view.subviews) {

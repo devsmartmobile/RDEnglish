@@ -17,7 +17,7 @@
 
 #define debug 1
 
-@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate>
+@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate>
 {
     BOOL isShowPhonetic;
     BOOL isLoadPhonetic;
@@ -55,7 +55,7 @@
 - (IBAction)didPressOnSetting:(id)sender;
 - (IBAction)openCamera:(id)sender;
 - (IBAction)recognizeSampleImage:(id)sender;
-
+@property (nonatomic, strong)UIDocumentInteractionController *documentController;
 @property (weak, nonatomic) IBOutlet UIButton *btPhoneticWord;
 @property (weak, nonatomic) IBOutlet EdictTextView *scrollText;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
@@ -304,13 +304,16 @@
         [self.scrollText imageWithView:self.scrollText withFrame:CGRectMake(0, 0, 1101, 1654) withCompleteBlock:^(NSArray *arrPaper) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                NSData *pdfData = [NSData dataWithContentsOfFile:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]];
-                UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[@"Test", pdfData] applicationActivities:nil];
-                
-                [self presentViewController:activityViewController animated:YES completion:nil];                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                
-            });
-            
+                self.documentController =
+                [UIDocumentInteractionController
+                 interactionControllerWithURL:[NSURL fileURLWithPath:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]]];
+                self.documentController.delegate = self;
+                self.documentController.UTI = @"com.adobe.pdf";
+                [self.documentController presentOpenInMenuFromRect:CGRectZero
+                                                       inView:self.view
+                                                     animated:YES];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                 });
         }];
     });
 
@@ -410,6 +413,7 @@
     KxMenuItem *menu= (KxMenuItem*)sender;
     [RDConstant sharedRDConstant].fontSizeView = menu.fontSize;
     self.textViewInput.font = [UIFont systemFontOfSize:menu.fontSize];
+    self.textViewInput.hidden = NO;
     if (!self.scrollText.isHidden) {
         [self setupPhoneticWordForText:self.textViewInput.text];
     }
@@ -1220,7 +1224,7 @@ clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0) {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Do something...
         // Available
-        [self.scrollText imageWithView:self.scrollText withFrame:self.scrollText.frame withCompleteBlock:^(NSArray *arrPaper) {
+        [self.scrollText imageWithView:self.scrollText withFrame:CGRectMake(0, 0, 598, 842) withCompleteBlock:^(NSArray *arrPaper) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 UIPrintInteractionController *pic = [UIPrintInteractionController sharedPrintController];

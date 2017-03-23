@@ -45,7 +45,17 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     [self.strDetail removeAllObjects];
     self.strDetail = nil;
     self.strDetail = [NSMutableArray array];
+    NSMutableDictionary *bufferWord = [NSMutableDictionary dictionary];
+    NSMutableDictionary *bufferDetail = [NSMutableDictionary dictionary];
+
     for (NSString* str in arrWord) {
+        NSString *phoneticStr = [bufferWord objectForKey:str];
+        
+        if (phoneticStr) {
+            [arrPhonetic addObject:phoneticStr];
+            [_strDetail addObject:[bufferDetail objectForKey:str]];
+            continue;
+        }
         NSString *strRemove = [str removeSpecifiCharacter];
         NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[strRemove lowercaseString],@"'LIMIT 1"] ;
         sqlite3_stmt *statement;
@@ -59,19 +69,28 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
                 NSString *detail = [[NSString alloc] initWithUTF8String:detailChars];
                 
 //                [Dict setObject:[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail] forKey:[word copy]];
-                [arrPhonetic addObject:[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail]];
+                NSString *phonetic =[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail];
+                [arrPhonetic addObject:phonetic];
                 [_strDetail addObject:detail];
+                [bufferWord setObject:phonetic forKey:str];
+                [bufferDetail setObject:detail forKey:str];
                 i++;
             }
             if (i<=0) {
                 [arrPhonetic addObject:str];
                 [_strDetail addObject:str];
+                [bufferWord setObject:str forKey:str];
+                [bufferDetail setObject:str forKey:str];
+
             }
 
             sqlite3_finalize(statement);
         }else{
             [arrPhonetic addObject:str];
             [_strDetail addObject:str];
+            [bufferWord setObject:str forKey:str];
+            [bufferDetail setObject:str forKey:str];
+
         }
 
 
