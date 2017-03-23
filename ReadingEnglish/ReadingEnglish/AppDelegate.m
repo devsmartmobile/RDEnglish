@@ -18,7 +18,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [RDConstant sharedRDConstant].fontSizeView = 15;
+    [RDConstant sharedRDConstant].fontSizeView = roundf(15 * (([UIScreen screens][0].bounds.size.height)/736));
     [RDConstant sharedRDConstant].langCode = 4;
 
     // Override point for customization after application launch.

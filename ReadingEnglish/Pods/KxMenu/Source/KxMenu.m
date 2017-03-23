@@ -46,7 +46,7 @@ const CGFloat kArrowSize = 12.f;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface KxMenuView : UIView
+@interface KxMenuView : UIView 
 @end
 
 @interface KxMenuOverlay : UIView
@@ -329,10 +329,11 @@ typedef enum {
 {
     _menuItems = menuItems;
     _contentView = [self mkContentViewForDictionary];
-    UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectMake(_contentView.bounds.origin.x + 10.0f, _contentView.bounds.origin.y + 10.0f, _contentView.bounds.size.width - 20.0f, _contentView.bounds.size.height - 20.0f)];
-    [webV.layer setCornerRadius:0.6];
+    UIWebView *webV = [[UIWebView alloc] initWithFrame:CGRectMake(_contentView.bounds.origin.x + roundf(10 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.origin.y + roundf(10 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.size.width - roundf(20 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.size.height - roundf(20 * (([UIScreen screens][0].bounds.size.height)/736)))];
     [webV loadHTMLString:[KxMenu  sharedMenu].htmlString baseURL:[[NSBundle mainBundle] bundleURL]];
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(webV.frame.size.width- 40, 5, 30, 30)];
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(webV.frame.size.width- roundf(40 * (([UIScreen screens][0].bounds.size.height)/736)), 5, roundf(30 * (([UIScreen screens][0].bounds.size.height)/736))
+, roundf(30 * (([UIScreen screens][0].bounds.size.height)/736)))];
+    webV.delegate = [KxMenu sharedMenu];
     [button setImage:[UIImage imageNamed:@"play_icon_audio"] forState:UIControlStateNormal];
     button.contentMode = UIViewContentModeScaleAspectFit;
     button.titleLabel.text = @"Play";
@@ -605,7 +606,6 @@ typedef enum {
     const CGFloat kMarginY = 5.f;
     
     UIFont *titleFont = [KxMenu titleFont];
-    if (!titleFont) titleFont = [UIFont boldSystemFontOfSize:16];
     
     CGFloat maxImageWidth = 0;
     CGFloat maxItemHeight = 0;
@@ -619,7 +619,7 @@ typedef enum {
     }
     
     for (KxMenuItem *menuItem in _menuItems) {
-        
+        if (!titleFont) titleFont = [UIFont boldSystemFontOfSize:menuItem.fontSize];
         const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
         const CGSize imageSize = menuItem.image.size;
         
@@ -1033,6 +1033,18 @@ static UIFont *gTitleFont;
     _menuView = [[KxMenuView alloc] init];
     [_menuView showMenuInView:view fromRect:rect menuItems:menuItems];    
 }
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+//rgb(236, 240, 241)
+    //    NSString *cssString = @"C,F,I,N,Q { font-family: Helvetica; font-size: %dpx ;color: rgb(44, 62, 80);}"; // 1
+//    NSString *cssString = @"body { font-family: Helvetica; font-size: %dpx ;color:  rgb(41, 128, 185))}"; // 1
+//    NSString * cssString=@"body { font-family: Helvetica; color: rgb(41, 128, 185))}";
+    NSString *cssString = @"body { font-family: Helvetica; font-size: 10px;background-color: rgb(236, 240, 241)}"; // 1
+    NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style)"; // 2
+    NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssString]; // 3
+    [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString]; // 4
+}
+
 - (void) showMenuInViewForDictionary:(UIView *)view
                fromRect:(CGRect)rect
               menuItems:(NSArray *)menuItems

@@ -51,8 +51,8 @@ const static UPStackMenuItemLabelPosition_e kStackMenuItemDefaultLabelPosition  
         if(_highlightedImage)
             [_imageButton setImage:_highlightedImage forState:UIControlStateSelected];
         [_imageButton setFrame:CGRectMake(0, 0,
-                                          MAX(50, _highlightedImage.size.width),
-                                          MAX(50, _highlightedImage.size.height))];
+                                          MAX(roundf(50 * ([UIScreen screens][0].bounds.size.height/736)),   roundf(_highlightedImage.size.width * ([UIScreen screens][0].bounds.size.height/736))),
+                                          MAX(roundf(50 * ([UIScreen screens][0].bounds.size.height/736)), roundf(_highlightedImage.size.width * ([UIScreen screens][0].bounds.size.height/736))))];
         
         _label = [[UILabel alloc] initWithFrame:CGRectZero];
         [_label setLineBreakMode:NSLineBreakByClipping];

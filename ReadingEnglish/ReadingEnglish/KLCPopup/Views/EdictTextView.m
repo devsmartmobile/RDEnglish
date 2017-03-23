@@ -339,112 +339,8 @@
 
 - (void)showMenu:(UILabel *)sender
 {
-    NSArray *menuItems =
-    @[
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"Share this"
-                     image:[UIImage imageNamed:@"action_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
-      
-      [KxMenuItem menuItem:@"Check this menu"
-                     image:nil
-                    target:self
-                    action:@selector(pushMenuItem:)],
-      
-      [KxMenuItem menuItem:@"Reload page"
-                     image:[UIImage imageNamed:@"reload"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
-      
-      [KxMenuItem menuItem:@"Search"
-                     image:[UIImage imageNamed:@"search_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
-      
-      [KxMenuItem menuItem:@"Go home"
-                     image:[UIImage imageNamed:@"home_icon"]
-                    target:self
-                    action:@selector(pushMenuItem:)],
-      ];
-    if (self.superview.frame.size.height > 736) {
-        menuItems =
-        @[
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456 1234456 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"Share this"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          
-          [KxMenuItem menuItem:@"Check this menu"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          
-          [KxMenuItem menuItem:@"Reload page"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          
-          [KxMenuItem menuItem:@"Search"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          
-          [KxMenuItem menuItem:@"Go home"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          [KxMenuItem menuItem:@"Go home"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)],
-          [KxMenuItem menuItem:@"Go home"
-                         image:nil
-                        target:self
-                        action:@selector(pushMenuItem:)]
-
-          ];
-
-    }
-    if (self.superview.frame.size.height <586) {
-        menuItems =
-        @[
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456 "
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          ];
-        
-    }
-
+    NSArray *menuItems = [[UtilsXML utilXMLInstance] getArrayMenuItemForScreenSearchText:(NSInteger)self.superview.frame.size.height];
+    
     KxMenuItem *first = menuItems[0];
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentCenter;
@@ -455,11 +351,6 @@
     [KxMenu showMenuInView:self
                   fromRect:CGRectMake(sender.frame.origin.x, sender.frame.origin.y - (self.contentOffset.y > 0 ? self.contentOffset.y :0.0f), sender.frame.size.width, sender.frame.size.height)
                  menuItems:menuItems];
-}
-
-- (void) pushMenuItem:(id)sender
-{
-    NSLog(@"%@", sender);
 }
 
 @end

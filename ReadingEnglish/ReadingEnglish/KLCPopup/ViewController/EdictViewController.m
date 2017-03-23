@@ -37,7 +37,11 @@
     
     NSTimer *timer;
 
+    __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
+    __weak IBOutlet NSLayoutConstraint *constantHeightEnglishDictionary;
 }
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constantHeigtButtonPhonetic;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constantWidthButtonPhonetic;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPhonetic;
 @property (copy , nonatomic)NSString *textBuffer;
 @property (assign , nonatomic)NSUInteger fontSizeBuffer;
@@ -77,16 +81,16 @@
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
     [UIView animateWithDuration:0.1 animations:^{
-        if (self.bottomSpaceSearchText.constant == 61) {
+        if (self.bottomSpaceSearchText.constant == roundf(61 * (self.view.frame.size.height/736))) {
             self.bottomSpaceSearchText.constant = keyboardFrameBeginRect.size.height +self.bottomSpaceSearchText.constant ;
         }
-        if (self.bottomConstraintTextInput.constant == 61) {
+        if (self.bottomConstraintTextInput.constant == roundf(61 * (self.view.frame.size.height/736))) {
             self.bottomConstraintTextInput.constant = self.bottomConstraintTextInput.constant + keyboardFrameBeginRect.size.height;
         }
         if (self.bottomConstraintSearchEnglish.constant == 0) {
             self.bottomConstraintSearchEnglish.constant = self.bottomConstraintSearchEnglish.constant + keyboardFrameBeginRect.size.height;
         }
-        if (stack.center.y == self.view.frame.size.height - 50) {
+        if (stack.center.y == self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
             [stack setCenter:CGPointMake(stack.center.x, stack.center.y - keyboardFrameBeginRect.size.height)];
         }
         self.topConstraintScrollText.constant = 0.f;
@@ -111,6 +115,8 @@
     
 }
 - (void)keyboardDidHide: (NSNotification *) notif{
+    [stack closeStack];
+    [KxMenu dismissMenu];
     // Do something here
     NSDictionary* keyboardInfo = [notif userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
@@ -189,12 +195,11 @@
 
     //setting content stack
 //    rgb(127, 140, 141)
-    contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 64)];
+    contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, roundf(64 * (self.view.frame.size.height/736)), roundf(64 * (self.view.frame.size.height/736)))];
     UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"circle-add"]];
 //    [contentView setBackgroundColor:[UIColor colorWithRed:127/255. green:140/255. blue:141/255. alpha:1.]];
     [contentView setBackgroundColor:[UIColor clearColor]];
-
-    [contentView.layer setCornerRadius:30];
+    [contentView.layer setCornerRadius:roundf(30 * (self.view.frame.size.height/736))];
     [icon setContentMode:UIViewContentModeScaleToFill];
     [icon setFrame:CGRectInset(contentView.frame, 0, 0)];
     [contentView addSubview:icon];
@@ -203,10 +208,20 @@
 //    [[UITextView appearance] setTintColor:[UIColor blackColor]];
 //    [[UITextField appearance] setTintColor:[UIColor blackColor]];
     self.banerView.hidden = YES;
-    self.topConstraintButtonSwitch.constant = - (self.banerView.frame.size.height -9);
     //
     // Create a queue to perform recognition operations
     self.operationQueue = [[NSOperationQueue alloc] init];
+    constantHeightEnglishDictionary.constant = roundf(62 * (self.view.frame.size.height/736));
+    
+    self.constantHeigtButtonPhonetic.constant = roundf(self.constantHeigtButtonPhonetic.constant * (self.view.frame.size.height/736));
+    self.constantWidthButtonPhonetic.constant = roundf(self.constantWidthButtonPhonetic.constant * (self.view.frame.size.height/736));
+    
+    self.bottomSpaceSearchText.constant = roundf(self.bottomSpaceSearchText.constant * (self.view.frame.size.height/736));
+    self.bottomConstraintTextInput.constant = roundf(self.bottomConstraintTextInput.constant * (self.view.frame.size.height/736));
+
+    self.searchText.font =[UIFont systemFontOfSize:roundf(18 * (([UIScreen screens][0].bounds.size.height)/736))] ;
+    constantHeightBanerView.constant = roundf(constantHeightBanerView.constant * (self.view.frame.size.height/736));
+    self.topConstraintButtonSwitch.constant = - (constantHeightBanerView.constant -9);
 
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -221,9 +236,11 @@
 {
 //    rgb(236, 240, 241)
 //    rgb(44, 62, 80)
-    [self.view setBackgroundColor:[UIColor colorWithRed:236 green:240 blue:241 alpha:0.1]];
+//    [self.view setBackgroundColor:[UIColor colorWithRed:236 green:240 blue:241 alpha:0.1]];
 //    self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     self.searchText.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
+    [self.buttonPhonetic updateConstraints];
+    [self.view updateConstraints];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -357,7 +374,7 @@
         [stack removeFromSuperview];
     
     stack = [[UPStackMenu alloc] initWithContentView:contentView];
-    [stack setCenter:CGPointMake(self.view.frame.size.width - 50, self.view.frame.size.height - 50)];
+    [stack setCenter:CGPointMake(self.view.frame.size.width - roundf(50 * (self.view.frame.size.height/736)), self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736)))];
     [stack setDelegate:self];
     
 //    UPStackMenuItem *getPhonetic = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"Switch"] highlightedImage:nil title:@""];
@@ -593,114 +610,11 @@
 }
 - (void)showMenuSearchText:(NSString *)htmlString withAudioText:(NSString*)audioText;
 {
-    NSArray *menuItems =
-    @[
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                     image:nil
-                    target:nil
-                    action:NULL],
-      ];
-    if (self.view.frame.size.height > 736) {
-        menuItems =
-        @[
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456 1234456 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL]
-          
-          ];
-        
-    }
-    if (self.view.frame.size.height <586) {
-        menuItems =
-        @[
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456 "
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          [KxMenuItem menuItem:@"ACTION MENU 1234456"
-                         image:nil
-                        target:nil
-                        action:NULL],
-          
-          ];
-
-    }
-    KxMenuItem *first = menuItems[0];
-    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
-    first.alignment = NSTextAlignmentCenter;
+    NSArray *menuItems = [[UtilsXML utilXMLInstance] getArrayMenuItemForScreenSearchText:(NSInteger)self.view.frame.size.height];
+    KxMenuItem *first0 = menuItems[0];
+    first0.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first0.alignment = NSTextAlignmentCenter;
+    first0.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     [KxMenu sharedMenu].htmlString = htmlString;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_DETAIL_DICTIONARY;
     [KxMenu sharedMenu].textAudio = audioText;
@@ -781,7 +695,7 @@
       ];
     
     KxMenuItem *first = menuItems[0];
-    first.fontSize = 15;
+    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     KxMenuItem *two = menuItems[1];
     two.fontSize = 14;
     KxMenuItem *three = menuItems[2];
@@ -793,22 +707,22 @@
     KxMenuItem *six = menuItems[5];
     six.fontSize = 18;
     KxMenuItem *seven = menuItems[6];
-    seven.fontSize = 15;
+    seven.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     KxMenuItem *eight = menuItems[7];
     eight.languagecode = 0;
-    eight.fontSize = 15;
+    eight.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     KxMenuItem *neight = menuItems[8];
     neight.languagecode = 1;
-    neight.fontSize = 15;
+    neight.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     KxMenuItem *ten = menuItems[9];
     ten.languagecode = 2;
-    ten.fontSize = 15;
+    ten.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     KxMenuItem *menu1 = menuItems[10];
-    menu1.fontSize = 15;
+    menu1.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     menu1.languagecode = 3;
     KxMenuItem *menu2 = menuItems[11];
     menu2.languagecode = 4;
-    menu2.fontSize = 15;
+    menu2.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
 
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentLeft;
@@ -846,12 +760,12 @@
       ];
     
     KxMenuItem *first = menuItems[0];
-    first.fontSize = 15;
+    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     KxMenuItem *two = menuItems[1];
-    two.fontSize = 14;
+    two.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     two.typePrint = MENU_TYPE_AIRPRINT;
     KxMenuItem *three = menuItems[2];
-    three.fontSize = 15;
+    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     three.typePrint = MENU_TYPE_CANONPRINT;
 
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];

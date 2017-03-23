@@ -61,7 +61,7 @@ typedef enum : NSUInteger {
                    action:(SEL) action;
 @end
 
-@interface KxMenu : NSObject
+@interface KxMenu : NSObject <UIWebViewDelegate>
 @property (readwrite, nonatomic) NSString *htmlString;
 @property (readwrite, nonatomic) NSString *textAudio;
 @property (assign, nonatomic)  MENU_TYPE_SHOWING typeSHow;

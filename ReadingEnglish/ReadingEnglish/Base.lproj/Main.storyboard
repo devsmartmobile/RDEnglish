@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="c8j-VH-Tps">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -18,14 +18,14 @@
                         <viewControllerLayoutGuide type="bottom" id="Ebe-O8-F52"/>
                     </layoutGuides>
                     <view key="view" tag="-1000" contentMode="scaleToFill" id="Qwx-tQ-del">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" tag="-1002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dI1-Zq-dqc" customClass="EdictTextView">
-                                <rect key="frame" x="0.0" y="20" width="375" height="586"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="655"/>
                             </scrollView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="-1003" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4r-g3-g0l">
-                                <rect key="frame" x="0.0" y="20" width="375" height="586"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="655"/>
                                 <attributedString key="attributedText"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <dataDetectorType key="dataDetectorTypes" calendarEvent="YES"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </textView>
                             <textField opaque="NO" clipsSubviews="YES" tag="-1004" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="English - Vietnamese Dictionary" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fIB-LG-aT9">
-                                <rect key="frame" x="0.0" y="605" width="375" height="62"/>
+                                <rect key="frame" x="0.0" y="674" width="414" height="62"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="62" id="qCD-2E-ymV"/>
@@ -47,14 +47,14 @@
                                 </connections>
                             </textField>
                             <view tag="-1005" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bqq-Zd-8bM" customClass="GADBannerView">
-                                <rect key="frame" x="0.0" y="20" width="375" height="61"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="61"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="61" id="tCx-xy-5xL"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" tag="-1006" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1dY-ua-Z6P">
-                                <rect key="frame" x="321" y="90" width="46" height="46"/>
+                                <rect key="frame" x="360" y="90" width="46" height="46"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="46" id="2OO-Yh-XA8"/>
@@ -92,6 +92,10 @@
                         <outlet property="bottomConstraintTextInput" destination="ikT-yJ-aya" id="VCp-C0-GA4"/>
                         <outlet property="bottomSpaceSearchText" destination="N5l-7e-2tp" id="23p-Y8-eh3"/>
                         <outlet property="buttonPhonetic" destination="1dY-ua-Z6P" id="fYC-Ye-C3L"/>
+                        <outlet property="constantHeightBanerView" destination="tCx-xy-5xL" id="cru-CU-OOF"/>
+                        <outlet property="constantHeightEnglishDictionary" destination="qCD-2E-ymV" id="NeO-tR-hxg"/>
+                        <outlet property="constantHeigtButtonPhonetic" destination="2OO-Yh-XA8" id="gnU-Jp-dKs"/>
+                        <outlet property="constantWidthButtonPhonetic" destination="Ph8-d4-RyF" id="wnE-Eo-JaR"/>
                         <outlet property="scrollText" destination="dI1-Zq-dqc" id="XoJ-b9-a5f"/>
                         <outlet property="searchText" destination="fIB-LG-aT9" id="xo8-ij-rer"/>
                         <outlet property="textViewInput" destination="l4r-g3-g0l" id="sbW-Tg-Fyk"/>

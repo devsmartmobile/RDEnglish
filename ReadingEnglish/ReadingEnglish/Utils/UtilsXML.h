@@ -13,7 +13,11 @@
 @property(strong, nonatomic) NSArray *fontNames;
 @property(strong, nonatomic) NSArray *langCodes;
 
-+ (UtilsXML*)utilXMLInstance ;
-- (NSString *)drawImagesToPdf:(NSArray*)images;
++(UtilsXML*)utilXMLInstance ;
+-(NSString *)drawImagesToPdf:(NSArray*)images;
 -(NSString*)getPhoneticFromHTML:(NSString*)html;
+-(NSInteger)getFontForScreen:(NSInteger)height;
+-(NSArray *)getArrayMenuItemForScreenSearchText:(NSInteger)height;
+-(CGFloat)getHeightEnglishVietnameseDictionaryForScreen:(NSInteger)height;
+
 @end
