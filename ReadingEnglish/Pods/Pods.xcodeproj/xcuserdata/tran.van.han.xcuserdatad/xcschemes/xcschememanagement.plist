@@ -6,48 +6,48 @@
 	<dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>HTMLKit.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
-		</dict>
-		<key>Kiwi.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>KxMenu.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>4</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>Pods-ReadingEnglish.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>6</integer>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RATreeView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>TesseractOCRiOS.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>7</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>UPStackMenu.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>8</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>01E15DACD8B02C1D406713FC6F1FC644</key>
+		<key>15F06B48A2A4C0641E04D6EBC7BB64AA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,17 +62,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>53347878AA8C63C62F993AAF4C537F5A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>755345325818102A8B1DDDD378EC9676</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C8384F58A42FD4B2D7B7BBDE9C87E06F</key>
+		<key>B2ECF2736A0287344EE154617BB25841</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DE1CF7018BDE55032D23EE6FD6F623DE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA6B234680BFD6234AC5C57EF8D7444D</key>
+		<key>E680C0B932B15E3DE86EBF8775777FDD</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -1145,14 +1145,14 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         if (U_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
             UIAlertController *alert = [UIAlertController
                                         alertControllerWithTitle:@""
-                                        message:@"Open Canon app"
+                                        message:@"PRINT WITH CANON APP"
                                         preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel"
+            [alert addAction:[UIAlertAction actionWithTitle:@"CANCEL"
                                                       style:UIAlertActionStyleCancel
                                                     handler:nil]];
             [alert
              addAction:[UIAlertAction
-                        actionWithTitle:@"Open Canon App"
+                        actionWithTitle:@"PRINT WITH CANON APP"
                         style:UIAlertActionStyleDestructive
                         handler:^(UIAlertAction *_Nonnull action) {
                             [self openCannonApp];
@@ -1164,19 +1164,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
             [[[UIAlertView alloc]
               initWithTitle:@""
-              message:@"Reading English Open Canon App"
+              message:@"READING ENGLISH PRINT WITH CANON"
               delegate:(id<UIAlertViewDelegate>)self
-              cancelButtonTitle:@"Cancel"
-              otherButtonTitles:@"Open Canon App", nil] show];
+              cancelButtonTitle:@"CANCEL"
+              otherButtonTitles:@"PRINT WITH CANON APP", nil] show];
 #pragma clang diagnostic pop
         }
     } else {
         /* Encourage Users to Install CPIS if CPIS is not Installed.
          */
         NSString *message = @"PRINT CANNON APP APPSTORE INSTALL";
-        NSString *titleAlert = @"Canon App Is Installed";
-        NSString *cancelButtonAlert = @"Cancel";
-        NSString *acceptButtonAlert = @"Ok";
+        NSString *titleAlert = @"CANON APP IS INSTALLED";
+        NSString *cancelButtonAlert = @"CANCEL";
+        NSString *acceptButtonAlert = @"OK";
         
         if (U_SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"9.0")) {
             UIAlertController *alert = [UIAlertController
@@ -1210,10 +1210,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 willDismissWithButtonIndex:(NSInteger)buttonIndex
 NS_DEPRECATED_IOS(2_0, 9_0) {
     if (buttonIndex != alertView.cancelButtonIndex) {
-        if ([alertView.title isEqualToString:@"Canon App Not Install"]) {
+        if ([alertView.title isEqualToString:@"CANON APP NOT INSTALL"]) {
             [self openAppstoreForCannon];
         } else if ([alertView.message
-                    isEqualToString:@"Open Canon App"]) {
+                    isEqualToString:@"PRINT WITH CANON APP"]) {
             [self openCannonApp];
         }
     }
@@ -1288,6 +1288,11 @@ clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0) {
                                          selector:@selector(siwtchViewText:)
                                          userInfo:nil
                                           repeats:NO];
+    [KxMenu dismissMenu];
+    [stack closeStack];
+    [self.textViewInput resignFirstResponder];
+    [self.searchText resignFirstResponder];
+
 }
 #pragma mark - handle timer view app
 -(void)siwtchViewText:(id)sender

@@ -19,8 +19,6 @@
 		7D9A113A1E80C835001F5127 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9A11391E80C835001F5127 /* Foundation.framework */; };
 		7D9A113D1E80CDD4001F5127 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E981E808C1A0046FD82 /* CoreGraphics.framework */; };
 		7D9A114D1E810724001F5127 /* RDConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9A114C1E810724001F5127 /* RDConstant.m */; };
-		7D9A114E1E8114A9001F5127 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; };
-		7D9A114F1E8114A9001F5127 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		935D9CC8CD3217A16BB31D5C /* libPods-ReadingEnglish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */; };
 		E8F96E531E804D750046FD82 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E521E804D750046FD82 /* main.m */; };
 		E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E551E804D750046FD82 /* AppDelegate.m */; };
@@ -41,23 +39,9 @@
 		E8F96EB41E808DDA0046FD82 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96EB31E808DDA0046FD82 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		7D9A11501E8114A9001F5127 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				7D9A114F1E8114A9001F5127 /* XCTest.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		7D92FCAE1E837E5600320761 /* EdictDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictDatabase.h; sourceTree = "<group>"; };
-		7D92FCAF1E837E5600320761 /* EdictDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictDatabase.m; sourceTree = "<group>"; };
+		7D92FCAF1E837E5600320761 /* EdictDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictDatabase.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7D92FCB11E837E5600320761 /* tbl_edict.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = tbl_edict.sqlite; sourceTree = "<group>"; };
 		7D92FCB31E837E5600320761 /* EdictViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictViewController.h; sourceTree = "<group>"; };
 		7D92FCB41E837E5600320761 /* EdictViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictViewController.m; sourceTree = "<group>"; };
@@ -115,7 +99,6 @@
 			files = (
 				7D9A113D1E80CDD4001F5127 /* CoreGraphics.framework in Frameworks */,
 				7D9A113A1E80C835001F5127 /* Foundation.framework in Frameworks */,
-				7D9A114E1E8114A9001F5127 /* XCTest.framework in Frameworks */,
 				E8F96EB41E808DDA0046FD82 /* libz.tbd in Frameworks */,
 				E8F96EB21E808DBB0046FD82 /* libz.1.2.8.tbd in Frameworks */,
 				E8F96E9D1E808C3F0046FD82 /* libstdc++.6.0.9.tbd in Frameworks */,
@@ -291,7 +274,6 @@
 				E8F96E4C1E804D750046FD82 /* Resources */,
 				6FC217EF4DC0AD9DFEE1D607 /* [CP] Embed Pods Frameworks */,
 				7912E819E501FFA335BF79C4 /* [CP] Copy Pods Resources */,
-				7D9A11501E8114A9001F5127 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -554,7 +536,6 @@
 					"/usr/lib/libstdc++.6.0.9.dylib",
 					"-l\"GoogleToolboxForMac\"",
 					"-l\"HTMLKit\"",
-					"-l\"Kiwi\"",
 					"-l\"KxMenu\"",
 					"-l\"MBProgressHUD\"",
 					"-l\"TesseractOCRiOS\"",
@@ -606,10 +587,6 @@
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
-					"\"XCTest\"",
-					"-weak_framework",
-					"\"AdSupport\"",
-					"-weak_framework",
 					"\"JavaScriptCore\"",
 					"-weak_framework",
 					"\"SafariServices\"",
@@ -644,7 +621,6 @@
 					"/usr/lib/libstdc++.6.0.9.dylib",
 					"-l\"GoogleToolboxForMac\"",
 					"-l\"HTMLKit\"",
-					"-l\"Kiwi\"",
 					"-l\"KxMenu\"",
 					"-l\"MBProgressHUD\"",
 					"-l\"TesseractOCRiOS\"",
@@ -696,10 +672,6 @@
 					"-framework",
 					"\"UIKit\"",
 					"-framework",
-					"\"XCTest\"",
-					"-weak_framework",
-					"\"AdSupport\"",
-					"-weak_framework",
 					"\"JavaScriptCore\"",
 					"-weak_framework",
 					"\"SafariServices\"",

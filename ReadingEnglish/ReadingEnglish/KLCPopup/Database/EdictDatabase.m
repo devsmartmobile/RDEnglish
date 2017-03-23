@@ -13,7 +13,8 @@
 #import "NSString+FDEdict.h"
 
 @implementation EdictDatabase
-
+@synthesize bufferWord = _bufferWord;
+@synthesize bufferDetail = _bufferDetail;
 static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
 
 + (EdictDatabase*)database {
@@ -27,8 +28,8 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
 
 - (id)init {
     if ((self = [super init])) {
-        bufferWord= [NSMutableDictionary dictionary];
-        bufferDetail= [NSMutableDictionary dictionary];
+        _bufferWord= [NSMutableDictionary dictionary];
+        _bufferDetail= [NSMutableDictionary dictionary];
         NSString *sqLiteDb = [[NSBundle mainBundle] pathForResource:@"tbl_edict" ofType:@"sqlite"];
 
         if (sqlite3_open([sqLiteDb UTF8String], &_database) != SQLITE_OK) {
@@ -49,11 +50,10 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     self.strDetail = [NSMutableArray array];
 
     for (NSString* str in arrWord) {
-        NSString *phoneticStr = [bufferWord objectForKey:str];
-        
+        NSString *phoneticStr = [_bufferWord objectForKey:str];
         if (phoneticStr) {
             [arrPhonetic addObject:phoneticStr];
-            [_strDetail addObject:[bufferDetail objectForKey:str]];
+            [_strDetail addObject:[_bufferDetail objectForKey:str]];
             continue;
         }
         NSString *strRemove = [str removeSpecifiCharacter];
@@ -72,18 +72,18 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
                 NSString *phonetic =[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail];
                 [arrPhonetic addObject:phonetic];
                 [_strDetail addObject:detail];
-                if (![bufferWord objectForKey:str]) {
-                    [bufferWord setObject:phonetic forKey:str];
-                    [bufferDetail setObject:detail forKey:str];
+                if (![_bufferWord objectForKey:str]) {
+                    [_bufferWord setObject:phonetic forKey:str];
+                    [_bufferDetail setObject:detail forKey:str];
                 }
                 i++;
             }
             if (i<=0) {
                 [arrPhonetic addObject:str];
                 [_strDetail addObject:str];
-                if (![bufferWord objectForKey:str]) {
-                    [bufferWord setObject:str forKey:str];
-                    [bufferDetail setObject:str forKey:str];
+                if (![_bufferWord objectForKey:str]) {
+                    [_bufferWord setObject:str forKey:str];
+                    [_bufferDetail setObject:str forKey:str];
 
                 }
 
@@ -93,14 +93,15 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
         }else{
             [arrPhonetic addObject:str];
             [_strDetail addObject:str];
-            if (![bufferWord objectForKey:str]) {
-            [bufferWord setObject:str forKey:str];
-            [bufferDetail setObject:str forKey:str];
+            if (![_bufferWord objectForKey:str]) {
+            [_bufferWord setObject:str forKey:str];
+            [_bufferDetail setObject:str forKey:str];
             }
         }
 
 
     }
+    
     return arrPhonetic;
     
 }
@@ -142,8 +143,8 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     NSString *query=[NSString stringWithFormat:@" CREATE TABLE IF NOT EXISTS '%@'('%@' TEXT PRIMARY KEY,'%@' TEXT);",@"GroupStory",@"IDG",@"NameG"];
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
-        return  TRUE;
         sqlite3_close(_database);
+        return  TRUE;
     }else
     {
         NSAssert(0, @"Table failed to create");
@@ -157,8 +158,8 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     NSString *query=[NSString stringWithFormat:@" CREATE TABLE IF NOT EXISTS '%@'('%@' TEXT PRIMARY KEY,'%@' TEXT);",@"DetailStory",@"IDG",@"Detail"];
     sqlite3_stmt *statement;
     if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
-        return  TRUE;
         sqlite3_close(_database);
+        return  TRUE;
     }else
     {
         NSAssert(0, @"Table failed to create");
