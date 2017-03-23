@@ -7,33 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D92FCC01E837E5600320761 /* EdictDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCAF1E837E5600320761 /* EdictDatabase.m */; };
+		7D92FCC11E837E5600320761 /* tbl_edict.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7D92FCB11E837E5600320761 /* tbl_edict.sqlite */; };
+		7D92FCC21E837E5600320761 /* EdictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCB41E837E5600320761 /* EdictViewController.m */; };
+		7D92FCC31E837E5600320761 /* RDBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCB61E837E5600320761 /* RDBaseViewController.m */; };
+		7D92FCC41E837E5600320761 /* EdictInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCB91E837E5600320761 /* EdictInfo.m */; };
+		7D92FCC51E837E5600320761 /* EDictLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCBB1E837E5600320761 /* EDictLabel.m */; };
+		7D92FCC61E837E5600320761 /* EdictTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCBD1E837E5600320761 /* EdictTextView.m */; };
+		7D92FCC71E837E5600320761 /* PhoneticTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCBF1E837E5600320761 /* PhoneticTextView.m */; };
 		7D9A11381E80C545001F5127 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 7D9A11371E80C545001F5127 /* tessdata */; };
 		7D9A113A1E80C835001F5127 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9A11391E80C835001F5127 /* Foundation.framework */; };
 		7D9A113D1E80CDD4001F5127 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E981E808C1A0046FD82 /* CoreGraphics.framework */; };
 		7D9A114D1E810724001F5127 /* RDConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9A114C1E810724001F5127 /* RDConstant.m */; };
 		7D9A114E1E8114A9001F5127 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; };
 		7D9A114F1E8114A9001F5127 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E941E808BF80046FD82 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7DD12FEC1E829628001AAB80 /* RDBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */; };
 		935D9CC8CD3217A16BB31D5C /* libPods-ReadingEnglish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */; };
 		E8F96E531E804D750046FD82 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E521E804D750046FD82 /* main.m */; };
 		E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E551E804D750046FD82 /* AppDelegate.m */; };
 		E8F96E5C1E804D750046FD82 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E5A1E804D750046FD82 /* Main.storyboard */; };
 		E8F96E5E1E804D750046FD82 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E5D1E804D750046FD82 /* Assets.xcassets */; };
 		E8F96E611E804D750046FD82 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E5F1E804D750046FD82 /* LaunchScreen.storyboard */; };
-		E8F96E771E804D9D0046FD82 /* EdictDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E691E804D9D0046FD82 /* EdictDatabase.m */; };
-		E8F96E781E804D9D0046FD82 /* EdictInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E6B1E804D9D0046FD82 /* EdictInfo.m */; };
-		E8F96E791E804D9D0046FD82 /* EDictLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E6D1E804D9D0046FD82 /* EDictLabel.m */; };
-		E8F96E7A1E804D9D0046FD82 /* EdictTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E6F1E804D9D0046FD82 /* EdictTextView.m */; };
-		E8F96E7B1E804D9D0046FD82 /* EdictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E711E804D9D0046FD82 /* EdictViewController.m */; };
 		E8F96E7C1E804D9D0046FD82 /* KLCPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E741E804D9D0046FD82 /* KLCPopup.m */; };
-		E8F96E7D1E804D9D0046FD82 /* PhoneticTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E761E804D9D0046FD82 /* PhoneticTextView.m */; };
 		E8F96E851E804DAB0046FD82 /* FDDeviceHardware.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E801E804DAB0046FD82 /* FDDeviceHardware.m */; };
 		E8F96E861E804DAB0046FD82 /* NSString+FDEdict.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E821E804DAB0046FD82 /* NSString+FDEdict.m */; };
 		E8F96E871E804DAB0046FD82 /* UtilsXML.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E841E804DAB0046FD82 /* UtilsXML.m */; };
 		E8F96E8A1E804DD00046FD82 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E891E804DD00046FD82 /* GoogleService-Info.plist */; };
 		E8F96E8D1E8050620046FD82 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E8C1E8050620046FD82 /* libxml2.tbd */; };
 		E8F96E8F1E8050670046FD82 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E8E1E8050670046FD82 /* libsqlite3.tbd */; };
-		E8F96E931E805F530046FD82 /* tbl_edict.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E921E805F530046FD82 /* tbl_edict.sqlite */; };
 		E8F96E971E808C130046FD82 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E961E808C130046FD82 /* CoreImage.framework */; };
 		E8F96E9B1E808C380046FD82 /* libTesseractOCRiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E9A1E808C380046FD82 /* libTesseractOCRiOS.a */; };
 		E8F96E9D1E808C3F0046FD82 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E9C1E808C3F0046FD82 /* libstdc++.6.0.9.tbd */; };
@@ -56,13 +56,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D92FCAE1E837E5600320761 /* EdictDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictDatabase.h; sourceTree = "<group>"; };
+		7D92FCAF1E837E5600320761 /* EdictDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictDatabase.m; sourceTree = "<group>"; };
+		7D92FCB11E837E5600320761 /* tbl_edict.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = tbl_edict.sqlite; sourceTree = "<group>"; };
+		7D92FCB31E837E5600320761 /* EdictViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictViewController.h; sourceTree = "<group>"; };
+		7D92FCB41E837E5600320761 /* EdictViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictViewController.m; sourceTree = "<group>"; };
+		7D92FCB51E837E5600320761 /* RDBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDBaseViewController.h; sourceTree = "<group>"; };
+		7D92FCB61E837E5600320761 /* RDBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDBaseViewController.m; sourceTree = "<group>"; };
+		7D92FCB81E837E5600320761 /* EdictInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictInfo.h; sourceTree = "<group>"; };
+		7D92FCB91E837E5600320761 /* EdictInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictInfo.m; sourceTree = "<group>"; };
+		7D92FCBA1E837E5600320761 /* EDictLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDictLabel.h; sourceTree = "<group>"; };
+		7D92FCBB1E837E5600320761 /* EDictLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDictLabel.m; sourceTree = "<group>"; };
+		7D92FCBC1E837E5600320761 /* EdictTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictTextView.h; sourceTree = "<group>"; };
+		7D92FCBD1E837E5600320761 /* EdictTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictTextView.m; sourceTree = "<group>"; };
+		7D92FCBE1E837E5600320761 /* PhoneticTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneticTextView.h; sourceTree = "<group>"; };
+		7D92FCBF1E837E5600320761 /* PhoneticTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneticTextView.m; sourceTree = "<group>"; };
 		7D9A11371E80C545001F5127 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		7D9A11391E80C835001F5127 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7D9A114B1E810724001F5127 /* RDConstant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDConstant.h; sourceTree = "<group>"; };
 		7D9A114C1E810724001F5127 /* RDConstant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDConstant.m; sourceTree = "<group>"; };
 		7DD12FE91E829548001AAB80 /* ReadingEnglishHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReadingEnglishHeader.h; sourceTree = "<group>"; };
-		7DD12FEA1E829628001AAB80 /* RDBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDBaseViewController.h; sourceTree = "<group>"; };
-		7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDBaseViewController.m; sourceTree = "<group>"; };
 		E09A2C081696FCC4EBF1C441 /* Pods-ReadingEnglish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.debug.xcconfig"; sourceTree = "<group>"; };
 		E0F5A174196CCCC6C1CB07AF /* Pods-ReadingEnglish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.release.xcconfig"; sourceTree = "<group>"; };
 		E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReadingEnglish.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -74,20 +87,8 @@
 		E8F96E5D1E804D750046FD82 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8F96E601E804D750046FD82 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E8F96E621E804D750046FD82 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E8F96E681E804D9D0046FD82 /* EdictDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictDatabase.h; sourceTree = "<group>"; };
-		E8F96E691E804D9D0046FD82 /* EdictDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictDatabase.m; sourceTree = "<group>"; };
-		E8F96E6A1E804D9D0046FD82 /* EdictInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictInfo.h; sourceTree = "<group>"; };
-		E8F96E6B1E804D9D0046FD82 /* EdictInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictInfo.m; sourceTree = "<group>"; };
-		E8F96E6C1E804D9D0046FD82 /* EDictLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EDictLabel.h; sourceTree = "<group>"; };
-		E8F96E6D1E804D9D0046FD82 /* EDictLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EDictLabel.m; sourceTree = "<group>"; };
-		E8F96E6E1E804D9D0046FD82 /* EdictTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictTextView.h; sourceTree = "<group>"; };
-		E8F96E6F1E804D9D0046FD82 /* EdictTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictTextView.m; sourceTree = "<group>"; };
-		E8F96E701E804D9D0046FD82 /* EdictViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictViewController.h; sourceTree = "<group>"; };
-		E8F96E711E804D9D0046FD82 /* EdictViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictViewController.m; sourceTree = "<group>"; };
 		E8F96E731E804D9D0046FD82 /* KLCPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KLCPopup.h; sourceTree = "<group>"; };
 		E8F96E741E804D9D0046FD82 /* KLCPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KLCPopup.m; sourceTree = "<group>"; };
-		E8F96E751E804D9D0046FD82 /* PhoneticTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneticTextView.h; sourceTree = "<group>"; };
-		E8F96E761E804D9D0046FD82 /* PhoneticTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneticTextView.m; sourceTree = "<group>"; };
 		E8F96E7F1E804DAB0046FD82 /* FDDeviceHardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDDeviceHardware.h; sourceTree = "<group>"; };
 		E8F96E801E804DAB0046FD82 /* FDDeviceHardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDDeviceHardware.m; sourceTree = "<group>"; };
 		E8F96E811E804DAB0046FD82 /* NSString+FDEdict.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+FDEdict.h"; sourceTree = "<group>"; };
@@ -98,7 +99,6 @@
 		E8F96E8B1E804E250046FD82 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		E8F96E8C1E8050620046FD82 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
 		E8F96E8E1E8050670046FD82 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		E8F96E921E805F530046FD82 /* tbl_edict.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = tbl_edict.sqlite; sourceTree = "<group>"; };
 		E8F96E941E808BF80046FD82 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		E8F96E961E808C130046FD82 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		E8F96E981E808C1A0046FD82 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -137,6 +137,53 @@
 				E0F5A174196CCCC6C1CB07AF /* Pods-ReadingEnglish.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		7D92FCAD1E837E5600320761 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				7D92FCAE1E837E5600320761 /* EdictDatabase.h */,
+				7D92FCAF1E837E5600320761 /* EdictDatabase.m */,
+			);
+			name = Database;
+			path = KLCPopup/Database;
+			sourceTree = "<group>";
+		};
+		7D92FCB01E837E5600320761 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				7D92FCB11E837E5600320761 /* tbl_edict.sqlite */,
+			);
+			name = Resource;
+			path = KLCPopup/Resource;
+			sourceTree = "<group>";
+		};
+		7D92FCB21E837E5600320761 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7D92FCB31E837E5600320761 /* EdictViewController.h */,
+				7D92FCB41E837E5600320761 /* EdictViewController.m */,
+				7D92FCB51E837E5600320761 /* RDBaseViewController.h */,
+				7D92FCB61E837E5600320761 /* RDBaseViewController.m */,
+			);
+			name = ViewController;
+			path = KLCPopup/ViewController;
+			sourceTree = "<group>";
+		};
+		7D92FCB71E837E5600320761 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7D92FCB81E837E5600320761 /* EdictInfo.h */,
+				7D92FCB91E837E5600320761 /* EdictInfo.m */,
+				7D92FCBA1E837E5600320761 /* EDictLabel.h */,
+				7D92FCBB1E837E5600320761 /* EDictLabel.m */,
+				7D92FCBC1E837E5600320761 /* EdictTextView.h */,
+				7D92FCBD1E837E5600320761 /* EdictTextView.m */,
+				7D92FCBE1E837E5600320761 /* PhoneticTextView.h */,
+				7D92FCBF1E837E5600320761 /* PhoneticTextView.m */,
+			);
+			name = Views;
+			path = KLCPopup/Views;
 			sourceTree = "<group>";
 		};
 		C47F57A44261D99C774F267E /* Frameworks */ = {
@@ -178,23 +225,12 @@
 		E8F96E501E804D750046FD82 /* ReadingEnglish */ = {
 			isa = PBXGroup;
 			children = (
-				E8F96E921E805F530046FD82 /* tbl_edict.sqlite */,
+				7D92FCAD1E837E5600320761 /* Database */,
+				7D92FCB01E837E5600320761 /* Resource */,
+				7D92FCB21E837E5600320761 /* ViewController */,
+				7D92FCB71E837E5600320761 /* Views */,
 				E8F96E7E1E804DAB0046FD82 /* Utils */,
-				E8F96E681E804D9D0046FD82 /* EdictDatabase.h */,
-				E8F96E691E804D9D0046FD82 /* EdictDatabase.m */,
-				E8F96E6A1E804D9D0046FD82 /* EdictInfo.h */,
-				E8F96E6B1E804D9D0046FD82 /* EdictInfo.m */,
-				E8F96E6C1E804D9D0046FD82 /* EDictLabel.h */,
-				E8F96E6D1E804D9D0046FD82 /* EDictLabel.m */,
-				7DD12FEA1E829628001AAB80 /* RDBaseViewController.h */,
-				7DD12FEB1E829628001AAB80 /* RDBaseViewController.m */,
-				E8F96E6E1E804D9D0046FD82 /* EdictTextView.h */,
-				E8F96E6F1E804D9D0046FD82 /* EdictTextView.m */,
-				E8F96E701E804D9D0046FD82 /* EdictViewController.h */,
-				E8F96E711E804D9D0046FD82 /* EdictViewController.m */,
 				E8F96E721E804D9D0046FD82 /* KLCPopup */,
-				E8F96E751E804D9D0046FD82 /* PhoneticTextView.h */,
-				E8F96E761E804D9D0046FD82 /* PhoneticTextView.m */,
 				E8F96E541E804D750046FD82 /* AppDelegate.h */,
 				E8F96E551E804D750046FD82 /* AppDelegate.m */,
 				E8F96E5A1E804D750046FD82 /* Main.storyboard */,
@@ -307,9 +343,9 @@
 			files = (
 				E8F96E611E804D750046FD82 /* LaunchScreen.storyboard in Resources */,
 				E8F96E8A1E804DD00046FD82 /* GoogleService-Info.plist in Resources */,
-				E8F96E931E805F530046FD82 /* tbl_edict.sqlite in Resources */,
 				E8F96E5E1E804D750046FD82 /* Assets.xcassets in Resources */,
 				E8F96E5C1E804D750046FD82 /* Main.storyboard in Resources */,
+				7D92FCC11E837E5600320761 /* tbl_edict.sqlite in Resources */,
 				7D9A11381E80C545001F5127 /* tessdata in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,19 +405,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8F96E7B1E804D9D0046FD82 /* EdictViewController.m in Sources */,
-				E8F96E7A1E804D9D0046FD82 /* EdictTextView.m in Sources */,
-				E8F96E791E804D9D0046FD82 /* EDictLabel.m in Sources */,
+				7D92FCC51E837E5600320761 /* EDictLabel.m in Sources */,
+				7D92FCC01E837E5600320761 /* EdictDatabase.m in Sources */,
 				E8F96E861E804DAB0046FD82 /* NSString+FDEdict.m in Sources */,
+				7D92FCC71E837E5600320761 /* PhoneticTextView.m in Sources */,
 				E8F96E7C1E804D9D0046FD82 /* KLCPopup.m in Sources */,
-				E8F96E771E804D9D0046FD82 /* EdictDatabase.m in Sources */,
+				7D92FCC31E837E5600320761 /* RDBaseViewController.m in Sources */,
 				E8F96E871E804DAB0046FD82 /* UtilsXML.m in Sources */,
+				7D92FCC21E837E5600320761 /* EdictViewController.m in Sources */,
+				7D92FCC61E837E5600320761 /* EdictTextView.m in Sources */,
 				7D9A114D1E810724001F5127 /* RDConstant.m in Sources */,
-				E8F96E7D1E804D9D0046FD82 /* PhoneticTextView.m in Sources */,
 				E8F96E851E804DAB0046FD82 /* FDDeviceHardware.m in Sources */,
 				E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */,
-				7DD12FEC1E829628001AAB80 /* RDBaseViewController.m in Sources */,
-				E8F96E781E804D9D0046FD82 /* EdictInfo.m in Sources */,
+				7D92FCC41E837E5600320761 /* EdictInfo.m in Sources */,
 				E8F96E531E804D750046FD82 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
