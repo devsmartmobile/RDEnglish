@@ -12,7 +12,7 @@
 #import "MBProgressHUD.h"
 #import "UPStackMenu.h"
 #import "KxMenu.h"
-
+#import "RDStoryViewController.h"
 @import GoogleMobileAds;
 
 #define debug 1
@@ -34,7 +34,7 @@
     UPStackMenuItem *exportFile;
 
     CGRect keyboardFrameBeginRect;
-    
+    RDStoryViewController *storyViewController;
     NSTimer *timer;
 
     __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
@@ -222,7 +222,7 @@
     self.searchText.font =[UIFont systemFontOfSize:roundf(18 * (([UIScreen screens][0].bounds.size.height)/736))] ;
     constantHeightBanerView.constant = roundf(constantHeightBanerView.constant * (self.view.frame.size.height/736));
     self.topConstraintButtonSwitch.constant = - (constantHeightBanerView.constant -9);
-
+//    [self addStoryView];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -246,7 +246,15 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+-(void)addStoryView
+{
+    // Create the next view controller.
+   storyViewController = [[RDStoryViewController alloc] initWithNibName:@"RDStoryViewController" bundle:nil];
+    [self addChildViewController:storyViewController];
+    [self.view addSubview:storyViewController.view];
+    [storyViewController didMoveToParentViewController:self];
+    
+}
 #pragma mark - handle event of viewcontroller
 - (IBAction)didPressOnPrint:(id)sender {
     [self.textViewInput resignFirstResponder];

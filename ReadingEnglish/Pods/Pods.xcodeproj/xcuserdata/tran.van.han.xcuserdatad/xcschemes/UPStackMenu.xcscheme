@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'DE1CF7018BDE55032D23EE6FD6F623DE'
+               BlueprintIdentifier = '60E4D28C19EAE830265AF7304B265AB2'
                BlueprintName = 'UPStackMenu'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libUPStackMenu.a'>

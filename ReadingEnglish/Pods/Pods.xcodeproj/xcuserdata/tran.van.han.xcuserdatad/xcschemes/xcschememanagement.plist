@@ -29,11 +29,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>RATreeView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>TesseractOCRiOS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -47,12 +42,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>15F06B48A2A4C0641E04D6EBC7BB64AA</key>
+		<key>175B076ED45EB1A3E40F58BA14036467</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>175B076ED45EB1A3E40F58BA14036467</key>
+		<key>33F0A111E605E6959A272633196CEC9F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,27 +57,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>60E4D28C19EAE830265AF7304B265AB2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>755345325818102A8B1DDDD378EC9676</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B2ECF2736A0287344EE154617BB25841</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DE1CF7018BDE55032D23EE6FD6F623DE</key>
+		<key>D6E87B1AC9B6AC90C3CC495322FB3D01</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E1BBB76ADBF2EF4EF2CE5DF6BBC77296</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E680C0B932B15E3DE86EBF8775777FDD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
