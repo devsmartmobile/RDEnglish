@@ -46,7 +46,7 @@ const CGFloat kArrowSize = 12.f;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-@interface KxMenuView : UIView 
+@interface KxMenuView : UIView  <UITableViewDelegate,UITableViewDataSource>
 @end
 
 @interface KxMenuOverlay : UIView
@@ -159,7 +159,7 @@ typedef enum {
     NSArray                     *_menuItems;
     AVSpeechUtterance *utterance;
     AVSpeechSynthesizer *synthesizer;
-
+    UITableView *tableView;
 
 }
 
@@ -175,6 +175,13 @@ typedef enum {
         self.layer.shadowOpacity = 0.5;
         self.layer.shadowOffset = CGSizeMake(2, 2);
         self.layer.shadowRadius = 2;
+        // setup table view
+        tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
+        tableView.delegate = self;
+        tableView.dataSource = self;
+        tableView.sectionHeaderHeight = roundf(18*([UIScreen screens][0].bounds.size.height)/736);
+        [tableView registerNib:[UINib nibWithNibName:@"RDStoryTableViewCell" bundle:nil] forCellReuseIdentifier:@"StoryCellReuseIdentifier"];
 
     }
     
@@ -319,6 +326,7 @@ typedef enum {
     UILabel *label = [self viewWithTag:obj.tag];
     synthesizer = [[AVSpeechSynthesizer alloc]init];
     utterance = [AVSpeechUtterance speechUtteranceWithString:[KxMenu sharedMenu].textAudio];
+    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:[KxMenu sharedMenu].audiolangCode];
     [utterance setRate:0.5f];
     [synthesizer speakUtterance:utterance];
 }
@@ -402,71 +410,12 @@ typedef enum {
                           menuItems:(NSArray *)menuItems
 {
     _menuItems = menuItems;
+    _contentView = [self mkContentViewForAllStory];
+    tableView.frame = CGRectMake(_contentView.bounds.origin.x + roundf(10 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.origin.y + roundf(10 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.size.width - roundf(20 * (([UIScreen screens][0].bounds.size.height)/736)), _contentView.bounds.size.height - roundf(20 * (([UIScreen screens][0].bounds.size.height)/736)));
 
-    NSBundle *bundletest = [NSBundle bundleForClass:[KxMenu class]];
-    NSURL *urlResource = [bundletest URLForResource:@"KxMenu" withExtension:@"bundle"];
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KxMenu" ofType:@"bundle"];
-    NSString *bundlePath1 = [[NSBundle mainBundle] pathForResource:@"RDStoryViewController" ofType:@"bundle"];
-
-    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
-    
-    RDStoryViewController *storyViewController = [[RDStoryViewController alloc] initWithNibName:@"MyViewController" bundle:bundle];
-    // Create the next view controller.
-    UIView *subView=storyViewController.view;
-    UIView *parent=_contentView;
-    
-    subView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    //Trailing
-    NSLayoutConstraint *trailing =[NSLayoutConstraint
-                                   constraintWithItem:subView
-                                   attribute:NSLayoutAttributeTrailing
-                                   relatedBy:NSLayoutRelationEqual
-                                   toItem:parent
-                                   attribute:NSLayoutAttributeTrailing
-                                   multiplier:1.0f
-                                   constant:0.f];
-    
-    //Leading
-    
-    NSLayoutConstraint *leading = [NSLayoutConstraint
-                                   constraintWithItem:subView
-                                   attribute:NSLayoutAttributeLeading
-                                   relatedBy:NSLayoutRelationEqual
-                                   toItem:parent
-                                   attribute:NSLayoutAttributeLeading
-                                   multiplier:1.0f
-                                   constant:0.f];
-    
-    //Bottom
-    NSLayoutConstraint *Top =[NSLayoutConstraint
-                              constraintWithItem:subView
-                              attribute:NSLayoutAttributeTop
-                              relatedBy:NSLayoutRelationEqual
-                              toItem:parent
-                              attribute:NSLayoutAttributeTop
-                              multiplier:1.0f
-                              constant:0.0f];
-    
-    //Height to be fixed for SubView same as AdHeight
-    NSLayoutConstraint *bottom = [NSLayoutConstraint
-                                  constraintWithItem:subView
-                                  attribute:NSLayoutAttributeBottom
-                                  relatedBy:NSLayoutRelationEqual
-                                  toItem:parent
-                                  attribute:NSLayoutAttributeBottom
-                                  multiplier:1.0f
-                                  constant:0.0f];
-    
-    
-    [parent addConstraint:trailing];
-    [parent addConstraint:Top];
-    [parent addConstraint:leading];
-    [parent addConstraint:bottom];
-    
-    [_contentView addSubview:subView];
+    [_contentView addSubview:tableView];
     [self addSubview:_contentView];
-    
+
     [self setupFrameInView:view fromRect:rect];
     
     KxMenuOverlay *overlay = [[KxMenuOverlay alloc] initWithFrame:view.bounds];
@@ -486,10 +435,43 @@ typedef enum {
                      } completion:^(BOOL completed) {
                          _contentView.hidden = NO;
                      }];
-    [_contentView bringSubviewToFront:subView];
+    [_contentView bringSubviewToFront:tableView];
     
 }
+#pragma mark - Table view data source
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [KxMenu sharedMenu].arrGroups[section];
+}
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return [KxMenu sharedMenu].arrGroups.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    NSArray * arr =[[KxMenu sharedMenu].arrStories objectForKey:[KxMenu sharedMenu].arrGroups[section]];
+    return [KxMenu sharedMenu].arrStories == nil ? [KxMenu sharedMenu].arrGroups.count: arr.count;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    RDStoryTableViewCell *cell = (RDStoryTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"StoryCellReuseIdentifier" forIndexPath:indexPath];
+    
+    if (!cell) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"RDStoryTableViewCell" owner:self options:nil];
+        cell = [nib objectAtIndex:0];
+    }
+    cell.storyDetailLabel =[KxMenu sharedMenu].arrStories == nil ? [KxMenu sharedMenu].arrGroups[indexPath.row] : [[KxMenu sharedMenu].arrStories objectForKey:[KxMenu sharedMenu].arrGroups[indexPath.section]][indexPath.row];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    RDStoryTableViewCell* cell =  (RDStoryTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    NSString *object = cell.storyDetailLabel;
+    [[KxMenu sharedMenu].targetStory performSelectorOnMainThread:[KxMenu sharedMenu].selectorStory withObject:self waitUntilDone:YES];
+
+}
 - (void)dismissMenu:(BOOL) animated
 {
     if (self.superview) {
@@ -837,6 +819,160 @@ typedef enum {
     
     return contentView;
 }
+- (UIView *) mkContentViewForAllStory
+{
+    for (UIView *v in self.subviews) {
+        [v removeFromSuperview];
+    }
+    
+    if (!_menuItems.count)
+        return nil;
+    
+    const CGFloat kMinMenuItemHeight = 32.f;
+    const CGFloat kMinMenuItemWidth = 32.f;
+    const CGFloat kMarginX = 10.f;
+    const CGFloat kMarginY = 5.f;
+    
+    UIFont *titleFont = [KxMenu titleFont];
+    
+    CGFloat maxImageWidth = 0;
+    CGFloat maxItemHeight = 0;
+    CGFloat maxItemWidth = 0;
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        
+        const CGSize imageSize = menuItem.image.size;
+        if (imageSize.width > maxImageWidth)
+            maxImageWidth = imageSize.width;
+    }
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        if (!titleFont) titleFont = [UIFont boldSystemFontOfSize:menuItem.fontSize];
+        const CGSize titleSize = [menuItem.title sizeWithFont:titleFont];
+        const CGSize imageSize = menuItem.image.size;
+        
+        const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + kMarginY * 2;
+        const CGFloat itemWidth = (menuItem.image ? maxImageWidth + kMarginX : 0) + titleSize.width + kMarginX * 4;
+        
+        if (itemHeight > maxItemHeight)
+            maxItemHeight = itemHeight;
+        
+        if (itemWidth > maxItemWidth)
+            maxItemWidth = itemWidth;
+    }
+    
+    maxItemWidth  = MAX(maxItemWidth, kMinMenuItemWidth);
+    maxItemHeight = MAX(maxItemHeight, kMinMenuItemHeight);
+    
+    const CGFloat titleX = kMarginX * 2 + (maxImageWidth > 0 ? maxImageWidth + kMarginX : 0);
+    const CGFloat titleWidth = maxItemWidth - titleX - kMarginX;
+    
+    UIImage *selectedImage = [KxMenuView selectedImage:(CGSize){maxItemWidth, maxItemHeight + 2}];
+    UIImage *gradientLine = [KxMenuView gradientLine: (CGSize){maxItemWidth - kMarginX * 4, 1}];
+    
+    UIView *contentView = [[UIView alloc] initWithFrame:CGRectZero];
+    contentView.autoresizingMask = UIViewAutoresizingNone;
+    contentView.backgroundColor = [UIColor clearColor];
+    contentView.opaque = NO;
+    
+    CGFloat itemY = kMarginY * 2;
+    NSUInteger itemNum = 0;
+    
+    
+    for (KxMenuItem *menuItem in _menuItems) {
+        
+        const CGRect itemFrame = (CGRect){0, itemY, maxItemWidth, maxItemHeight};
+        
+        UIView *itemView = [[UIView alloc] initWithFrame:itemFrame];
+        itemView.autoresizingMask = UIViewAutoresizingNone;
+        itemView.backgroundColor = [UIColor clearColor];
+        itemView.opaque = NO;
+        
+        [contentView addSubview:itemView];
+        
+        if (menuItem.enabled) {
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.tag = itemNum;
+            button.frame = itemView.bounds;
+            button.enabled = menuItem.enabled;
+            button.backgroundColor = [UIColor clearColor];
+            button.opaque = NO;
+            button.autoresizingMask = UIViewAutoresizingNone;
+            
+            [button addTarget:self
+                       action:@selector(performAction:)
+             forControlEvents:UIControlEventTouchUpInside];
+            
+            [button setBackgroundImage:selectedImage forState:UIControlStateHighlighted];
+            
+            [itemView addSubview:button];
+        }
+        
+        if (menuItem.title.length) {
+            
+            CGRect titleFrame;
+            
+            if (!menuItem.enabled && !menuItem.image) {
+                
+                titleFrame = (CGRect){
+                    kMarginX * 2,
+                    kMarginY,
+                    maxItemWidth - kMarginX * 4,
+                    maxItemHeight - kMarginY * 2
+                };
+                
+            } else {
+                
+                titleFrame = (CGRect){
+                    titleX,
+                    kMarginY,
+                    titleWidth,
+                    maxItemHeight - kMarginY * 2
+                };
+            }
+            
+            UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleFrame];
+            titleLabel.text = menuItem.title;
+            titleLabel.font = titleFont;
+            titleLabel.textAlignment = menuItem.alignment;
+            titleLabel.textColor = menuItem.foreColor ? menuItem.foreColor : [UIColor whiteColor];
+            titleLabel.backgroundColor = [UIColor clearColor];
+            titleLabel.autoresizingMask = UIViewAutoresizingNone;
+            //titleLabel.backgroundColor = [UIColor greenColor];
+            [itemView addSubview:titleLabel];
+        }
+        
+        if (menuItem.image) {
+            
+            const CGRect imageFrame = {kMarginX * 2, kMarginY, maxImageWidth, maxItemHeight - kMarginY * 2};
+            UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.image = menuItem.image;
+            imageView.clipsToBounds = YES;
+            imageView.contentMode = UIViewContentModeCenter;
+            imageView.autoresizingMask = UIViewAutoresizingNone;
+            [itemView addSubview:imageView];
+        }
+        
+        if (itemNum < _menuItems.count - 1) {
+            
+            UIImageView *gradientView = [[UIImageView alloc] initWithImage:gradientLine];
+            gradientView.frame = (CGRect){kMarginX * 2, maxItemHeight + 1, gradientLine.size};
+            gradientView.contentMode = UIViewContentModeLeft;
+            [itemView addSubview:gradientView];
+            
+            itemY += 2;
+        }
+        
+        itemY += maxItemHeight;
+        ++itemNum;
+    }
+    
+    contentView.frame = (CGRect){0, 0, maxItemWidth, itemY + kMarginY * 2};
+    
+    return contentView;
+}
+
 
 - (CGPoint) arrowPoint
 {

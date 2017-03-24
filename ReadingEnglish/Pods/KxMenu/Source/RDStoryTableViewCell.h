@@ -11,4 +11,5 @@
 @interface RDStoryTableViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *storyLabel;
 @property (strong , nonatomic) NSString *storyDetailLabel;
+//-(void)layoutCell;
 @end

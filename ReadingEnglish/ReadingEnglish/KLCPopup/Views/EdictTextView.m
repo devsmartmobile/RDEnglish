@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "KxMenu.h"
 #import "MBProgressHUD.h"
+#import "PhoneticLabel.h"
 @interface EdictTextView ()<EDictLabelDelegate,KLCPopupDelegate>
 {
     KLCPopup *popUp;
@@ -93,17 +94,19 @@
 {
     UIFont *fontForlable = [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView];
     // creat UIlabel with key size
-    EDictLabel *labelPhonetic = [[EDictLabel alloc] init];
+    PhoneticLabel *labelPhonetic = [[PhoneticLabel alloc] init];
     labelPhonetic.backgroundColor = [UIColor clearColor];
     labelPhonetic.font = fontForlable;
     UIFontDescriptor * fontD = [labelPhonetic.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
     labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView-2];
     labelPhonetic.text = phonetic;
+    [labelPhonetic initPhoneticLabel];
     //            rgb(192, 57, 43)
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
     labelPhonetic.frame = CGRectMake(xOriginal, yOriginal, sizePhonetic.width, sizePhonetic.height);
-    labelPhonetic.userInteractionEnabled = NO;
+    labelPhonetic.maxWidth = maxWidth;
+    labelPhonetic.userInteractionEnabled = YES;
     
     // creat UIlabel with key size
     EDictLabel *labelKey = [[EDictLabel alloc] init];
@@ -154,7 +157,7 @@
             goto line_break;
         }
         // calcule origin of text view when need to break line
-        if ((xOriginal) <= (framePaper.size.width - (maxWidth + framePaper.size.width > 842 ? 600.f : 0.0f))) {
+        if ((xOriginal) <= (framePaper.size.width - (maxWidth + framePaper.size.width > 842 ? 650.f : 0.0f))) {
             [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:i];
             xOriginal += maxWidth + 2.0;
         }else
@@ -179,7 +182,7 @@
             }
 
         }
-        if (textToPrint.totalHeight > (framePaper.size.height -( maxHeight + framePaper.size.width > 842 ? 850.f : 0.0f))) {
+        if (textToPrint.totalHeight > (framePaper.size.height -( maxHeight + framePaper.size.width > 842 ? 900.f : 0.0f))) {
 //            dispatch_async(dispatch_get_main_queue(), ^{
                 [arrPaper addObject:[self getImageFromView:textToPrint]];
 //            });

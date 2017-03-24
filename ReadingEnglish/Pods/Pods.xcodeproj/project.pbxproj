@@ -482,8 +482,6 @@
 		E8855E266717FF84D1792EE1824B4697 /* pix.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B9F25AD5BF5F096741D4190B1384D6E /* pix.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E8CF34671E844E2B0000C762 /* RDStoryTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = E8CF345E1E844E2B0000C762 /* RDStoryTableViewCell.h */; };
 		E8CF346E1E844E2B0000C762 /* RDStoryTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CF345F1E844E2B0000C762 /* RDStoryTableViewCell.m */; };
-		E8CF34821E844E690000C762 /* RDStoryViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E8CF34611E844E2B0000C762 /* RDStoryViewController.h */; };
-		E8CF34831E844E6F0000C762 /* RDStoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CF34621E844E2B0000C762 /* RDStoryViewController.m */; };
 		E90F54254BCEB34D168FE339AAD1EED6 /* HTMLKitErrorDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = 5873AADEA4BFF7D26121F042C5E981CF /* HTMLKitErrorDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E92DAF0E0204EFC055453276968EBF43 /* unicharmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 113F1E8B53E6E17DE27782EE7E524149 /* unicharmap.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E9B306E63CAC206E928FA1D5878C4CD5 /* HTMLDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 72D118BE3CE174376DF051CC13EA9017 /* HTMLDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1074,10 +1072,6 @@
 		E84CA1B453F5B42120B8A8E33B5E1D11 /* TesseractOCR.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TesseractOCR.h; path = TesseractOCR/TesseractOCR.h; sourceTree = "<group>"; };
 		E8CF345E1E844E2B0000C762 /* RDStoryTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDStoryTableViewCell.h; path = Source/RDStoryTableViewCell.h; sourceTree = "<group>"; };
 		E8CF345F1E844E2B0000C762 /* RDStoryTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDStoryTableViewCell.m; path = Source/RDStoryTableViewCell.m; sourceTree = "<group>"; };
-		E8CF34611E844E2B0000C762 /* RDStoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RDStoryViewController.h; path = Source/RDStoryViewController.h; sourceTree = "<group>"; };
-		E8CF34621E844E2B0000C762 /* RDStoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RDStoryViewController.m; path = Source/RDStoryViewController.m; sourceTree = "<group>"; };
-		E8CF34851E844F110000C762 /* RDStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RDStoryTableViewCell.xib; sourceTree = "<group>"; };
-		E8CF34861E844F110000C762 /* RDStoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RDStoryViewController.xib; sourceTree = "<group>"; };
 		E944BC13871F8B8F797FA89B48577DD5 /* HTMLText.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = HTMLText.m; path = Sources/HTMLText.m; sourceTree = "<group>"; };
 		E966A991E773A8BF760009D4AE4B5F2B /* config_auto.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = config_auto.h; path = TesseractOCR/include/tesseract/config_auto.h; sourceTree = "<group>"; };
 		EA3AABFFF5433EEB277D83D09A5D41CC /* unicity_table.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = unicity_table.h; path = TesseractOCR/include/tesseract/unicity_table.h; sourceTree = "<group>"; };
@@ -1218,11 +1212,8 @@
 		0D6F56B8448939690F95B5DBDD058CDB /* KxMenu */ = {
 			isa = PBXGroup;
 			children = (
-				E8CF34841E844F110000C762 /* Resources */,
 				E8CF345E1E844E2B0000C762 /* RDStoryTableViewCell.h */,
 				E8CF345F1E844E2B0000C762 /* RDStoryTableViewCell.m */,
-				E8CF34611E844E2B0000C762 /* RDStoryViewController.h */,
-				E8CF34621E844E2B0000C762 /* RDStoryViewController.m */,
 				4AC8BE06C019C36E86414815315C8702 /* KxMenu.h */,
 				9B90796DF7DD5FCB19827EB95EE2E56E /* KxMenu.m */,
 				826578788392F43375700E102A844071 /* Support Files */,
@@ -2060,15 +2051,6 @@
 			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
-		E8CF34841E844F110000C762 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				E8CF34851E844F110000C762 /* RDStoryTableViewCell.xib */,
-				E8CF34861E844F110000C762 /* RDStoryViewController.xib */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		EB4BFBC6D26941B75F1887BC15541CF8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -2456,7 +2438,6 @@
 			files = (
 				E8CF34671E844E2B0000C762 /* RDStoryTableViewCell.h in Headers */,
 				71E2EDA977B4F0B7EF414D05F0CAABD0 /* KxMenu.h in Headers */,
-				E8CF34821E844E690000C762 /* RDStoryViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2757,7 +2738,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8CF34831E844E6F0000C762 /* RDStoryViewController.m in Sources */,
 				E8CF346E1E844E2B0000C762 /* RDStoryTableViewCell.m in Sources */,
 				6BB319381D2532B796D9FAC7FE74E5E0 /* KxMenu-dummy.m in Sources */,
 				2385D3E996832FA3B2B7008F8726A60D /* KxMenu.m in Sources */,

@@ -88,7 +88,7 @@
         if (self.bottomConstraintSearchEnglish.constant == 0) {
             self.bottomConstraintSearchEnglish.constant = self.bottomConstraintSearchEnglish.constant + keyboardFrameBeginRect.size.height;
         }
-        if (stack.center.y == self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
+        if (stack.center.y <= self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
             [stack setCenter:CGPointMake(stack.center.x, stack.center.y - keyboardFrameBeginRect.size.height)];
         }
         self.topConstraintScrollText.constant = 0.f;
@@ -226,14 +226,15 @@
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
     self.view.backgroundColor = [UIColor whiteColor];
     self.textViewInput.backgroundColor = [UIColor whiteColor];
     self.scrollText.backgroundColor = [UIColor whiteColor];
 
-    [super viewWillAppear:animated];
 }
 -(void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
 //    rgb(236, 240, 241)
 //    rgb(44, 62, 80)
 //    [self.view setBackgroundColor:[UIColor colorWithRed:236 green:240 blue:241 alpha:0.1]];
@@ -241,6 +242,7 @@
     self.searchText.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     [self.buttonPhonetic updateConstraints];
     [self.view updateConstraints];
+    [self showMenuListAllStory];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -459,7 +461,10 @@
         case STORY_TYPE_LIST_ALL_STORY:
             [self showMenuListAllStory];
             break;
-            
+        case STORY_TYPE_SAVE_ALL_STORY:
+            [self showMenuListAllGroup];
+            break;
+
         default:
             break;
     }
@@ -619,6 +624,8 @@
     [KxMenu sharedMenu].htmlString = htmlString;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_DETAIL_DICTIONARY;
     [KxMenu sharedMenu].textAudio = audioText;
+    [KxMenu sharedMenu].audiolangCode = [UtilsXML utilXMLInstance].langCodes[[RDConstant sharedRDConstant].langCode];
+
     if (self.textViewInput.hidden) {
         [KxMenu showMenuInView:self.scrollText
                       fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
@@ -636,16 +643,46 @@
     first0.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first0.alignment = NSTextAlignmentCenter;
     first0.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
+    [KxMenu sharedMenu].arrGroups = [[RDStoryDBManager databaseStory] loadAllGroups];
+    [KxMenu sharedMenu].arrStories = [[RDStoryDBManager databaseStory] loadAllStory];
+    [KxMenu sharedMenu].targetStory = self;
+    [KxMenu sharedMenu].selectorStory = @selector(didChooseStory:);
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_LIST_ALL_STORY;
-    if (self.textViewInput.hidden) {
-        [KxMenu showMenuInView:self.scrollText
-                      fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
-                     menuItems:menuItems];
-        
-    }else
-        [KxMenu showMenuInView:self.textViewInput
-                      fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
-                     menuItems:menuItems];
+    [KxMenu sharedMenu].edictViewControll = self;
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
+                 menuItems:menuItems];
+}
+-(void)showMenuListAllGroup
+{
+    NSArray *menuItems = [[UtilsXML utilXMLInstance] getArrayMenuItemForScreenSearchText:(NSInteger)self.view.frame.size.height];
+    KxMenuItem *first0 = menuItems[0];
+    first0.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first0.alignment = NSTextAlignmentCenter;
+    first0.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
+    [KxMenu sharedMenu].arrGroups = [[RDStoryDBManager databaseStory] loadAllGroups];
+    [KxMenu sharedMenu].arrStories = nil;
+    [KxMenu sharedMenu].targetStory = self;
+    [KxMenu sharedMenu].selectorStory = @selector(didChooseGroup:);
+
+    [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_LIST_ALL_STORY;
+    [KxMenu sharedMenu].edictViewControll = self;
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
+                 menuItems:menuItems];
+
+}
+-(void)didChooseStory:(id)sender
+{
+    self.textViewInput.text = (NSString*)sender;
+}
+-(void)didChooseGroup:(id)sender
+{
+    [[RDStoryDBManager databaseStory] insertStoryWithGroup:(NSString*)sender withDetailStory:self.textViewInput.text];
+}
+-(void)saveStoryToGorup:(NSString*)group
+{
+    
 }
 -(void)createNewStory
 {
@@ -658,7 +695,10 @@
     [alert show];
 }
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"%@", [alertView textFieldAtIndex:0].text);
+    if ([[alertView textFieldAtIndex:0].text isEqualToString:@""]) {
+        return;
+    }
+    [[RDStoryDBManager databaseStory] insertGroupStory:[alertView textFieldAtIndex:0].text];
 }
 
 - (void)showMenuForSetting
@@ -798,10 +838,8 @@
     two.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     two.typePrint = MENU_TYPE_AIRPRINT;
     KxMenuItem *three = menuItems[2];
-    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     three.typePrint = MENU_TYPE_CANONPRINT;
-
-    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentLeft;
     
         [KxMenu sharedMenu].htmlString = nil;
@@ -818,15 +856,15 @@
       
       [KxMenuItem menuItem:@"Save Story To Group"
                      image:nil
-                    target:nil
-                    action:NULL],
-      
-      [KxMenuItem menuItem:@"Create New Group"
-                     image:[UIImage imageNamed:@"action_icon"]
                     target:self
                     action:@selector(pushMenuItemGroupSelect:)],
       
-      [KxMenuItem menuItem:@"List All Groups"
+      [KxMenuItem menuItem:@"Create New Group"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItemGroupSelect:)],
+      
+      [KxMenuItem menuItem:@"List All Story"
                      image:nil
                     target:self
                     action:@selector(pushMenuItemGroupSelect:)],
@@ -835,16 +873,14 @@
       ];
     
     KxMenuItem *first = menuItems[0];
-    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
+    first.typeStory = STORY_TYPE_SAVE_ALL_STORY;
     KxMenuItem *two = menuItems[1];
     two.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     two.typeStory = STORY_TYPE_CREATE_NEW;
     KxMenuItem *three = menuItems[2];
-    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
     three.typeStory = STORY_TYPE_LIST_ALL_STORY;
-    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
-    first.alignment = NSTextAlignmentLeft;
-    
     [KxMenu sharedMenu].htmlString = nil;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
     [KxMenu sharedMenu].textAudio = nil;

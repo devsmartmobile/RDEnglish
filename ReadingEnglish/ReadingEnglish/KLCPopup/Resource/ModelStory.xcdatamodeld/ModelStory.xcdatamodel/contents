@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16D32" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DetailStory" representedClassName="DetailStory" syncable="YES" codeGenerationType="class">
+        <attribute name="detail_story" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="group_name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Group" representedClassName="Group" syncable="YES" codeGenerationType="class">
+        <attribute name="group_name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="one_more" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailStory" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Group" positionX="-90" positionY="-18" width="155" height="73"/>
+        <element name="DetailStory" positionX="-290" positionY="36" width="128" height="75"/>
+    </elements>
+</model>

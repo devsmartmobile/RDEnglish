@@ -1,6 +1,5 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
-#import "RDStoryViewController.h"
 #import "RDStoryTableViewCell.h"
 #else
 #ifndef FOUNDATION_EXPORT

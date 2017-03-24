@@ -46,6 +46,7 @@ typedef enum : NSUInteger {
 typedef enum : NSUInteger {
     STORY_TYPE_CREATE_NEW,
     STORY_TYPE_LIST_ALL_STORY,
+    STORY_TYPE_SAVE_ALL_STORY
 } STORY_TYPE;
 
 @interface KxMenuItem : NSObject
@@ -61,7 +62,6 @@ typedef enum : NSUInteger {
 @property (assign, nonatomic) NSUInteger languagecode;
 @property (assign, nonatomic) MENU_TYPE_PRINT typePrint;
 @property (assign, nonatomic) STORY_TYPE typeStory;
-
 + (instancetype) menuItem:(NSString *) title
                     image:(UIImage *) image
                    target:(id)target
@@ -72,6 +72,13 @@ typedef enum : NSUInteger {
 @property (readwrite, nonatomic) NSString *htmlString;
 @property (readwrite, nonatomic) NSString *textAudio;
 @property (assign, nonatomic)  MENU_TYPE_SHOWING typeSHow;
+@property (readwrite, nonatomic) NSString *audiolangCode;
+@property (strong, nonatomic) id edictViewControll;
+@property (strong , nonatomic) NSDictionary *arrStories;
+@property (strong , nonatomic) NSArray *arrGroups;
+@property (strong , nonatomic) id targetStory;
+@property (assign , nonatomic) SEL selectorStory;
+
 + (instancetype) sharedMenu;
 + (void) showMenuInView:(UIView *)view
                fromRect:(CGRect)rect

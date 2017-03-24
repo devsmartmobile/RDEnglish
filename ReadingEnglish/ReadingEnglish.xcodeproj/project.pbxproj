@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D1194391E84B16500ADDB8B /* PhoneticLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1194381E84B16500ADDB8B /* PhoneticLabel.m */; };
+		7D11943C1E84BE3800ADDB8B /* RDStoryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D11943A1E84BE3800ADDB8B /* RDStoryTableViewCell.xib */; };
+		7D2EFAD81E851B970058FC52 /* ModelStory.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7D2EFAD61E851B970058FC52 /* ModelStory.xcdatamodeld */; };
+		7D2EFADB1E851DD60058FC52 /* RDStoryDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D2EFADA1E851DD60058FC52 /* RDStoryDBManager.m */; };
 		7D92FCC01E837E5600320761 /* EdictDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCAF1E837E5600320761 /* EdictDatabase.m */; };
 		7D92FCC11E837E5600320761 /* tbl_edict.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 7D92FCB11E837E5600320761 /* tbl_edict.sqlite */; };
 		7D92FCC21E837E5600320761 /* EdictViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D92FCB41E837E5600320761 /* EdictViewController.m */; };
@@ -40,6 +44,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7D1194371E84B16500ADDB8B /* PhoneticLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhoneticLabel.h; sourceTree = "<group>"; };
+		7D1194381E84B16500ADDB8B /* PhoneticLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhoneticLabel.m; sourceTree = "<group>"; };
+		7D11943A1E84BE3800ADDB8B /* RDStoryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RDStoryTableViewCell.xib; sourceTree = "<group>"; };
+		7D2EFAD71E851B970058FC52 /* ModelStory.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ModelStory.xcdatamodel; sourceTree = "<group>"; };
+		7D2EFAD91E851DD60058FC52 /* RDStoryDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDStoryDBManager.h; sourceTree = "<group>"; };
+		7D2EFADA1E851DD60058FC52 /* RDStoryDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDStoryDBManager.m; sourceTree = "<group>"; };
 		7D92FCAE1E837E5600320761 /* EdictDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EdictDatabase.h; sourceTree = "<group>"; };
 		7D92FCAF1E837E5600320761 /* EdictDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EdictDatabase.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		7D92FCB11E837E5600320761 /* tbl_edict.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = tbl_edict.sqlite; sourceTree = "<group>"; };
@@ -127,6 +137,8 @@
 			children = (
 				7D92FCAE1E837E5600320761 /* EdictDatabase.h */,
 				7D92FCAF1E837E5600320761 /* EdictDatabase.m */,
+				7D2EFAD91E851DD60058FC52 /* RDStoryDBManager.h */,
+				7D2EFADA1E851DD60058FC52 /* RDStoryDBManager.m */,
 			);
 			name = Database;
 			path = KLCPopup/Database;
@@ -136,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				7D92FCB11E837E5600320761 /* tbl_edict.sqlite */,
+				7D2EFAD61E851B970058FC52 /* ModelStory.xcdatamodeld */,
 			);
 			name = Resource;
 			path = KLCPopup/Resource;
@@ -164,6 +177,8 @@
 				7D92FCBD1E837E5600320761 /* EdictTextView.m */,
 				7D92FCBE1E837E5600320761 /* PhoneticTextView.h */,
 				7D92FCBF1E837E5600320761 /* PhoneticTextView.m */,
+				7D1194371E84B16500ADDB8B /* PhoneticLabel.h */,
+				7D1194381E84B16500ADDB8B /* PhoneticLabel.m */,
 			);
 			name = Views;
 			path = KLCPopup/Views;
@@ -214,15 +229,6 @@
 				7D92FCB71E837E5600320761 /* Views */,
 				E8F96E7E1E804DAB0046FD82 /* Utils */,
 				E8F96E721E804D9D0046FD82 /* KLCPopup */,
-				E8F96E541E804D750046FD82 /* AppDelegate.h */,
-				E8F96E551E804D750046FD82 /* AppDelegate.m */,
-				E8F96E5A1E804D750046FD82 /* Main.storyboard */,
-				E8F96E5D1E804D750046FD82 /* Assets.xcassets */,
-				E8F96E891E804DD00046FD82 /* GoogleService-Info.plist */,
-				E8F96E5F1E804D750046FD82 /* LaunchScreen.storyboard */,
-				E8F96E621E804D750046FD82 /* Info.plist */,
-				E8F96E8B1E804E250046FD82 /* PrefixHeader.pch */,
-				7D9A11371E80C545001F5127 /* tessdata */,
 				E8F96E511E804D750046FD82 /* Supporting Files */,
 			);
 			path = ReadingEnglish;
@@ -231,6 +237,16 @@
 		E8F96E511E804D750046FD82 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E8F96E541E804D750046FD82 /* AppDelegate.h */,
+				E8F96E551E804D750046FD82 /* AppDelegate.m */,
+				7D11943A1E84BE3800ADDB8B /* RDStoryTableViewCell.xib */,
+				E8F96E5A1E804D750046FD82 /* Main.storyboard */,
+				E8F96E5D1E804D750046FD82 /* Assets.xcassets */,
+				E8F96E891E804DD00046FD82 /* GoogleService-Info.plist */,
+				E8F96E5F1E804D750046FD82 /* LaunchScreen.storyboard */,
+				E8F96E621E804D750046FD82 /* Info.plist */,
+				E8F96E8B1E804E250046FD82 /* PrefixHeader.pch */,
+				7D9A11371E80C545001F5127 /* tessdata */,
 				E8F96E521E804D750046FD82 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -323,6 +339,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D11943C1E84BE3800ADDB8B /* RDStoryTableViewCell.xib in Resources */,
 				E8F96E611E804D750046FD82 /* LaunchScreen.storyboard in Resources */,
 				E8F96E8A1E804DD00046FD82 /* GoogleService-Info.plist in Resources */,
 				E8F96E5E1E804D750046FD82 /* Assets.xcassets in Resources */,
@@ -388,10 +405,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D92FCC51E837E5600320761 /* EDictLabel.m in Sources */,
+				7D2EFADB1E851DD60058FC52 /* RDStoryDBManager.m in Sources */,
+				7D2EFAD81E851B970058FC52 /* ModelStory.xcdatamodeld in Sources */,
 				7D92FCC01E837E5600320761 /* EdictDatabase.m in Sources */,
 				E8F96E861E804DAB0046FD82 /* NSString+FDEdict.m in Sources */,
 				7D92FCC71E837E5600320761 /* PhoneticTextView.m in Sources */,
 				E8F96E7C1E804D9D0046FD82 /* KLCPopup.m in Sources */,
+				7D1194391E84B16500ADDB8B /* PhoneticLabel.m in Sources */,
 				7D92FCC31E837E5600320761 /* RDBaseViewController.m in Sources */,
 				E8F96E871E804DAB0046FD82 /* UtilsXML.m in Sources */,
 				7D92FCC21E837E5600320761 /* EdictViewController.m in Sources */,
@@ -708,6 +728,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7D2EFAD61E851B970058FC52 /* ModelStory.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7D2EFAD71E851B970058FC52 /* ModelStory.xcdatamodel */,
+			);
+			currentVersion = 7D2EFAD71E851B970058FC52 /* ModelStory.xcdatamodel */;
+			path = ModelStory.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E8F96E461E804D750046FD82 /* Project object */;
 }
