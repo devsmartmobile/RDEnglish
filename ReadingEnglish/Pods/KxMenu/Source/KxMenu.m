@@ -397,6 +397,99 @@ typedef enum {
     
 }
 
+- (void)showMenuInViewForListAllStory:(UIView *)view
+                           fromRect:(CGRect)rect
+                          menuItems:(NSArray *)menuItems
+{
+    _menuItems = menuItems;
+
+    NSBundle *bundletest = [NSBundle bundleForClass:[KxMenu class]];
+    NSURL *urlResource = [bundletest URLForResource:@"KxMenu" withExtension:@"bundle"];
+    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"KxMenu" ofType:@"bundle"];
+    NSString *bundlePath1 = [[NSBundle mainBundle] pathForResource:@"RDStoryViewController" ofType:@"bundle"];
+
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    
+    RDStoryViewController *storyViewController = [[RDStoryViewController alloc] initWithNibName:@"MyViewController" bundle:bundle];
+    // Create the next view controller.
+    UIView *subView=storyViewController.view;
+    UIView *parent=_contentView;
+    
+    subView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    //Trailing
+    NSLayoutConstraint *trailing =[NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeTrailing
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parent
+                                   attribute:NSLayoutAttributeTrailing
+                                   multiplier:1.0f
+                                   constant:0.f];
+    
+    //Leading
+    
+    NSLayoutConstraint *leading = [NSLayoutConstraint
+                                   constraintWithItem:subView
+                                   attribute:NSLayoutAttributeLeading
+                                   relatedBy:NSLayoutRelationEqual
+                                   toItem:parent
+                                   attribute:NSLayoutAttributeLeading
+                                   multiplier:1.0f
+                                   constant:0.f];
+    
+    //Bottom
+    NSLayoutConstraint *Top =[NSLayoutConstraint
+                              constraintWithItem:subView
+                              attribute:NSLayoutAttributeTop
+                              relatedBy:NSLayoutRelationEqual
+                              toItem:parent
+                              attribute:NSLayoutAttributeTop
+                              multiplier:1.0f
+                              constant:0.0f];
+    
+    //Height to be fixed for SubView same as AdHeight
+    NSLayoutConstraint *bottom = [NSLayoutConstraint
+                                  constraintWithItem:subView
+                                  attribute:NSLayoutAttributeBottom
+                                  relatedBy:NSLayoutRelationEqual
+                                  toItem:parent
+                                  attribute:NSLayoutAttributeBottom
+                                  multiplier:1.0f
+                                  constant:0.0f];
+    
+    
+    [parent addConstraint:trailing];
+    [parent addConstraint:Top];
+    [parent addConstraint:leading];
+    [parent addConstraint:bottom];
+    
+    [_contentView addSubview:subView];
+    [self addSubview:_contentView];
+    
+    [self setupFrameInView:view fromRect:rect];
+    
+    KxMenuOverlay *overlay = [[KxMenuOverlay alloc] initWithFrame:view.bounds];
+    [overlay addSubview:self];
+    [view addSubview:overlay];
+    
+    _contentView.hidden = YES;
+    const CGRect toFrame = self.frame;
+    self.frame = (CGRect){self.arrowPoint, 1, 1};
+    
+    [UIView animateWithDuration:0.2
+                     animations:^(void) {
+                         
+                         self.alpha = 1.0f;
+                         self.frame = toFrame;
+                         
+                     } completion:^(BOOL completed) {
+                         _contentView.hidden = NO;
+                     }];
+    [_contentView bringSubviewToFront:subView];
+    
+}
+
 - (void)dismissMenu:(BOOL) animated
 {
     if (self.superview) {
@@ -1072,6 +1165,33 @@ static UIFont *gTitleFont;
     _menuView = [[KxMenuView alloc] init];
     [_menuView showMenuInViewForDictionary:view fromRect:rect menuItems:menuItems];
 }
+- (void) showMenuInViewForListAllStory:(UIView *)view
+                            fromRect:(CGRect)rect
+                           menuItems:(NSArray *)menuItems
+{
+    NSParameterAssert(view);
+    NSParameterAssert(menuItems.count);
+    
+    if (_menuView) {
+        
+        [_menuView dismissMenu:NO];
+        _menuView = nil;
+    }
+    
+    if (!_observing) {
+        
+        _observing = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(orientationWillChange:)
+                                                     name:UIApplicationWillChangeStatusBarOrientationNotification
+                                                   object:nil];
+    }
+    
+    
+    _menuView = [[KxMenuView alloc] init];
+    [_menuView showMenuInViewForListAllStory:view fromRect:rect menuItems:menuItems];
+}
 
 - (void) dismissMenu
 {
@@ -1100,9 +1220,13 @@ static UIFont *gTitleFont;
     KxMenu *menu = (KxMenu*)[self sharedMenu];
     if (menu.typeSHow == MENU_TYPE_SHOWING_DETAIL_DICTIONARY) {
         [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems];
-    }else
+    }else if(menu.typeSHow == MENU_TYPE_SHOWING_MENU)
     {
         [[self sharedMenu] showMenuInViewForDictionary:view fromRect:rect menuItems:menuItems];
+
+    }else if (menu.typeSHow == MENU_TYPE_SHOWING_LIST_ALL_STORY)
+    {
+        [[self sharedMenu] showMenuInViewForListAllStory:view fromRect:rect menuItems:menuItems];
 
     }
 }

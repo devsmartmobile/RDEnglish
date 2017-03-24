@@ -25,8 +25,9 @@
     self.arrGroups = @[@"Exmaple 1",@"Example 2"];
     self.arrStories = @[@"Story 1",@"Story 1"];
     self.tableView.sectionHeaderHeight = roundf(64*self.view.frame.size.height/736);
-    
-    UINib *cell = [UINib nibWithNibName:@"RDStoryTableViewCell" bundle:nil];
+    NSBundle *bundle = [NSBundle bundleForClass:[RDStoryTableViewCell class]];
+    UINib *cell = [UINib nibWithNibName:@"RDStoryTableViewCell" bundle:bundle];
+//    NSArray *banners = [bundle loadNibNamed:@"RDStoryTableViewCell" owner:nil options:nil];
     [self.tableView registerNib:cell forCellReuseIdentifier:@"StoryCellReuseIdentifier"];
 
 }

@@ -12,12 +12,11 @@
 #import "MBProgressHUD.h"
 #import "UPStackMenu.h"
 #import "KxMenu.h"
-#import "RDStoryViewController.h"
 @import GoogleMobileAds;
 
 #define debug 1
 
-@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate>
+@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate,UIAlertViewDelegate>
 {
     BOOL isShowPhonetic;
     BOOL isLoadPhonetic;
@@ -34,7 +33,6 @@
     UPStackMenuItem *exportFile;
 
     CGRect keyboardFrameBeginRect;
-    RDStoryViewController *storyViewController;
     NSTimer *timer;
 
     __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
@@ -121,12 +119,14 @@
     NSDictionary* keyboardInfo = [notif userInfo];
     NSValue* keyboardFrameBegin = [keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey];
     keyboardFrameBeginRect = [keyboardFrameBegin CGRectValue];
-
+    self.searchText.text = @"";
     [UIView animateWithDuration:0.1 animations:^{
         self.bottomSpaceSearchText.constant = self.bottomSpaceSearchText.constant - keyboardFrameBeginRect.size.height;
         self.bottomConstraintTextInput.constant = self.bottomConstraintTextInput.constant -keyboardFrameBeginRect.size.height;
         self.bottomConstraintSearchEnglish.constant = 0.0f;
-        [stack setCenter:CGPointMake(stack.center.x, stack.center.y+keyboardFrameBeginRect.size.height)];
+        if (stack.center.y+keyboardFrameBeginRect.size.height <= self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
+            [stack setCenter:CGPointMake(stack.center.x, stack.center.y+keyboardFrameBeginRect.size.height)];
+        }
         self.topConstraintScrollText.constant = self.banerView.frame.size.height;
         self.topConstraintTextViewInput.constant = self.banerView.frame.size.height;
         self.banerView.hidden = NO;
@@ -140,7 +140,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
-    self.textViewInput.text = @"Input English To Search Phonetic";
+    self.textViewInput.text = @"Input English To Show Phonetic";
     self.textViewInput.textColor = [UIColor lightGrayColor]; //optional
     //setup swip left and right
     UISwipeGestureRecognizer *swipRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(showWordView:)];
@@ -246,15 +246,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)addStoryView
-{
-    // Create the next view controller.
-   storyViewController = [[RDStoryViewController alloc] initWithNibName:@"RDStoryViewController" bundle:nil];
-    [self addChildViewController:storyViewController];
-    [self.view addSubview:storyViewController.view];
-    [storyViewController didMoveToParentViewController:self];
-    
-}
 #pragma mark - handle event of viewcontroller
 - (IBAction)didPressOnPrint:(id)sender {
     [self.textViewInput resignFirstResponder];
@@ -306,7 +297,7 @@
     [self.searchText resignFirstResponder];
     [stack closeStack];
     [KxMenu dismissMenu];
-    if ([self.textViewInput.text isEqualToString:@"Input English To Search Phonetic"]) {
+    if ([self.textViewInput.text isEqualToString:@"Input English To Show Phonetic"]) {
         [self.textViewInput becomeFirstResponder];
         return;
     }
@@ -334,26 +325,7 @@
 }
  - (IBAction)didPressOnExportFile:(id)sender
 {
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        // Do something...
-        // Available
-        [self.scrollText imageWithView:self.scrollText withFrame:CGRectMake(0, 0, 1101, 1654) withCompleteBlock:^(NSArray *arrPaper) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                self.documentController =
-                [UIDocumentInteractionController
-                 interactionControllerWithURL:[NSURL fileURLWithPath:[[UtilsXML utilXMLInstance] drawImagesToPdf:arrPaper]]];
-                self.documentController.delegate = self;
-                self.documentController.UTI = @"com.adobe.pdf";
-                [self.documentController presentOpenInMenuFromRect:CGRectZero
-                                                       inView:self.view
-                                                     animated:YES];
-                [MBProgressHUD hideHUDForView:self.view animated:YES];
-                 });
-        }];
-    });
-
+    [self showMenuForSettingStory];
 }
 
 - (IBAction)didPressOnSave:(id)sender
@@ -471,14 +443,28 @@
             break;
         case MENU_TYPE_CANONPRINT:
             [self openCannonPrintScreen];
-
+            
             break;
-
+            
         default:
             break;
     }
 }
+- (void)pushMenuItemGroupSelect:(id)sender{
+    KxMenuItem *menu= (KxMenuItem*)sender;
+    switch (menu.typeStory) {
+        case STORY_TYPE_CREATE_NEW:
+            [self createNewStory];
+            break;
+        case STORY_TYPE_LIST_ALL_STORY:
+            [self showMenuListAllStory];
+            break;
+            
+        default:
+            break;
+    }
 
+}
 - (void)setStackIconClosed:(BOOL)closed
 {
     UIImageView *icon = [[contentView subviews] objectAtIndex:0];
@@ -546,7 +532,7 @@
 #pragma mark - handle Text View of viewcontroller
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:@"Input English To Search Phonetic"]) {
+    if ([textView.text isEqualToString:@"Input English To Show Phonetic"]) {
         textView.text = @"";
         self.textViewInput.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     }
@@ -555,8 +541,9 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
+
     if ([textView.text isEqualToString:@""]) {
-        textView.text = @"Input English To Search Phonetic";
+        textView.text = @"Input English To Show Phonetic";
         textView.textColor = [UIColor lightGrayColor]; //optional
     }
     [textView resignFirstResponder];
@@ -564,6 +551,12 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    self.buttonPhonetic.hidden = NO;
+    [NSTimer scheduledTimerWithTimeInterval:5.0
+                                     target:self
+                                   selector:@selector(siwtchViewText:)
+                                   userInfo:nil
+                                    repeats:NO];
     [self.searchText resignFirstResponder];
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -636,6 +629,38 @@
                   fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
                  menuItems:menuItems];
 }
+- (void)showMenuListAllStory;
+{
+    NSArray *menuItems = [[UtilsXML utilXMLInstance] getArrayMenuItemForScreenSearchText:(NSInteger)self.view.frame.size.height];
+    KxMenuItem *first0 = menuItems[0];
+    first0.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first0.alignment = NSTextAlignmentCenter;
+    first0.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
+    [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_LIST_ALL_STORY;
+    if (self.textViewInput.hidden) {
+        [KxMenu showMenuInView:self.scrollText
+                      fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
+                     menuItems:menuItems];
+        
+    }else
+        [KxMenu showMenuInView:self.textViewInput
+                      fromRect:CGRectMake(self.searchText.frame.origin.x, self.searchText.frame.origin.y - 20, 62, 62)
+                     menuItems:menuItems];
+}
+-(void)createNewStory
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Create New Story"
+                                                    message:@"Input Name Group Of Story"
+                                                   delegate:self
+                                          cancelButtonTitle:@"Done"
+                                          otherButtonTitles:nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert show];
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    NSLog(@"%@", [alertView textFieldAtIndex:0].text);
+}
+
 - (void)showMenuForSetting
 {
     NSArray *menuItems =
@@ -780,6 +805,47 @@
     first.alignment = NSTextAlignmentLeft;
     
         [KxMenu sharedMenu].htmlString = nil;
+    [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
+    [KxMenu sharedMenu].textAudio = nil;
+    [KxMenu showMenuInView:self.view
+                  fromRect:CGRectMake(stack.center.x, self.searchText.frame.origin.y, stack.frame.size.width, stack.frame.size.height)
+                 menuItems:menuItems];
+}
+- (void)showMenuForSettingStory
+{
+    NSArray *menuItems =
+    @[
+      
+      [KxMenuItem menuItem:@"Save Story To Group"
+                     image:nil
+                    target:nil
+                    action:NULL],
+      
+      [KxMenuItem menuItem:@"Create New Group"
+                     image:[UIImage imageNamed:@"action_icon"]
+                    target:self
+                    action:@selector(pushMenuItemGroupSelect:)],
+      
+      [KxMenuItem menuItem:@"List All Groups"
+                     image:nil
+                    target:self
+                    action:@selector(pushMenuItemGroupSelect:)],
+      
+      
+      ];
+    
+    KxMenuItem *first = menuItems[0];
+    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    KxMenuItem *two = menuItems[1];
+    two.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    two.typeStory = STORY_TYPE_CREATE_NEW;
+    KxMenuItem *three = menuItems[2];
+    three.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    three.typeStory = STORY_TYPE_LIST_ALL_STORY;
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    first.alignment = NSTextAlignmentLeft;
+    
+    [KxMenu sharedMenu].htmlString = nil;
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_MENU;
     [KxMenu sharedMenu].textAudio = nil;
     [KxMenu showMenuInView:self.view
@@ -1139,10 +1205,6 @@ NS_DEPRECATED_IOS(2_0, 9_0) {
             [self openCannonApp];
         }
     }
-}
-
-- (void)alertView:(UIAlertView *)alertView
-clickedButtonAtIndex:(NSInteger)buttonIndex NS_DEPRECATED_IOS(2_0, 9_0) {
 }
 
 - (void)openAppstoreForCannon {

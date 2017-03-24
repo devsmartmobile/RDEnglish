@@ -4,17 +4,17 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>HTMLKit.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Kiwi.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -47,7 +47,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>01E15DACD8B02C1D406713FC6F1FC644</key>
+		<key>144D1B9F8136D00EAE7D23549C6AB667</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -57,12 +57,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4631E28F67B81D39064B0FC9353AA838</key>
+		<key>1ACED62DD11C2B46559FF80AFEE3CA46</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>53347878AA8C63C62F993AAF4C537F5A</key>
+		<key>4631E28F67B81D39064B0FC9353AA838</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -72,7 +72,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C8384F58A42FD4B2D7B7BBDE9C87E06F</key>
+		<key>9E033EDB5EC0819481B0546434FA577B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA6B234680BFD6234AC5C57EF8D7444D</key>
+		<key>F7BB6E736A0252B2B7CCEE61BA4A37A2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
