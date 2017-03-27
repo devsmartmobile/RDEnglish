@@ -18,7 +18,8 @@
 @property (strong,nonatomic)NSMutableDictionary *bufferDetail;
 @property (strong,nonatomic) NSMutableArray *strDetail;
 + (EdictDatabase*)database;
-- (NSArray *)getEdictInfosWithArrWord:(NSArray*)arrWord;
+- (NSArray *)getEdictInfosWithArrWord:(NSArray*)arrWord ;
+- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete))completion;
 - (NSString *)getEdictInfosWithWord:(NSString*)arrWord;
 - (BOOL)createTableGroupStory;
 - (BOOL)createTableDetailStory;

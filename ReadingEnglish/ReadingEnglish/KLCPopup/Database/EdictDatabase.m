@@ -105,6 +105,64 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     return arrPhonetic;
     
 }
+- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete))completion;
+{
+    [self.strDetail removeAllObjects];
+    self.strDetail = nil;
+    self.strDetail = [NSMutableArray array];
+    for (int index = 0; index < arrWord.count; index ++) {
+        NSString *str = arrWord [index];
+        NSString *phoneticStr = [_bufferWord objectForKey:str];
+        if (phoneticStr) {
+            [_strDetail addObject:[_bufferDetail objectForKey:str]];
+            createView (index,str,phoneticStr);
+            continue;
+        }
+        NSString *strRemove = [str removeSpecifiCharacter];
+        NSString *query = [NSString stringWithFormat:@"%@%@%@",@"SELECT idx,word, detail FROM tbl_edict WHERE word = '",[strRemove lowercaseString],@"'LIMIT 1"] ;
+        sqlite3_stmt *statement;
+        if (sqlite3_prepare_v2(_database, [query UTF8String], -1, &statement, nil) == SQLITE_OK) {
+            NSInteger i = 0;
+            while (sqlite3_step(statement) == SQLITE_ROW) {
+                //                char *wordChars = (char *) sqlite3_column_text(statement, 1);
+                char *detailChars = (char *) sqlite3_column_text(statement, 2);
+                //            char *stateChars = (char *) sqlite3_column_text(statement, 3);
+                //                NSString *word = [[NSString alloc] initWithUTF8String:wordChars];
+                NSString *detail = [[NSString alloc] initWithUTF8String:detailChars];
+                
+                //                [Dict setObject:[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail] forKey:[word copy]];
+                NSString *phonetic =[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail];
+                createView (index,str,phonetic);
+                [_strDetail addObject:detail];
+                if (![_bufferWord objectForKey:str]) {
+                    [_bufferWord setObject:phonetic forKey:str];
+                    [_bufferDetail setObject:detail forKey:str];
+                }
+                i++;
+            }
+            if (i<=0) {
+                createView (index,str,str);
+                [_strDetail addObject:str];
+                if (![_bufferWord objectForKey:str]) {
+                    [_bufferWord setObject:str forKey:str];
+                    [_bufferDetail setObject:str forKey:str];
+                    
+                }
+                i++;
+            }
+            
+            sqlite3_finalize(statement);
+        }else{
+            createView (index,str,str);
+            [_strDetail addObject:str];
+            if (![_bufferWord objectForKey:str]) {
+                [_bufferWord setObject:str forKey:str];
+                [_bufferDetail setObject:str forKey:str];
+            }
+        }
+    }
+    completion(YES);
+}
 - (NSString *)getEdictInfosWithWord:(NSString*)arrWord
 {
     NSString *strPhonetic = [NSString string];

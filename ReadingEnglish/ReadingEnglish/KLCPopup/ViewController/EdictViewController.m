@@ -12,6 +12,8 @@
 #import "MBProgressHUD.h"
 #import "UPStackMenu.h"
 #import "KxMenu.h"
+#import "EDictLabel.h"
+#import "PhoneticLabel.h"
 @import GoogleMobileAds;
 
 #define debug 1
@@ -34,7 +36,8 @@
 
     CGRect keyboardFrameBeginRect;
     NSTimer *timer;
-
+    NSInteger tagPre ;
+    NSInteger tagCurrent;
     __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
     __weak IBOutlet NSLayoutConstraint *constantHeightEnglishDictionary;
 }
@@ -88,7 +91,7 @@
         if (self.bottomConstraintSearchEnglish.constant == 0) {
             self.bottomConstraintSearchEnglish.constant = self.bottomConstraintSearchEnglish.constant + keyboardFrameBeginRect.size.height;
         }
-        if (stack.center.y <= self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
+        if (stack.center.y == self.view.frame.size.height - roundf(50 * (self.view.frame.size.height/736))) {
             [stack setCenter:CGPointMake(stack.center.x, stack.center.y - keyboardFrameBeginRect.size.height)];
         }
         self.topConstraintScrollText.constant = 0.f;
@@ -223,6 +226,9 @@
     constantHeightBanerView.constant = roundf(constantHeightBanerView.constant * (self.view.frame.size.height/736));
     self.topConstraintButtonSwitch.constant = - (constantHeightBanerView.constant -9);
 //    [self addStoryView];
+    
+    tagPre = -1;
+    tagCurrent = -1;
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -242,7 +248,7 @@
     self.searchText.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     [self.buttonPhonetic updateConstraints];
     [self.view updateConstraints];
-    [self showMenuListAllStory];
+//    [self showMenuListAllStory];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -905,30 +911,41 @@
             [arrWord addObjectsFromArray:[str componentsSeparatedByString:@" "]];
             [arrWord addObject:@"\n"];
         }
-        NSArray *arrPhonetic = [[EdictDatabase database] getEdictInfosWithArrWord:arrWord];
         isLoadPhonetic = YES;
         self.scrollText.fontName = [[UtilsXML alloc] init].fontNames[0];
         self.scrollText.fontSize = 18;
+        [self.scrollText initEdictTextView];
         self.scrollText.arrWord = arrWord;
-        self.scrollText.arrPhonetic = arrPhonetic;
+//        self.scrollText.arrPhonetic = arrPhonetic;
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame];
-        });
-        isShowPhonetic = YES;
-        self.banerView.hidden = NO;
-        self.topConstraintButtonSwitch.constant = 9.0f;
-        self.topConstraintScrollText.constant = self.banerView.frame.size.height;
-        self.topConstraintTextViewInput.constant = self.banerView.frame.size.height;
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            self.textViewInput.hidden = YES;
             self.scrollText.hidden = NO;
-            self.textBuffer = text;
-            self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
-            [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
-
+            self.textViewInput.hidden = YES;
         });
+        [[EdictDatabase database] getEdictInfosWithArrWord:arrWord withCreateViewBlock:^(NSInteger index, NSString *word, NSString *phonetic) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame forIndex:index withWord:word withPhonetic:phonetic ];
+            });
+
+        } withCompleteBlock:^(BOOL isComplete) {
+            if (isComplete) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    isShowPhonetic = YES;
+                    self.banerView.hidden = NO;
+                    self.topConstraintButtonSwitch.constant = 9.0f;
+                    self.topConstraintScrollText.constant = self.banerView.frame.size.height;
+                    self.topConstraintTextViewInput.constant = self.banerView.frame.size.height;
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    self.textViewInput.hidden = YES;
+                    self.scrollText.hidden = NO;
+                    self.textBuffer = text;
+                    self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
+                    [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
+                    [self.scrollText setContentOffset:CGPointZero animated:YES];
+                    
+                });
+            }
+
+        }];
     });
     
     
@@ -1106,7 +1123,58 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
     isPlayAudio = NO;
+//    EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre+self.scrollText.arrWord.count];
+//    if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+//        [labelPre unhightLightTextlabel];
+//    }
+//    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent+self.scrollText.arrWord.count];
+//    if ([labelCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+//        [labelCurrent unhightLightTextlabel];
+//    }
+    PhoneticLabel *labelPhoPre = [self.scrollText viewWithTag:tagPre +self.scrollText.arrWord.count ];
+    if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoPre unhightLightTextlabel];
+    }
+    PhoneticLabel *labelPhoCurrent = [self.scrollText viewWithTag:tagCurrent +self.scrollText.arrWord.count];
+    if ([labelPhoCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoCurrent unhightLightTextlabel];
+    }
+    [self.scrollText setContentOffset:CGPointZero animated:YES];
 
+
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance
+{
+//        EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
+//        if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+//            [labelPre unhightLightTextlabel];
+//        }
+        PhoneticLabel *labelPhoPre = [self.scrollText viewWithTag:tagPre +self.scrollText.arrWord.count];
+        if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+            [labelPhoPre unhightLightTextlabel];
+        }
+
+       tagCurrent = characterRange.location;
+//    for (UILabel *label in self.scrollText.subviews) {
+//        NSLog(@"location in view %ld",(long)label.tag);
+//        NSLog(@"tag is %ld",-(label.tag + ((label.tag == 0) ? 1: 0)));
+//
+//    }
+//    NSLog(@"location in view %ld",(long)tagCurrent);
+//    NSLog(@"tag is %ld",-(tagCurrent + ((tagCurrent == 0) ? 1: 0)));
+
+//    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
+//    if ([labelCurrent respondsToSelector:@selector(hightLightTextlabel)]) {
+//        [labelCurrent hightLightTextlabel];
+//    }
+    PhoneticLabel *labelPhoCurrent = [self.scrollText viewWithTag:tagCurrent  +self.scrollText.arrWord.count];
+    if ([labelPhoCurrent respondsToSelector:@selector(hightLightTextlabel)]) {
+        [labelPhoCurrent hightLightTextlabel];
+    }
+    tagPre = tagCurrent;
+    if (labelPhoCurrent.frame.origin.y > self.scrollText.contentOffset.y + self.view.frame.size.height) {
+        [self.scrollText setContentOffset:CGPointMake(0, labelPhoCurrent.frame.origin.y) animated:YES];
+    }
 }
 #pragma mark - handle canon print app
 

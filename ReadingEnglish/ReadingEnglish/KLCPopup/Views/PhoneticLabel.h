@@ -11,4 +11,7 @@
 @interface PhoneticLabel : UILabel
 @property (assign,nonatomic) CGFloat maxWidth;
 -(void)initPhoneticLabel;
+-(void)hightLightTextlabel;
+-(void)unhightLightTextlabel;
+
 @end

@@ -19,4 +19,7 @@
 @property (strong,nonatomic) EdictInfo *infor;
 @property (strong, nonatomic) id <EDictLabelDelegate> delegate;
 -(void)initLabel;
+-(void)hightLightTextlabel;
+-(void)unhightLightTextlabel;
+
 @end

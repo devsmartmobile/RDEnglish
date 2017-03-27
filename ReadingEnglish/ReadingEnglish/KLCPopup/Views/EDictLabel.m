@@ -23,12 +23,22 @@
     [self.delegate showDetailVocabolaryWithTag:self.tag];
     
 }
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+-(void)hightLightTextlabel
+{
+    //rgb(52, 152, 219)
+    self.backgroundColor = [UIColor colorWithRed:52/255 green:152/255 blue:219/255 alpha:1];
+    self.textColor = [UIColor whiteColor];
+    self.font = [UIFont systemFontOfSize:([RDConstant sharedRDConstant].fontSizeView + 4)];
+    CGSize sizeZoom = [self.text sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:[UtilsXML utilXMLInstance].fontNames[0] size:[RDConstant sharedRDConstant].fontSizeView + 4] }];
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, sizeZoom.width, sizeZoom.height);
+    [self.superview bringSubviewToFront:self];
 }
-*/
-
+-(void)unhightLightTextlabel
+{
+    self.backgroundColor = [UIColor clearColor];
+    self.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
+    self.font = [UIFont systemFontOfSize:([RDConstant sharedRDConstant].fontSizeView)];
+    CGSize sizeZoom = [self.text sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:[UtilsXML utilXMLInstance].fontNames[0] size:[RDConstant sharedRDConstant].fontSizeView] }];
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, sizeZoom.width, sizeZoom.height);
+}
 @end

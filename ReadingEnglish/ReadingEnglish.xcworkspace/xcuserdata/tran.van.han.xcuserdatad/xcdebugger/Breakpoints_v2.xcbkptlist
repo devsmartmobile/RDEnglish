@@ -6,48 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/ViewController/EdictViewController.m"
-            timestampString = "512043728.525137"
+            filePath = "ReadingEnglish/KLCPopup/Views/EdictTextView.m"
+            timestampString = "512303807.134016"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "641"
-            endingLineNumber = "641"
-            landmarkName = "-showMenuListAllStory"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/Database/RDStoryDBManager.m"
-            timestampString = "512044602.832568"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "-loadAllStory"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/Database/RDStoryDBManager.m"
-            timestampString = "512044123.242276"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "-loadAllGroups"
+            startingLineNumber = "196"
+            endingLineNumber = "196"
+            landmarkName = "-addSubviewWithKey:withPhonetic:withSizeKey:withSizePhonetic:withTag:withLocation:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
