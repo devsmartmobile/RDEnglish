@@ -1268,7 +1268,9 @@ static UIFont *gTitleFont;
     //    NSString *cssString = @"C,F,I,N,Q { font-family: Helvetica; font-size: %dpx ;color: rgb(44, 62, 80);}"; // 1
 //    NSString *cssString = @"body { font-family: Helvetica; font-size: %dpx ;color:  rgb(41, 128, 185))}"; // 1
 //    NSString * cssString=@"body { font-family: Helvetica; color: rgb(41, 128, 185))}";
-    NSString *cssString = @"body { font-family: Helvetica; font-size: 10px;background-color: rgb(236, 240, 241)}"; // 1
+    CGFloat deltaPX = [UIScreen screens][0].bounds.size.height/568;
+    NSString *cssString = [NSString stringWithFormat:@"body { font-family: Helvetica; font-size: %fpx;background-color: rgb(236, 240, 241)}" ,10 *deltaPX]; // 1
+    
     NSString *javascriptString = @"var style = document.createElement('style'); style.innerHTML = '%@'; document.head.appendChild(style)"; // 2
     NSString *javascriptWithCSSString = [NSString stringWithFormat:javascriptString, cssString]; // 3
     [webView stringByEvaluatingJavaScriptFromString:javascriptWithCSSString]; // 4

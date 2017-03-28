@@ -256,7 +256,7 @@
             goto line_break;
         }
         // calcule origin of text view when need to break line
-        if ((xOriginalPrint) <= (framePaper.size.width - (maxWidthPrint + framePaper.size.width > 842 ? 650 : 0.0f))) {
+        if ((xOriginalPrint) < (framePaper.size.width - (maxWidthPrint + framePaper.size.width > 842 ? 600 : 20.0f))) {
             [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKeyPrint withSizePhonetic:sizePhoneticPrint withTag:i];
             xOriginalPrint += maxWidthPrint + 2.0;
         }else
@@ -281,7 +281,7 @@
             }
 
         }
-        if (textToPrint.totalHeightPrint > (framePaper.size.height -( maxHeightPrint + framePaper.size.width > 842 ? 900.f : 0.0f))) {
+        if (textToPrint.totalHeightPrint > (framePaper.size.height -( maxHeightPrint + framePaper.size.width > 842 ? 850.f : 20.0f))) {
 //            dispatch_async(dispatch_get_main_queue(), ^{
                 [arrPaper addObject:[self getImageFromView:textToPrint]];
 //            });

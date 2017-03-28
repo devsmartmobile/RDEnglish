@@ -29,7 +29,6 @@
     [FIRApp configure];
     // Initialize Google Mobile Ads SDK
     [GADMobileAds configureWithApplicationID:@"ca-app-pub-3940256099942544/2934735716"];
-
     return YES;
 }
 

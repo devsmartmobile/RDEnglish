@@ -313,18 +313,19 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     [self.textViewInput resignFirstResponder];
     [self.searchText resignFirstResponder];
     if (self.scrollText.isHidden) {
-        if (![self.textViewInput.text isEqualToString:@""]) {
-            
-            [self didPressOnPhonetic:nil];
+        if ([self.textViewInput.text isEqualToString:@"Input English To Show Phonetic"]) {
+            return ;
         }
-        return ;
     }
     [self showMenuForSettingPrinter];
 }
 - (IBAction)didPressOnReading:(id)sender {
+    
     [stack closeStack];
     [KxMenu dismissMenu];
-
+    if ([self.textViewInput.text isEqualToString:@"Input English To Show Phonetic"]) {
+        return;
+    }
     if (isPlayAudio) {
         [self didPressOffReading:sender];
         return;
@@ -353,6 +354,9 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     utterance.postUtteranceDelay = 0.2f;
 
     [synthesizer speakUtterance:utterance];
+    if (self.scrollText.hidden) {
+        [self didPressOnPhonetic:nil];
+    }
     
 }
 - (IBAction)didPressOffReading:(id)sender {
@@ -399,7 +403,8 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 }
  - (IBAction)didPressOnExportFile:(id)sender
 {
-    [self showMenuForSettingStory];
+    return;
+//    [self showMenuForSettingStory];
 }
 
 - (IBAction)didPressOnSave:(id)sender
@@ -496,10 +501,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     KxMenuItem *menu= (KxMenuItem*)sender;
     [RDConstant sharedRDConstant].fontSizeView = menu.fontSize;
     self.textViewInput.font = [UIFont systemFontOfSize:menu.fontSize];
-    self.textViewInput.hidden = NO;
-    if (!self.scrollText.isHidden) {
-        [self setupPhoneticWordForText:self.textViewInput.text];
-    }
+    [self setupPhoneticWordForText:self.textViewInput.text];
 
 }
 - (void)pushMenuItemSettingLanguageCodes:(id)sender
@@ -910,7 +912,9 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
       ];
     
     KxMenuItem *first = menuItems[0];
-    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
+    first.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];
+    first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+
     KxMenuItem *two = menuItems[1];
     two.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)self.view.frame.size.height];;
     two.typePrint = MENU_TYPE_AIRPRINT;
@@ -1250,6 +1254,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     if ([labelPhoCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
         [labelPhoCurrent unhightLightTextlabel];
     }
+    self.buttonPhonetic.hidden = NO;
 
 }
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance *)utterance
