@@ -26,6 +26,13 @@
     CGFloat maxHeight ;
     CGSize sizeKey;
     CGSize sizePhonetic;
+    CGFloat xOriginalPrint;
+    CGFloat yOriginalPrint ;
+    CGFloat maxWidthPrint ;
+    CGFloat maxHeightPrint ;
+    CGSize sizeKeyPrint;
+    CGSize sizePhoneticPrint;
+
     NSInteger location;
     NSInteger sumPreLeghtChar ;
     NSInteger sumPreSpace ;
@@ -64,7 +71,7 @@
             // get frame size for key string
             sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
             // get frame size for value string
-            sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
+            sizePhonetic = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView -2] }];
             
             maxWidth =MAX(sizeKey.width,sizePhonetic.width);
             maxHeight = MAX(maxHeight, sizePhonetic.height+sizeKey.height);
@@ -78,6 +85,11 @@
             if (xOriginal <= (framePaper.size.width  -  (maxWidth))) {
                 [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:i withLocation:location];
                 xOriginal += maxWidth + 2.0f ;
+                sumPreSpace      = i  ;
+                sumPreLeghtChar  += key.length;
+                location = sumPreSpace + sumPreLeghtChar + 1;
+                NSLog(@"location in view %ld",(long)location);
+
             }else
             {
             break_line:
@@ -96,13 +108,13 @@
                     ++self.totalLine;
                     [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:i withLocation:location];
                     xOriginal += maxWidth + 2.0f ;
+                    sumPreSpace      = i  ;
+                    sumPreLeghtChar  += key.length;
+                    location = sumPreSpace + sumPreLeghtChar + 1;
+                    NSLog(@"location in view %ld",(long)location);
 
                 }
             }
-            sumPreSpace      = i  ;
-            sumPreLeghtChar  += key.length;
-            location = sumPreSpace + sumPreLeghtChar + 1;
-            NSLog(@"location in view %ld",(long)location);
 
         }
     //Change frame after setup view finished
@@ -116,11 +128,6 @@
         NSString *key =  wordPar;
         //get object from key
         NSString *phonetic = phoneticPar;
-        //
-        sumPreSpace      = index  ;
-        sumPreLeghtChar  += key.length;
-        location = sumPreSpace + sumPreLeghtChar + 1 + self.arrWord.count;
-        NSLog(@"location in view %ld",(long)location);
 
         // get frame size for key string
         sizeKey = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
@@ -138,6 +145,7 @@
         //            ((self.totalLine == 0 || self.totalLine == 1) ? 50 : 0.0f)
         if (xOriginal <= (framePaper.size.width  -  (maxWidth))) {
             [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:location];
+            //
             xOriginal += maxWidth + 2.0f ;
         }else
         {
@@ -149,6 +157,7 @@
                 maxWidth = 0.0f;
                 maxHeight = 0.0f;
                 ++self.totalLine;
+                sumPreLeghtChar ++;
             }else
             {
                 xOriginal = 2.0f;
@@ -156,10 +165,18 @@
                 self.totalHeight = yOriginal;
                 ++self.totalLine;
                 [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:location];
+                //
                 xOriginal += maxWidth + 2.0f ;
                 
             }
         }
+    
+        sumPreSpace      = index  ;
+        sumPreLeghtChar  += key.length;
+        location = sumPreSpace + sumPreLeghtChar +1;
+        NSLog(@"location in view %ld",(long)location);
+    
+
       //Change frame after setup view finished
       self.contentSize = CGSizeMake(self.frame.size.width,100 + self.totalHeight);
 
@@ -176,7 +193,7 @@
     labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView-2];
     labelPhonetic.text = phonetic;
     [labelPhonetic initPhoneticLabel];
-    labelPhonetic.tag = localtionPar;
+    labelPhonetic.tag = -1009;
 //    NSLog(@"tag is %ld",labelPhonetic.tag);
 
     //            rgb(192, 57, 43)
@@ -194,8 +211,9 @@
     labelKey.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
     labelKey.frame = CGRectMake(xOriginal, yOriginal + sizePhoneticPar.height - 5, sizeKeyPar.width, sizeKeyPar.height);
     labelKey.delegate = self;
-    labelKey.tag = tag ;
-    [labelKey initLabel];
+    labelKey.tag = location ;
+    labelKey.indexLabel = tag;
+    [labelKey initLabel:labelPhonetic];
     labelKey.userInteractionEnabled = YES;
     
     // add key and phonetic on text view
@@ -211,16 +229,15 @@
 -(void)setupEdictTextViewWithFrameForPrint:(CGRect)framePaper withCompleteBlock:(void (^)(NSArray *arrPaper))completion
 {
     NSMutableArray *arrPaper = [NSMutableArray array];
-    xOriginal = 2.0f;
-    yOriginal = 0.0f;
-    maxWidth = 0.0f;
-    maxHeight = 0.0f;
-    self.totalLine = 0;
-    CGSize sizeKeyPar= CGSizeZero;
-    CGSize sizePhoneticPar = CGSizeZero;
-
+    xOriginalPrint = 2.0f;
+    yOriginalPrint = 0.0f;
+    maxWidthPrint = 0.0f;
+    maxHeightPrint = 0.0f;
+    sizeKeyPrint= CGSizeZero;
+    sizePhoneticPrint = CGSizeZero;
+    self.totalLinePrint = 0;
     EdictTextView *textToPrint = [[EdictTextView alloc]  initWithFrame:framePaper];
-    textToPrint.totalHeight = 0.0f;
+    textToPrint.totalHeightPrint = 0.0f;
     // loop for with array word
     for (int i =0; i < self.arrWord.count; i++) {
         // get key object
@@ -228,43 +245,43 @@
         //get object from key
         NSString *phonetic = [self.arrPhonetic objectAtIndex:i];
         // get frame size for key string
-        sizeKeyPar = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
+        sizeKeyPrint = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
         // get frame size for value string
-        sizePhoneticPar = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
+        sizePhoneticPrint = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView -2] }];
         
-        maxWidth =MAX(sizeKeyPar.width,sizePhoneticPar.width);
-        maxHeight = MAX(maxHeight, sizePhoneticPar.height+sizeKeyPar.height);
+        maxWidthPrint =MAX(sizeKeyPrint.width,sizePhoneticPrint.width);
+        maxHeightPrint = MAX(maxHeightPrint, sizePhoneticPrint.height+sizeKeyPrint.height);
 
         if ([key isEqualToString:@"\n"]) {
             goto line_break;
         }
         // calcule origin of text view when need to break line
-        if ((xOriginal) <= (framePaper.size.width - (maxWidth + framePaper.size.width > 842 ? 650.f : 0.0f))) {
-            [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:i];
-            xOriginal += maxWidth + 2.0;
+        if ((xOriginalPrint) <= (framePaper.size.width - (maxWidthPrint + framePaper.size.width > 842 ? 650.f : 0.0f))) {
+            [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKeyPrint withSizePhonetic:sizePhoneticPrint withTag:i];
+            xOriginalPrint += maxWidthPrint + 2.0;
         }else
         {
         line_break:
             if ([key containsString:@"\n"]) {
-                xOriginal = 2.0f;
-                yOriginal += sizeKeyPar.height - 5.0f ;
-                textToPrint.totalHeight = yOriginal + maxHeight;
-                maxWidth = 0.0f;
-                maxHeight = 0.0f;
-                ++textToPrint.totalLine;
+                xOriginalPrint = 2.0f;
+                yOriginalPrint += sizeKeyPrint.height - 5.0f ;
+                textToPrint.totalHeightPrint = yOriginalPrint + maxHeightPrint;
+                maxWidthPrint = 0.0f;
+                maxHeightPrint = 0.0f;
+                ++textToPrint.totalLinePrint;
             }else
             {
-                xOriginal = 2.0f;
-                yOriginal += maxHeight - 5.f ;
-                textToPrint.totalHeight = yOriginal + maxHeight;
-                ++self.totalLine;
-                [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKeyPar withSizePhonetic:sizePhoneticPar withTag:i];
-                xOriginal += maxWidth + 2.0f ;
+                xOriginalPrint = 2.0f;
+                yOriginalPrint += maxHeightPrint - 5.f ;
+                textToPrint.totalHeightPrint = yOriginalPrint + maxHeightPrint;
+                ++self.totalLinePrint;
+                [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKeyPrint withSizePhonetic:sizePhoneticPrint withTag:i];
+                xOriginalPrint += maxWidthPrint + 2.0f ;
                 
             }
 
         }
-        if (textToPrint.totalHeight > (framePaper.size.height -( maxHeight + framePaper.size.width > 842 ? 900.f : 0.0f))) {
+        if (textToPrint.totalHeightPrint > (framePaper.size.height -( maxHeightPrint + framePaper.size.width > 842 ? 900.f : 0.0f))) {
 //            dispatch_async(dispatch_get_main_queue(), ^{
                 [arrPaper addObject:[self getImageFromView:textToPrint]];
 //            });
@@ -274,11 +291,11 @@
             }
             textToPrint = nil;
             textToPrint = [[EdictTextView alloc]  initWithFrame:framePaper];
-            textToPrint.totalHeight = 0.0f;
-            xOriginal = 2.0f;
-            yOriginal = 0.0f;
-            maxWidth = 0.0f;
-            maxHeight = 0.0f;
+            textToPrint.totalHeightPrint = 0.0f;
+            xOriginalPrint = 2.0f;
+            yOriginalPrint = 0.0f;
+            maxWidthPrint = 0.0f;
+            maxHeightPrint = 0.0f;
 
         }else
         {
@@ -303,10 +320,10 @@
     labelPhonetic.font = fontForlable;
     UIFontDescriptor * fontD = [labelPhonetic.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic];
-    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView-2];
+    labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView- 2];
     labelPhonetic.text = phonetic;
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
-    labelPhonetic.frame = CGRectMake(xOriginal, yOriginal, sizePhoneticPar.width, sizePhoneticPar.height);
+    labelPhonetic.frame = CGRectMake(xOriginalPrint, yOriginalPrint, maxWidthPrint, sizePhoneticPar.height);
     
     // creat UIlabel with key size
     //        rgb(127, 140, 141)
@@ -315,7 +332,7 @@
     labelKey.font = fontForlable;
     labelKey.text = key;
     labelKey.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
-    labelKey.frame = CGRectMake(xOriginal, yOriginal + sizePhoneticPar.height -5, sizeKeyPar.width, sizeKeyPar.height);
+    labelKey.frame = CGRectMake(xOriginalPrint, yOriginalPrint + sizePhoneticPar.height -5, maxWidthPrint, sizeKeyPar.height);
     
     // add key and phonetic on text view
     [textview addSubview:labelPhonetic];
@@ -429,7 +446,8 @@
     KxMenuItem *first = menuItems[0];
     first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
     first.alignment = NSTextAlignmentCenter;
-    NSString *detail = [[EdictDatabase database].strDetail objectAtIndex:sender.tag];
+    EDictLabel *dicLabel = (EDictLabel*)sender;
+    NSString *detail = [[EdictDatabase database].strDetail objectAtIndex:dicLabel.indexLabel];
     [KxMenu sharedMenu].htmlString = detail;
     [KxMenu sharedMenu].textAudio = ([sender isKindOfClass:[UILabel class]]) ? sender.text : @"";
     [KxMenu sharedMenu].typeSHow = MENU_TYPE_SHOWING_DETAIL_DICTIONARY;

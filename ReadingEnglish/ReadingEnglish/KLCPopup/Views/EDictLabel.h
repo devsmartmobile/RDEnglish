@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EdictInfo.h"
-
+#import "PhoneticLabel.h"
 @protocol EDictLabelDelegate <NSObject>
 @required
 -(void)showDetailVocabolaryWithTag:(NSInteger)tag;
@@ -17,8 +17,11 @@
 
 @interface EDictLabel : UILabel
 @property (strong,nonatomic) EdictInfo *infor;
+@property (assign,nonatomic) NSInteger indexLabel;
+@property (strong,nonatomic) PhoneticLabel *phoneticLabel;
+
 @property (strong, nonatomic) id <EDictLabelDelegate> delegate;
--(void)initLabel;
+-(void)initLabel:(PhoneticLabel*)phonetic;
 -(void)hightLightTextlabel;
 -(void)unhightLightTextlabel;
 

@@ -19,7 +19,7 @@
 @property (strong,nonatomic) NSMutableArray *strDetail;
 + (EdictDatabase*)database;
 - (NSArray *)getEdictInfosWithArrWord:(NSArray*)arrWord ;
-- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete))completion;
+- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete , NSArray*phonetic,NSString *textInputString))completion;
 - (NSString *)getEdictInfosWithWord:(NSString*)arrWord;
 - (BOOL)createTableGroupStory;
 - (BOOL)createTableDetailStory;

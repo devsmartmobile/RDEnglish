@@ -16,6 +16,9 @@
 @property (nonatomic,strong) NSArray *arrWord;
 @property (nonatomic,assign) CGFloat totalHeight;
 @property (nonatomic,assign) NSInteger totalLine;
+@property (nonatomic,assign) CGFloat totalHeightPrint;
+@property (nonatomic,assign) NSInteger totalLinePrint;
+
 -(void)initEdictTextView;
 -(void)setupEdictTextViewWithFrame:(CGRect)framePaper;
 -(void)setupEdictTextViewWithFrame:(CGRect)framePaper forIndex:(NSInteger)index withWord:(NSString*)wordPar withPhonetic:(NSString*)phoneticPar;

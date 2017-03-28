@@ -105,15 +105,19 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     return arrPhonetic;
     
 }
-- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete))completion;
+- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete , NSArray*phonetic,NSString *textInputString))completion
 {
+    NSMutableString *strInputString = [NSMutableString string];
+    NSMutableArray *arrPhonetic = [NSMutableArray array];
     [self.strDetail removeAllObjects];
     self.strDetail = nil;
     self.strDetail = [NSMutableArray array];
     for (int index = 0; index < arrWord.count; index ++) {
         NSString *str = arrWord [index];
+        [strInputString appendString:str];
         NSString *phoneticStr = [_bufferWord objectForKey:str];
         if (phoneticStr) {
+            [arrPhonetic addObject:phoneticStr];
             [_strDetail addObject:[_bufferDetail objectForKey:str]];
             createView (index,str,phoneticStr);
             continue;
@@ -132,6 +136,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
                 
                 //                [Dict setObject:[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail] forKey:[word copy]];
                 NSString *phonetic =[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail];
+                [arrPhonetic addObject:phonetic];
                 createView (index,str,phonetic);
                 [_strDetail addObject:detail];
                 if (![_bufferWord objectForKey:str]) {
@@ -141,6 +146,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
                 i++;
             }
             if (i<=0) {
+                [arrPhonetic addObject:str];
                 createView (index,str,str);
                 [_strDetail addObject:str];
                 if (![_bufferWord objectForKey:str]) {
@@ -153,6 +159,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             
             sqlite3_finalize(statement);
         }else{
+            [arrPhonetic addObject:str];
             createView (index,str,str);
             [_strDetail addObject:str];
             if (![_bufferWord objectForKey:str]) {
@@ -161,7 +168,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             }
         }
     }
-    completion(YES);
+    completion(YES,arrPhonetic,strInputString);
 }
 - (NSString *)getEdictInfosWithWord:(NSString*)arrWord
 {

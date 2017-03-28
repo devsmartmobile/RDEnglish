@@ -281,6 +281,7 @@
     [self.searchText resignFirstResponder];
     
     synthesizer = [[AVSpeechSynthesizer alloc]init];
+
     utterance = [AVSpeechUtterance speechUtteranceWithString:self.textViewInput.text];
     synthesizer.delegate = self;
 //    aus
@@ -908,6 +909,10 @@
         NSArray *arrBreakLine = [text componentsSeparatedByString:@"\n"];
         for (NSString *str in arrBreakLine) {
 //            NSString *strRemove = [str removeSpecifiCharacter];
+            if ([str isEqualToString:@""]) {
+                [arrWord addObject:@"\n"];
+                continue;
+            }
             [arrWord addObjectsFromArray:[str componentsSeparatedByString:@" "]];
             [arrWord addObject:@"\n"];
         }
@@ -926,8 +931,9 @@
                 [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame forIndex:index withWord:word withPhonetic:phonetic ];
             });
 
-        } withCompleteBlock:^(BOOL isComplete) {
+        } withCompleteBlock:^(BOOL isComplete,NSArray*phonetic,NSString *textInputString) {
             if (isComplete) {
+                self.scrollText.arrPhonetic = phonetic;
                 dispatch_async(dispatch_get_main_queue(), ^{
                     isShowPhonetic = YES;
                     self.banerView.hidden = NO;
@@ -941,7 +947,7 @@
                     self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
                     [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
                     [self.scrollText setContentOffset:CGPointZero animated:YES];
-                    
+                    self.textViewInput.text = textInputString;
                 });
             }
 
@@ -1123,19 +1129,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
     isPlayAudio = NO;
-//    EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre+self.scrollText.arrWord.count];
+    EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
 //    if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
 //        [labelPre unhightLightTextlabel];
 //    }
-//    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent+self.scrollText.arrWord.count];
+    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
 //    if ([labelCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
 //        [labelCurrent unhightLightTextlabel];
 //    }
-    PhoneticLabel *labelPhoPre = [self.scrollText viewWithTag:tagPre +self.scrollText.arrWord.count ];
+    PhoneticLabel *labelPhoPre =labelPre.phoneticLabel;
     if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
         [labelPhoPre unhightLightTextlabel];
     }
-    PhoneticLabel *labelPhoCurrent = [self.scrollText viewWithTag:tagCurrent +self.scrollText.arrWord.count];
+    PhoneticLabel *labelPhoCurrent = labelCurrent.phoneticLabel;
     if ([labelPhoCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
         [labelPhoCurrent unhightLightTextlabel];
     }
@@ -1145,16 +1151,18 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 }
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance
 {
-//        EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
+        EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
 //        if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
 //            [labelPre unhightLightTextlabel];
 //        }
-        PhoneticLabel *labelPhoPre = [self.scrollText viewWithTag:tagPre +self.scrollText.arrWord.count];
+        PhoneticLabel *labelPhoPre = labelPre.phoneticLabel;
         if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
             [labelPhoPre unhightLightTextlabel];
         }
 
        tagCurrent = characterRange.location;
+    NSLog(@"location in view %ld",(long)characterRange.location);
+
 //    for (UILabel *label in self.scrollText.subviews) {
 //        NSLog(@"location in view %ld",(long)label.tag);
 //        NSLog(@"tag is %ld",-(label.tag + ((label.tag == 0) ? 1: 0)));
@@ -1163,17 +1171,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 //    NSLog(@"location in view %ld",(long)tagCurrent);
 //    NSLog(@"tag is %ld",-(tagCurrent + ((tagCurrent == 0) ? 1: 0)));
 
-//    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
+    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
 //    if ([labelCurrent respondsToSelector:@selector(hightLightTextlabel)]) {
 //        [labelCurrent hightLightTextlabel];
 //    }
-    PhoneticLabel *labelPhoCurrent = [self.scrollText viewWithTag:tagCurrent  +self.scrollText.arrWord.count];
+    PhoneticLabel *labelPhoCurrent = labelCurrent.phoneticLabel;
     if ([labelPhoCurrent respondsToSelector:@selector(hightLightTextlabel)]) {
         [labelPhoCurrent hightLightTextlabel];
     }
     tagPre = tagCurrent;
-    if (labelPhoCurrent.frame.origin.y > self.scrollText.contentOffset.y + self.view.frame.size.height) {
-        [self.scrollText setContentOffset:CGPointMake(0, labelPhoCurrent.frame.origin.y) animated:YES];
+    if (labelCurrent.frame.origin.y > self.scrollText.contentOffset.y + self.view.frame.size.height) {
+        [self.scrollText setContentOffset:CGPointMake(0, labelCurrent.frame.origin.y) animated:YES];
     }
 }
 #pragma mark - handle canon print app

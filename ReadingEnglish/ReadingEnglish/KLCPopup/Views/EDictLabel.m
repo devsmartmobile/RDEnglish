@@ -11,11 +11,12 @@
 #import <QuartzCore/QuartzCore.h>
 
 @implementation EDictLabel 
--(void)initLabel
+-(void)initLabel:(PhoneticLabel*)phonetic
 {
     self.userInteractionEnabled = YES;
     UITapGestureRecognizer *gestTap = [[UITapGestureRecognizer alloc ] initWithTarget:self action:@selector(didTapOnWord:)];
     [self addGestureRecognizer:gestTap];
+    self.phoneticLabel = phonetic;
 
 }
 -(void)didTapOnWord:(UITapGestureRecognizer*)tap
