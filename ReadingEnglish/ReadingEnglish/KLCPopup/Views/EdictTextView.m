@@ -120,7 +120,7 @@
     //Change frame after setup view finished
     self.contentSize = CGSizeMake(self.frame.size.width,100 + self.totalHeight);
 }
--(void)setupEdictTextViewWithFrame:(CGRect)framePaper forIndex:(NSInteger)index withWord:(NSString*)wordPar withPhonetic:(NSString*)phoneticPar
+-(void)setupEdictTextViewWithFrame:(CGRect)framePaper forIndex:(NSInteger)index withWord:(NSString*)wordPar withPhonetic:(NSString*)phoneticPar withLocation:(NSInteger)locationPar
 {
     
         // loop for with array word
@@ -144,7 +144,7 @@
         // calcule origin of text view when need to break line
         //            ((self.totalLine == 0 || self.totalLine == 1) ? 50 : 0.0f)
         if (xOriginal <= (framePaper.size.width  -  (maxWidth))) {
-            [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:location];
+            [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:locationPar];
             //
             xOriginal += maxWidth + 2.0f ;
         }else
@@ -164,17 +164,17 @@
                 yOriginal += maxHeight - 5.f ;
                 self.totalHeight = yOriginal;
                 ++self.totalLine;
-                [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:location];
+                [self addSubviewWithKey:key withPhonetic:phonetic withSizeKey:sizeKey withSizePhonetic:sizePhonetic withTag:index withLocation:locationPar];
                 //
                 xOriginal += maxWidth + 2.0f ;
                 
             }
         }
     
-        sumPreSpace      = index  ;
-        sumPreLeghtChar  += key.length;
-        location = sumPreSpace + sumPreLeghtChar +1;
-        NSLog(@"location in view %ld",(long)location);
+//        sumPreSpace      = index  ;
+//        sumPreLeghtChar  += key.length;
+//        location = sumPreSpace + sumPreLeghtChar +1;
+//        NSLog(@"location in view %ld",(long)location);
     
 
       //Change frame after setup view finished
@@ -198,7 +198,7 @@
 
     //            rgb(192, 57, 43)
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
-    labelPhonetic.frame = CGRectMake(xOriginal, yOriginal, sizePhoneticPar.width, sizePhoneticPar.height);
+    labelPhonetic.frame = CGRectMake(xOriginal, yOriginal, maxWidth, sizePhoneticPar.height);
     labelPhonetic.maxWidth = maxWidth;
     labelPhonetic.userInteractionEnabled = YES;
     
@@ -209,9 +209,9 @@
     labelKey.text = key;
     //            rgb(44, 62, 80)
     labelKey.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
-    labelKey.frame = CGRectMake(xOriginal, yOriginal + sizePhoneticPar.height - 5, sizeKeyPar.width, sizeKeyPar.height);
+    labelKey.frame = CGRectMake(xOriginal, yOriginal + sizePhoneticPar.height - 5, maxWidth, sizeKeyPar.height);
     labelKey.delegate = self;
-    labelKey.tag = location ;
+    labelKey.tag = localtionPar ;
     labelKey.indexLabel = tag;
     [labelKey initLabel:labelPhonetic];
     labelKey.userInteractionEnabled = YES;
@@ -247,16 +247,16 @@
         // get frame size for key string
         sizeKeyPrint = [key sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
         // get frame size for value string
-        sizePhoneticPrint = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView -2] }];
+        sizePhoneticPrint = [phonetic sizeWithAttributes:@{ NSFontAttributeName : [UIFont fontWithName:_fontName size:[RDConstant sharedRDConstant].fontSizeView] }];
         
-        maxWidthPrint =MAX(sizeKeyPrint.width,sizePhoneticPrint.width);
+        maxWidthPrint =  MAX(sizeKeyPrint.width,sizePhoneticPrint.width);
         maxHeightPrint = MAX(maxHeightPrint, sizePhoneticPrint.height+sizeKeyPrint.height);
 
         if ([key isEqualToString:@"\n"]) {
             goto line_break;
         }
         // calcule origin of text view when need to break line
-        if ((xOriginalPrint) <= (framePaper.size.width - (maxWidthPrint + framePaper.size.width > 842 ? 650.f : 0.0f))) {
+        if ((xOriginalPrint) <= (framePaper.size.width - (maxWidthPrint + framePaper.size.width > 842 ? 650 : 0.0f))) {
             [self addSubviewWithKey:key withPhonetic:phonetic withTextView:textToPrint withSizeKey:sizeKeyPrint withSizePhonetic:sizePhoneticPrint withTag:i];
             xOriginalPrint += maxWidthPrint + 2.0;
         }else
@@ -268,7 +268,7 @@
                 textToPrint.totalHeightPrint = yOriginalPrint + maxHeightPrint;
                 maxWidthPrint = 0.0f;
                 maxHeightPrint = 0.0f;
-                ++textToPrint.totalLinePrint;
+                ++self.totalLinePrint;
             }else
             {
                 xOriginalPrint = 2.0f;
@@ -323,7 +323,7 @@
     labelPhonetic.font = [UIFont fontWithDescriptor:fontD size:[RDConstant sharedRDConstant].fontSizeView- 2];
     labelPhonetic.text = phonetic;
     labelPhonetic.textColor = [UIColor colorWithRed:230/255. green:126/255. blue:34/255. alpha:1.];
-    labelPhonetic.frame = CGRectMake(xOriginalPrint, yOriginalPrint, maxWidthPrint, sizePhoneticPar.height);
+    labelPhonetic.frame = CGRectMake(xOriginalPrint, yOriginalPrint, sizePhoneticPar.width, sizePhoneticPar.height);
     
     // creat UIlabel with key size
     //        rgb(127, 140, 141)
@@ -332,7 +332,7 @@
     labelKey.font = fontForlable;
     labelKey.text = key;
     labelKey.textColor = [UIColor colorWithRed:44/255. green:62/255. blue:80/255. alpha:1.];
-    labelKey.frame = CGRectMake(xOriginalPrint, yOriginalPrint + sizePhoneticPar.height -5, maxWidthPrint, sizeKeyPar.height);
+    labelKey.frame = CGRectMake(xOriginalPrint, yOriginalPrint + sizePhoneticPar.height -5, sizeKeyPar.width, sizeKeyPar.height);
     
     // add key and phonetic on text view
     [textview addSubview:labelPhonetic];

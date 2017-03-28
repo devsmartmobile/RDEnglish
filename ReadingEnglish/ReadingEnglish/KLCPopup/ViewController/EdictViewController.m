@@ -15,6 +15,67 @@
 #import "EDictLabel.h"
 #import "PhoneticLabel.h"
 @import GoogleMobileAds;
+static NSString * BCP47LanguageCodeFromISO681LanguageCode(NSString *ISO681LanguageCode) {
+    if ([ISO681LanguageCode isEqualToString:@"ar"]) {
+        return @"ar-SA";
+    } else if ([ISO681LanguageCode hasPrefix:@"cs"]) {
+        return @"cs-CZ";
+    } else if ([ISO681LanguageCode hasPrefix:@"da"]) {
+        return @"da-DK";
+    } else if ([ISO681LanguageCode hasPrefix:@"de"]) {
+        return @"de-DE";
+    } else if ([ISO681LanguageCode hasPrefix:@"el"]) {
+        return @"el-GR";
+    } else if ([ISO681LanguageCode hasPrefix:@"en"]) {
+        return @"en-US"; // en-AU, en-GB, en-IE, en-ZA
+    } else if ([ISO681LanguageCode hasPrefix:@"es"]) {
+        return @"es-ES"; // es-MX
+    } else if ([ISO681LanguageCode hasPrefix:@"fi"]) {
+        return @"fi-FI";
+    } else if ([ISO681LanguageCode hasPrefix:@"fr"]) {
+        return @"fr-FR"; // fr-CA
+    } else if ([ISO681LanguageCode hasPrefix:@"hi"]) {
+        return @"hi-IN";
+    } else if ([ISO681LanguageCode hasPrefix:@"hu"]) {
+        return @"hu-HU";
+    } else if ([ISO681LanguageCode hasPrefix:@"id"]) {
+        return @"id-ID";
+    } else if ([ISO681LanguageCode hasPrefix:@"it"]) {
+        return @"it-IT";
+    } else if ([ISO681LanguageCode hasPrefix:@"ja"]) {
+        return @"ja-JP";
+    } else if ([ISO681LanguageCode hasPrefix:@"ko"]) {
+        return @"ko-KR";
+    } else if ([ISO681LanguageCode hasPrefix:@"nl"]) {
+        return @"nl-NL"; // nl-BE
+    } else if ([ISO681LanguageCode hasPrefix:@"no"]) {
+        return @"no-NO";
+    } else if ([ISO681LanguageCode hasPrefix:@"pl"]) {
+        return @"pl-PL";
+    } else if ([ISO681LanguageCode hasPrefix:@"pt"]) {
+        return @"pt-BR"; // pt-PT
+    } else if ([ISO681LanguageCode hasPrefix:@"ro"]) {
+        return @"ro-RO";
+    } else if ([ISO681LanguageCode hasPrefix:@"ru"]) {
+        return @"ru-RU";
+    } else if ([ISO681LanguageCode hasPrefix:@"sk"]) {
+        return @"sk-SK";
+    } else if ([ISO681LanguageCode hasPrefix:@"sv"]) {
+        return @"sv-SE";
+    } else if ([ISO681LanguageCode hasPrefix:@"th"]) {
+        return @"th-TH";
+    } else if ([ISO681LanguageCode hasPrefix:@"tr"]) {
+        return @"tr-TR";
+    } else if ([ISO681LanguageCode hasPrefix:@"zh"]) {
+        return @"zh-CN"; // zh-HK, zh-TW
+    } else {
+        return nil;
+    }
+}
+static NSString * BCP47LanguageCodeForString(NSString *string) {
+    NSString *ISO681LanguageCode = (__bridge NSString *)CFStringTokenizerCopyBestStringLanguage((__bridge CFStringRef)string, CFRangeMake(0, [string length]));
+    return BCP47LanguageCodeFromISO681LanguageCode(ISO681LanguageCode);
+}
 
 #define debug 1
 
@@ -107,13 +168,6 @@
     [self.searchText resignFirstResponder];
     [stack closeStack];
     [KxMenu dismissMenu];
-    self.buttonPhonetic.hidden = NO;
-    [NSTimer scheduledTimerWithTimeInterval:5.0
-                                           target:self
-                                         selector:@selector(siwtchViewText:)
-                                         userInfo:nil
-                                          repeats:NO];
-    
 }
 - (void)keyboardDidHide: (NSNotification *) notif{
     [stack closeStack];
@@ -282,11 +336,22 @@
     
     synthesizer = [[AVSpeechSynthesizer alloc]init];
 
-    utterance = [AVSpeechUtterance speechUtteranceWithString:self.textViewInput.text];
+    utterance = [AVSpeechUtterance speechUtteranceWithString:self.textReading];
     synthesizer.delegate = self;
 //    aus
-    utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:[UtilsXML utilXMLInstance].langCodes[[RDConstant sharedRDConstant].langCode]];
-    [utterance setRate:0.4f];
+    if (SYSTEM_VERSION_LESS_THAN(@"9.0")) {
+        // code here
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:BCP47LanguageCodeForString(utterance.speechString)];
+
+    }else
+    {
+        utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:[UtilsXML utilXMLInstance].langCodes[[RDConstant sharedRDConstant].langCode]];
+    }
+
+    [utterance setRate:0.3f];
+    utterance.preUtteranceDelay = 0.2f;
+    utterance.postUtteranceDelay = 0.2f;
+
     [synthesizer speakUtterance:utterance];
     
 }
@@ -524,15 +589,26 @@
             break;
         case 1:
             [self didPressOnPrint:nil];;
+            [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
+            isPlayAudio = NO;
+
             break;
         case 2:
-            [self didPressOnSetting:nil];;
+            [self didPressOnSetting:nil];
+            [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
+            isPlayAudio = NO;
+
             break;
         case 3:
-            [self didPressOnSave:nil];;
+            [self didPressOnSave:nil];
+            [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
+            isPlayAudio = NO;
+
             break;
         case 4:
-           [self didPressOnExportFile:nil];;
+           [self didPressOnExportFile:nil];
+            [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
+            isPlayAudio = NO;
             break;
 
         default:
@@ -563,12 +639,6 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.buttonPhonetic.hidden = NO;
-    [NSTimer scheduledTimerWithTimeInterval:5.0
-                                     target:self
-                                   selector:@selector(siwtchViewText:)
-                                   userInfo:nil
-                                    repeats:NO];
     [self.searchText resignFirstResponder];
 }
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView
@@ -926,9 +996,9 @@
             self.scrollText.hidden = NO;
             self.textViewInput.hidden = YES;
         });
-        [[EdictDatabase database] getEdictInfosWithArrWord:arrWord withCreateViewBlock:^(NSInteger index, NSString *word, NSString *phonetic) {
+        [[EdictDatabase database] getEdictInfosWithArrWord:arrWord withCreateViewBlock:^(NSInteger index, NSString *word, NSString *phonetic,NSInteger location) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame forIndex:index withWord:word withPhonetic:phonetic ];
+                [self.scrollText setupEdictTextViewWithFrame:self.scrollText.frame forIndex:index withWord:word withPhonetic:phonetic withLocation:location];
             });
 
         } withCompleteBlock:^(BOOL isComplete,NSArray*phonetic,NSString *textInputString) {
@@ -947,7 +1017,7 @@
                     self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
                     [self.buttonPhonetic setBackgroundImage:[UIImage imageNamed:@"EditText"] forState:UIControlStateNormal];
                     [self.scrollText setContentOffset:CGPointZero animated:YES];
-                    self.textViewInput.text = textInputString;
+                    self.textReading = textInputString;
                 });
             }
 
@@ -1146,6 +1216,69 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [labelPhoCurrent unhightLightTextlabel];
     }
     [self.scrollText setContentOffset:CGPointZero animated:YES];
+    self.buttonPhonetic.hidden = NO;
+
+
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+        [NSTimer scheduledTimerWithTimeInterval:3.0
+                                               target:self
+                                             selector:@selector(siwtchViewText:)
+                                             userInfo:nil
+                                              repeats:NO];
+        
+
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didPauseSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
+    isPlayAudio = NO;
+    EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
+    //    if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+    //        [labelPre unhightLightTextlabel];
+    //    }
+    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
+    //    if ([labelCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+    //        [labelCurrent unhightLightTextlabel];
+    //    }
+    PhoneticLabel *labelPhoPre =labelPre.phoneticLabel;
+    if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoPre unhightLightTextlabel];
+    }
+    PhoneticLabel *labelPhoCurrent = labelCurrent.phoneticLabel;
+    if ([labelPhoCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoCurrent unhightLightTextlabel];
+    }
+
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didContinueSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    
+}
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didCancelSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    [speaker_on changeImageItem:[UIImage imageNamed:@"audio_play"]];
+    isPlayAudio = NO;
+    EDictLabel *labelPre = [self.scrollText viewWithTag:tagPre];
+    //    if ([labelPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+    //        [labelPre unhightLightTextlabel];
+    //    }
+    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
+    //    if ([labelCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+    //        [labelCurrent unhightLightTextlabel];
+    //    }
+    PhoneticLabel *labelPhoPre =labelPre.phoneticLabel;
+    if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoPre unhightLightTextlabel];
+    }
+    PhoneticLabel *labelPhoCurrent = labelCurrent.phoneticLabel;
+    if ([labelPhoCurrent respondsToSelector:@selector(unhightLightTextlabel)]) {
+        [labelPhoCurrent unhightLightTextlabel];
+    }
+    tagPre = -1;
+    tagCurrent = -1;
+    self.buttonPhonetic.hidden = NO;
 
 
 }
@@ -1159,9 +1292,17 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         if ([labelPhoPre respondsToSelector:@selector(unhightLightTextlabel)]) {
             [labelPhoPre unhightLightTextlabel];
         }
+     EDictLabel *labelCurrent = [self.scrollText viewWithTag:characterRange.location];
+
+      if (tagCurrent == -1 && self.scrollText.contentOffset.y > labelCurrent.frame.origin.y) {
+        [self.scrollText setContentOffset:CGPointMake(0, labelCurrent.frame.origin.y -labelCurrent.frame.size.height) animated:YES];
+        }
+        if (labelCurrent.frame.origin.y > self.scrollText.contentOffset.y + self.scrollText.frame.size.height- labelCurrent.frame.size.height) {
+        [self.scrollText setContentOffset:CGPointMake(0, labelCurrent.frame.origin.y -labelCurrent.frame.size.height) animated:YES];
+        }
 
        tagCurrent = characterRange.location;
-    NSLog(@"location in view %ld",(long)characterRange.location);
+       NSLog(@"location in view %ld",(long)characterRange.location);
 
 //    for (UILabel *label in self.scrollText.subviews) {
 //        NSLog(@"location in view %ld",(long)label.tag);
@@ -1171,7 +1312,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
 //    NSLog(@"location in view %ld",(long)tagCurrent);
 //    NSLog(@"tag is %ld",-(tagCurrent + ((tagCurrent == 0) ? 1: 0)));
 
-    EDictLabel *labelCurrent = [self.scrollText viewWithTag:tagCurrent];
 //    if ([labelCurrent respondsToSelector:@selector(hightLightTextlabel)]) {
 //        [labelCurrent hightLightTextlabel];
 //    }
@@ -1180,9 +1320,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         [labelPhoCurrent hightLightTextlabel];
     }
     tagPre = tagCurrent;
-    if (labelCurrent.frame.origin.y > self.scrollText.contentOffset.y + self.view.frame.size.height) {
-        [self.scrollText setContentOffset:CGPointMake(0, labelCurrent.frame.origin.y) animated:YES];
-    }
 }
 #pragma mark - handle canon print app
 
@@ -1378,12 +1515,6 @@ NS_DEPRECATED_IOS(2_0, 9_0) {
 #pragma mark - handle delegate scrooll view app
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    self.buttonPhonetic.hidden = NO;
-    [NSTimer scheduledTimerWithTimeInterval:5.0
-                                           target:self
-                                         selector:@selector(siwtchViewText:)
-                                         userInfo:nil
-                                          repeats:NO];
     [KxMenu dismissMenu];
     [stack closeStack];
     [self.textViewInput resignFirstResponder];

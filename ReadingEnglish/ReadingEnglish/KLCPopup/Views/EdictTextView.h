@@ -21,7 +21,7 @@
 
 -(void)initEdictTextView;
 -(void)setupEdictTextViewWithFrame:(CGRect)framePaper;
--(void)setupEdictTextViewWithFrame:(CGRect)framePaper forIndex:(NSInteger)index withWord:(NSString*)wordPar withPhonetic:(NSString*)phoneticPar;
+-(void)setupEdictTextViewWithFrame:(CGRect)framePaper forIndex:(NSInteger)index withWord:(NSString*)wordPar withPhonetic:(NSString*)phoneticPar withLocation:(NSInteger)locationPar;
 -(void)setupEdictTextViewWithFrameForPrint:(CGRect)framePaper withCompleteBlock:(void (^)(NSArray *arrPaper))completion;
 - (void) imageWithView:(UIView *)view withFrame:(CGRect)frame withCompleteBlock:(void (^)(NSArray *arrPaper))completion;
 -(UIImage*)crop:(CGRect)frame withImage:(UIImage*)image;

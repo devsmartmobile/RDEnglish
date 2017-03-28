@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/Views/EdictTextView.m"
-            timestampString = "512303807.134016"
+            filePath = "ReadingEnglish/KLCPopup/ViewController/EdictViewController.m"
+            timestampString = "512368904.150011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
-            landmarkName = "-addSubviewWithKey:withPhonetic:withSizeKey:withSizePhonetic:withTag:withLocation:"
+            startingLineNumber = "1307"
+            endingLineNumber = "1307"
+            landmarkName = "-speechSynthesizer:willSpeakRangeOfSpeechString:utterance:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

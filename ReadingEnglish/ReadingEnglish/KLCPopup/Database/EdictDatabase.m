@@ -105,21 +105,32 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
     return arrPhonetic;
     
 }
-- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic))createView  withCompleteBlock:(void (^)(BOOL isComplete , NSArray*phonetic,NSString *textInputString))completion
+- (void)getEdictInfosWithArrWord:(NSArray*)arrWord withCreateViewBlock:(void (^)(NSInteger index,NSString* word,NSString * phonetic,NSInteger location))createView  withCompleteBlock:(void (^)(BOOL isComplete , NSArray*phonetic,NSString *textInputString))completion
 {
     NSMutableString *strInputString = [NSMutableString string];
     NSMutableArray *arrPhonetic = [NSMutableArray array];
     [self.strDetail removeAllObjects];
     self.strDetail = nil;
     self.strDetail = [NSMutableArray array];
+    NSInteger locationAtIndex = 0;
     for (int index = 0; index < arrWord.count; index ++) {
         NSString *str = arrWord [index];
-        [strInputString appendString:str];
+        if ([str isEqualToString:@""] || [str isEqualToString:@"\n"]) {
+            [strInputString appendString:@" "];
+        }else
+        {
+            [strInputString appendString:str];
+            [strInputString appendString:@" "];
+
+        }
+        
+        locationAtIndex =  strInputString.length - str.length - 1;
+
         NSString *phoneticStr = [_bufferWord objectForKey:str];
         if (phoneticStr) {
             [arrPhonetic addObject:phoneticStr];
             [_strDetail addObject:[_bufferDetail objectForKey:str]];
-            createView (index,str,phoneticStr);
+            createView (index,str,phoneticStr,locationAtIndex);
             continue;
         }
         NSString *strRemove = [str removeSpecifiCharacter];
@@ -137,7 +148,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
                 //                [Dict setObject:[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail] forKey:[word copy]];
                 NSString *phonetic =[[UtilsXML utilXMLInstance] getPhoneticFromHTML:detail];
                 [arrPhonetic addObject:phonetic];
-                createView (index,str,phonetic);
+                createView (index,str,phonetic,locationAtIndex);
                 [_strDetail addObject:detail];
                 if (![_bufferWord objectForKey:str]) {
                     [_bufferWord setObject:phonetic forKey:str];
@@ -147,7 +158,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             }
             if (i<=0) {
                 [arrPhonetic addObject:str];
-                createView (index,str,str);
+                createView (index,str,str,locationAtIndex);
                 [_strDetail addObject:str];
                 if (![_bufferWord objectForKey:str]) {
                     [_bufferWord setObject:str forKey:str];
@@ -160,7 +171,7 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             sqlite3_finalize(statement);
         }else{
             [arrPhonetic addObject:str];
-            createView (index,str,str);
+            createView (index,str,str,locationAtIndex);
             [_strDetail addObject:str];
             if (![_bufferWord objectForKey:str]) {
                 [_bufferWord setObject:str forKey:str];

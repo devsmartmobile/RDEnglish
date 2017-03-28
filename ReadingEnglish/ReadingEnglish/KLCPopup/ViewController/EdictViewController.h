@@ -16,4 +16,5 @@
 @interface EdictViewController : UIViewController <UITextViewDelegate,G8TesseractDelegate,
 UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *textViewInput;
+@property (strong,nonatomic) NSString* textReading;
 @end
