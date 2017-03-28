@@ -79,7 +79,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 
 #define debug 1
 
-@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate,UIAlertViewDelegate>
+@interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate,UIAlertViewDelegate,UIWebViewDelegate>
 {
     BOOL isShowPhonetic;
     BOOL isLoadPhonetic;
@@ -303,7 +303,40 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     [self.buttonPhonetic updateConstraints];
     [self.view updateConstraints];
 //    [self showMenuListAllStory];
+//    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.view.frame];
+//    webView.delegate = self;
+//    NSURL *aURL = [NSURL URLWithString:@"http://www.bbc.com/news/world-australia-39409693"];
+//    NSURLRequest *aRequest = [NSURLRequest requestWithURL:aURL];
+//    //load the index.html file into the web view.
+//    [webView loadRequest:aRequest];
+//    [self.view addSubview:webView];
 }
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return YES;
+}
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+//    NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('talk-article__body talk-transcript__body')[0].innerHTML;"];
+    NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('story-body__inner')[0].innerHTML;"];
+
+    NSRange r;
+    NSString *s = [someHTML copy];
+    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@""];
+    
+    NSLog(@"%@",s);
+
+}
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
