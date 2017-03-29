@@ -78,7 +78,6 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 }
 
 #define debug 1
-
 @interface EdictViewController ()<UIPrintInteractionControllerDelegate,UITextFieldDelegate,UPStackMenuDelegate,UIScrollViewDelegate,AVSpeechSynthesizerDelegate,UIDocumentInteractionControllerDelegate,UIAlertViewDelegate,UIWebViewDelegate>
 {
     BOOL isShowPhonetic;
@@ -102,6 +101,13 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
     __weak IBOutlet NSLayoutConstraint *constantHeightEnglishDictionary;
 }
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTrailingRDWebview;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLeadingRDWebview;
+@property (weak, nonatomic) IBOutlet UIWebView *RDWebview;
+- (IBAction)didPressOnMenuButton:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *menuButton;
+- (IBAction)didChangeSpeedForAudio:(id)sender;
+@property (weak, nonatomic) IBOutlet UISlider *audioSliderSpeed;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constantHeigtButtonPhonetic;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constantWidthButtonPhonetic;
 @property (weak, nonatomic) IBOutlet UIButton *buttonPhonetic;
@@ -283,6 +289,18 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     
     tagPre = -1;
     tagCurrent = -1;
+    //
+    float degrees = 90; //the value in degrees
+    self.audioSliderSpeed.transform = CGAffineTransformMakeRotation(degrees * M_PI/180);
+    //
+//    self.RDWebview.frame = CGRectMake(-self.RDWebview.frame.size.width, self.RDWebview.frame.origin.y, self.RDWebview.frame.size.width, self.RDWebview.frame.size.height);
+//    NSURL *aURL = [NSURL URLWithString:@"http://www.ted.com/talks"];
+//    NSURLRequest *aRequest = [NSURLRequest requestWithURL:aURL];
+//    //load the index.html file into the web view.
+//    [self.RDWebview loadRequest:aRequest];
+    self.constraintTrailingRDWebview.constant = self.constraintTrailingRDWebview.constant + self.RDWebview.frame.size.width;
+    self.constraintLeadingRDWebview.constant = -(self.constraintLeadingRDWebview.constant + self.RDWebview.frame.size.width);
+
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -303,38 +321,6 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     [self.buttonPhonetic updateConstraints];
     [self.view updateConstraints];
 //    [self showMenuListAllStory];
-//    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.view.frame];
-//    webView.delegate = self;
-//    NSURL *aURL = [NSURL URLWithString:@"http://www.bbc.com/news/world-australia-39409693"];
-//    NSURLRequest *aRequest = [NSURLRequest requestWithURL:aURL];
-//    //load the index.html file into the web view.
-//    [webView loadRequest:aRequest];
-//    [self.view addSubview:webView];
-}
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return YES;
-}
-- (void)webViewDidStartLoad:(UIWebView *)webView
-{
-    
-}
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-//    NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('talk-article__body talk-transcript__body')[0].innerHTML;"];
-    NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('story-body__inner')[0].innerHTML;"];
-
-    NSRange r;
-    NSString *s = [someHTML copy];
-    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
-        s = [s stringByReplacingCharactersInRange:r withString:@""];
-    
-    NSLog(@"%@",s);
-
-}
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
-{
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -382,7 +368,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
         utterance.voice = [AVSpeechSynthesisVoice voiceWithLanguage:[UtilsXML utilXMLInstance].langCodes[[RDConstant sharedRDConstant].langCode]];
     }
 
-    [utterance setRate:0.3f];
+    [utterance setRate:AVSpeechUtteranceDefaultSpeechRate];
     utterance.preUtteranceDelay = 0.2f;
     utterance.postUtteranceDelay = 0.2f;
 
@@ -1185,7 +1171,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
  *  @param tesseract The `G8Tesseract` object performing the recognition.
  */
 - (void)progressImageRecognitionForTesseract:(G8Tesseract *)tesseract {
-    NSLog(@"progress: %lu", (unsigned long)tesseract.progress);
+//    NSLog(@"progress: %lu", (unsigned long)tesseract.progress);
 }
 
 /**
@@ -1340,7 +1326,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
         }
 
        tagCurrent = characterRange.location;
-       NSLog(@"location in view %ld",(long)characterRange.location);
+//       NSLog(@"location in view %ld",(long)characterRange.location);
 
 //    for (UILabel *label in self.scrollText.subviews) {
 //        NSLog(@"location in view %ld",(long)label.tag);
@@ -1564,4 +1550,73 @@ NS_DEPRECATED_IOS(2_0, 9_0) {
 {
     self.buttonPhonetic.hidden = YES;
 }
+- (IBAction)didChangeSpeedForAudio:(id)sender {
+    UISlider *slider = (UISlider*)sender;
+    [utterance setRate:slider.value];
+}
+#pragma mark - handle webview  app
+
+- (IBAction)didPressOnMenuButton:(id)sender {
+    if (self.constraintLeadingRDWebview.constant < 0) {
+        [UIView animateWithDuration:1. animations:^{
+//            self.RDWebview.frame = CGRectMake(0, self.RDWebview.frame.origin.y, self.RDWebview.frame.size.width, self.RDWebview.frame.size.height);
+            self.constraintTrailingRDWebview.constant = self.constraintTrailingRDWebview.constant - self.RDWebview.frame.size.width;
+            self.constraintLeadingRDWebview.constant = 0;
+
+            self.menuButton.frame = CGRectMake(self.RDWebview.frame.size.width + 10, self.menuButton.frame.origin.y, self.menuButton.frame.size.width, self.menuButton.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self.menuButton setBackgroundImage:[UIImage imageNamed:@"Left"] forState:UIControlStateNormal];
+            NSURL *aURL = [NSURL URLWithString:@"http://www.ted.com/talks"];
+            NSURLRequest *aRequest = [NSURLRequest requestWithURL:aURL];
+            //load the index.html file into the web view.
+            [self.RDWebview loadRequest:aRequest];
+
+        }];
+
+    }else
+    {
+        [UIView animateWithDuration:1. animations:^{
+            self.constraintTrailingRDWebview.constant = self.constraintTrailingRDWebview.constant + self.RDWebview.frame.size.width;
+            self.constraintLeadingRDWebview.constant = -(self.constraintLeadingRDWebview.constant + self.RDWebview.frame.size.width);
+//            self.RDWebview.frame = CGRectMake(-self.RDWebview.frame.size.width, self.RDWebview.frame.origin.y, self.RDWebview.frame.size.width, self.RDWebview.frame.size.height);
+            self.menuButton.frame = CGRectMake(10, self.menuButton.frame.origin.y, self.menuButton.frame.size.width, self.menuButton.frame.size.height);
+
+
+        } completion:^(BOOL finished) {
+            
+            [self.menuButton setBackgroundImage:[UIImage imageNamed:@"Right"] forState:UIControlStateNormal];
+
+        }];
+
+    }
+}
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    return YES;
+}
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+    
+}
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+  //NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('talk-article__body talk-transcript__body')[0].innerHTML;"];
+    NSString *someHTML = [webView stringByEvaluatingJavaScriptFromString:@"document.getElementsByClassName('story-body__inner')[0].innerHTML;"];
+    
+    NSRange r;
+    NSString *s = [someHTML copy];
+    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@""];
+    
+    if (![someHTML isEqualToString:@""]) {
+        self.textViewInput.text = s;
+        [self didPressOnMenuButton:nil];
+    }
+    
+}
+- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+    
+}
+
 @end

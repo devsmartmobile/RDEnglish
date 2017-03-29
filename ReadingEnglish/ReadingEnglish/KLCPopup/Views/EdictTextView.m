@@ -88,7 +88,6 @@
                 sumPreSpace      = i  ;
                 sumPreLeghtChar  += key.length;
                 location = sumPreSpace + sumPreLeghtChar + 1;
-                NSLog(@"location in view %ld",(long)location);
 
             }else
             {
@@ -111,7 +110,6 @@
                     sumPreSpace      = i  ;
                     sumPreLeghtChar  += key.length;
                     location = sumPreSpace + sumPreLeghtChar + 1;
-                    NSLog(@"location in view %ld",(long)location);
 
                 }
             }

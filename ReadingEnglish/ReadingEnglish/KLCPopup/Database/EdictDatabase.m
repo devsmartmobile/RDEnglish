@@ -277,7 +277,6 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             field2Str=[[NSString alloc] initWithUTF8String:field2];
             
             NSString *str=[NSString stringWithFormat:@"%@ - %@",field1Str,field2Str];
-            NSLog(@"%@",str);
         }
     }
 }
@@ -298,7 +297,6 @@ static EdictDatabase *FDConstantsSharedSingletonDatabase = nil;
             field2Str=[[NSString alloc] initWithUTF8String:field2];
             
             NSString *str=[NSString stringWithFormat:@"%@ - %@",field1Str,field2Str];
-            NSLog(@"%@",str);
         }
     }
 }

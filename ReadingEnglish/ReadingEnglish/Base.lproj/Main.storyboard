@@ -65,9 +65,32 @@
                                     <action selector="didPressOnPhonetic:" destination="c8j-VH-Tps" eventType="touchUpInside" id="J7G-3c-EZU"/>
                                 </connections>
                             </button>
+                            <slider hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="D2L-Ws-CBk">
+                                <rect key="frame" x="278" y="332" width="118" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="didChangeSpeedForAudio:" destination="c8j-VH-Tps" eventType="valueChanged" id="jxR-zE-b44"/>
+                                </connections>
+                            </slider>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNM-p5-iY5">
+                                <rect key="frame" x="10" y="90" width="46" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" backgroundImage="Right"/>
+                                <connections>
+                                    <action selector="didPressOnMenuButton:" destination="c8j-VH-Tps" eventType="touchUpInside" id="uJs-MJ-b3r"/>
+                                </connections>
+                            </button>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQh-eF-XYZ">
+                                <rect key="frame" x="0.0" y="79" width="352" height="596"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="delegate" destination="c8j-VH-Tps" id="3gc-IZ-sYK"/>
+                                </connections>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" red="0.99958223104476929" green="1" blue="0.9658086895942688" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="vQh-eF-XYZ" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="8l0-yK-g2R"/>
                             <constraint firstAttribute="trailing" secondItem="Bqq-Zd-8bM" secondAttribute="trailing" id="9fb-sb-iOY"/>
                             <constraint firstItem="Bqq-Zd-8bM" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="AFB-dy-P87"/>
                             <constraint firstAttribute="trailing" secondItem="dI1-Zq-dqc" secondAttribute="trailing" id="Bhh-Cc-Oev"/>
@@ -75,9 +98,12 @@
                             <constraint firstItem="l4r-g3-g0l" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="EzU-mi-NHo"/>
                             <constraint firstAttribute="trailing" secondItem="1dY-ua-Z6P" secondAttribute="trailing" constant="8" id="Gvw-5h-t93"/>
                             <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="fIB-LG-aT9" secondAttribute="bottom" id="H4H-Et-NgA"/>
+                            <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="vQh-eF-XYZ" secondAttribute="bottom" constant="61" id="H57-ZP-iNP"/>
+                            <constraint firstItem="1dY-ua-Z6P" firstAttribute="leading" secondItem="vQh-eF-XYZ" secondAttribute="trailing" constant="8" id="JOm-KT-1Tq"/>
                             <constraint firstItem="Ebe-O8-F52" firstAttribute="top" secondItem="dI1-Zq-dqc" secondAttribute="bottom" constant="61" id="N5l-7e-2tp"/>
                             <constraint firstAttribute="trailing" secondItem="l4r-g3-g0l" secondAttribute="trailing" id="ReQ-af-mwD"/>
                             <constraint firstItem="l4r-g3-g0l" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="YjY-b9-YGS"/>
+                            <constraint firstItem="vQh-eF-XYZ" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" constant="59" id="a84-Xc-Mgh"/>
                             <constraint firstItem="dI1-Zq-dqc" firstAttribute="leading" secondItem="Qwx-tQ-del" secondAttribute="leading" id="d8U-aR-Cld"/>
                             <constraint firstItem="1dY-ua-Z6P" firstAttribute="top" secondItem="Bqq-Zd-8bM" secondAttribute="bottom" constant="9" id="edi-b9-e1N"/>
                             <constraint firstItem="Bqq-Zd-8bM" firstAttribute="top" secondItem="NqB-ty-NnD" secondAttribute="bottom" id="hZM-RM-smh"/>
@@ -87,6 +113,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="RDWebview" destination="vQh-eF-XYZ" id="eBB-EQ-1fD"/>
+                        <outlet property="audioSliderSpeed" destination="D2L-Ws-CBk" id="JdL-lC-qNb"/>
                         <outlet property="banerView" destination="Bqq-Zd-8bM" id="vOJ-b5-om9"/>
                         <outlet property="bottomConstraintSearchEnglish" destination="H4H-Et-NgA" id="TCx-dB-Us5"/>
                         <outlet property="bottomConstraintTextInput" destination="ikT-yJ-aya" id="VCp-C0-GA4"/>
@@ -96,6 +124,9 @@
                         <outlet property="constantHeightEnglishDictionary" destination="qCD-2E-ymV" id="NeO-tR-hxg"/>
                         <outlet property="constantHeigtButtonPhonetic" destination="2OO-Yh-XA8" id="gnU-Jp-dKs"/>
                         <outlet property="constantWidthButtonPhonetic" destination="Ph8-d4-RyF" id="wnE-Eo-JaR"/>
+                        <outlet property="constraintLeadingRDWebview" destination="8l0-yK-g2R" id="PsZ-x7-HST"/>
+                        <outlet property="constraintTrailingRDWebview" destination="JOm-KT-1Tq" id="s45-A4-TOR"/>
+                        <outlet property="menuButton" destination="dNM-p5-iY5" id="n3i-Je-gkw"/>
                         <outlet property="scrollText" destination="dI1-Zq-dqc" id="XoJ-b9-a5f"/>
                         <outlet property="searchText" destination="fIB-LG-aT9" id="xo8-ij-rer"/>
                         <outlet property="textViewInput" destination="l4r-g3-g0l" id="sbW-Tg-Fyk"/>
@@ -106,10 +137,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1jO-B0-Qyy" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="748" y="-321.58920539730138"/>
+            <point key="canvasLocation" x="747.82608695652175" y="-322.01086956521743"/>
         </scene>
     </scenes>
     <resources>
         <image name="Phonetic" width="128" height="128"/>
+        <image name="Right" width="128" height="128"/>
     </resources>
 </document>
