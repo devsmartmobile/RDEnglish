@@ -12,7 +12,7 @@
 			<key>CFBundleTypeName</key>
 			<string>Pdf Document</string>
 			<key>CFBundleTypeRole</key>
-			<string>QLGenerator</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -115,6 +115,8 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>77854565882-9ksumrml5esavkbambdcgdl79el5so0t.apps.googleusercontent.com</string>
+	<string>817594039243-j9j307ltmjru8bs5pdi6rdoqenhbua9i.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.77854565882-9ksumrml5esavkbambdcgdl79el5so0t</string>
+	<string>com.googleusercontent.apps.817594039243-j9j307ltmjru8bs5pdi6rdoqenhbua9i</string>
 	<key>API_KEY</key>
-	<string>AIzaSyClrvcBtoHvWxN1cPllWoWziY8yfeWh9hM</string>
+	<string>AIzaSyCfRGsEGYXv58nDYnHJJu6BbazZqgO8iW8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>77854565882</string>
+	<string>817594039243</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>dict.app.ReadingEnglish</string>
+	<string>com.dict.app.ReadingEnglish</string>
 	<key>PROJECT_ID</key>
-	<string>readingenglish-6936b</string>
+	<string>rdictsmart</string>
 	<key>STORAGE_BUCKET</key>
-	<string>readingenglish-6936b.appspot.com</string>
+	<string>rdictsmart.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
 	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:77854565882:ios:d9dad68f22e7a9b4</string>
+	<string>1:817594039243:ios:f0c250dbe81fe080</string>
 	<key>DATABASE_URL</key>
-	<string>https://readingenglish-6936b.firebaseio.com</string>
+	<string>https://rdictsmart.firebaseio.com</string>
 </dict>
 </plist>

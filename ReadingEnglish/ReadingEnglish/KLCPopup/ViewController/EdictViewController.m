@@ -213,7 +213,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     self.view.userInteractionEnabled = YES;
     //setup gogle Admod
     // Replace this ad unit ID with your own ad unit ID.
-    self.banerView.adUnitID = @"ca-app-pub-6290218846561932/6053256005";
+    self.banerView.adUnitID = @"ca-app-pub-6290218846561932/4354903205";
     self.banerView.rootViewController = self;
     
     GADRequest *request = [GADRequest request];
