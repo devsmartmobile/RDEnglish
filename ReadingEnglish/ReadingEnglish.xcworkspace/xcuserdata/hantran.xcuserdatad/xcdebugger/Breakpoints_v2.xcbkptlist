@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/Database/EdictDatabase.m"
-            timestampString = "512328836.836093"
+            filePath = "ReadingEnglish/KLCPopup/ViewController/EdictViewController.m"
+            timestampString = "512707729.105244"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "-getEdictInfosWithArrWord:withCreateViewBlock:withCompleteBlock:"
+            startingLineNumber = "1257"
+            endingLineNumber = "1257"
+            landmarkName = "-speechSynthesizer:didFinishSpeechUtterance:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,29 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ReadingEnglish/KLCPopup/ViewController/EdictViewController.m"
-            timestampString = "512328836.836093"
+            filePath = "ReadingEnglish/KLCPopup/Views/EdictTextView.m"
+            timestampString = "512703651.537144"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1164"
-            endingLineNumber = "1164"
-            landmarkName = "-speechSynthesizer:willSpeakRangeOfSpeechString:utterance:"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
+            landmarkName = "-showMenu:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ReadingEnglish/Utils/UtilsXML.m"
+            timestampString = "512703842.038066"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "-getArrayMenuItemForScreenSearchText:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

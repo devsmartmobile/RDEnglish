@@ -455,6 +455,39 @@ static UtilsXML *FDConstantsSharedSingleton = nil;
             break;
             
         default:
+        {
+            arrMenuItem =
+            @[
+              
+              [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                             image:nil
+                            target:nil
+                            action:NULL],
+              
+              [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                             image:nil
+                            target:nil
+                            action:NULL],
+              
+              [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                             image:nil
+                            target:nil
+                            action:NULL],
+              
+              [KxMenuItem menuItem:@"ACTION MENU 1234456"
+                             image:nil
+                            target:nil
+                            action:NULL],
+              
+              ];
+            KxMenuItem *first3 = arrMenuItem[0];
+            first3.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)[UIScreen screens][0].bounds.size.height];
+            KxMenuItem *first4 = arrMenuItem[1];
+            first4.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)[UIScreen screens][0].bounds.size.height];
+            KxMenuItem *first5 = arrMenuItem[2];
+            first5.fontSize = [[UtilsXML utilXMLInstance] getFontForScreen:(NSInteger)[UIScreen screens][0].bounds.size.height];
+
+        }
             break;
     }
     

@@ -100,6 +100,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     NSInteger tagCurrent;
     __weak IBOutlet NSLayoutConstraint *constantHeightBanerView;
     __weak IBOutlet NSLayoutConstraint *constantHeightEnglishDictionary;
+    BOOL isReachable;
 }
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintTrailingRDWebview;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constraintLeadingRDWebview;
@@ -202,6 +203,30 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 #pragma mark - handle view of viewcontroller
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Allocate a reachability object
+    Reachability* reach = [Reachability reachabilityWithHostname:@"www.google.com"];
+    
+    // Set the blocks
+    reach.reachableBlock = ^(Reachability*reach)
+    {
+        // keep in mind this is called on a background thread
+        // and if you are updating the UI it needs to happen
+        // on the main thread, like this:
+        isReachable = YES;
+    };
+    
+    reach.unreachableBlock = ^(Reachability*reach)
+    {
+        isReachable = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network is disconnect" message:@"Please check status networking" delegate:nil cancelButtonTitle:@"Cancels" otherButtonTitles:nil];
+            [alert show];
+        });
+    };
+    
+    // Start the notifier, which will cause the reachability object to retain itself!
+    [reach startNotifier];
+
     self.fontSizeBuffer = [RDConstant sharedRDConstant].fontSizeView;
     self.textViewInput.text = @"Input English To Show Phonetic";
     self.textViewInput.textColor = [UIColor lightGrayColor]; //optional
@@ -300,7 +325,8 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 //    [self.RDWebview loadRequest:aRequest];
     self.constraintTrailingRDWebview.constant = self.constraintTrailingRDWebview.constant + self.RDWebview.frame.size.width;
     self.constraintLeadingRDWebview.constant = -(self.constraintLeadingRDWebview.constant + self.RDWebview.frame.size.width);
-
+    self.RDWebview.hidden = YES;
+    self.menuButton.hidden = YES;
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -326,6 +352,10 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (BOOL)shouldAutorotate
+{
+    return NO;
 }
 #pragma mark - handle event of viewcontroller
 - (IBAction)didPressOnPrint:(id)sender {
@@ -394,6 +424,9 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     [self.searchText resignFirstResponder];
     [stack closeStack];
     [KxMenu dismissMenu];
+    if (!isReachable) {
+        return;
+    }
     if ([self.textViewInput.text isEqualToString:@"Input English To Show Phonetic"]) {
         [self.textViewInput becomeFirstResponder];
         return;
@@ -460,7 +493,7 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
     print = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"paper_printer"] highlightedImage:nil title:@""];
     settingItem = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"settings"] highlightedImage:nil title:@""];
     save = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"take-picture"] highlightedImage:nil title:@""];
-    exportFile = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"Export_File"] highlightedImage:nil title:@""];
+    exportFile = [[UPStackMenuItem alloc] initWithImage:[UIImage imageNamed:@"help"] highlightedImage:nil title:@""];
 
     NSMutableArray *items = [[NSMutableArray alloc] initWithObjects:speaker_on, print,settingItem,save,exportFile, nil];
     [items enumerateObjectsUsingBlock:^(UPStackMenuItem *item, NSUInteger idx, BOOL *stop) {
@@ -598,6 +631,9 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 - (void)stackMenu:(UPStackMenu *)menu didTouchItem:(UPStackMenuItem *)item atIndex:(NSUInteger)index
 {
     [stack closeStack];
+    if (!isReachable) {
+        return;
+    }
     switch (index) {
 //        case 0:
 //            [self didPressOnPhonetic:nil];
@@ -627,9 +663,9 @@ static NSString * BCP47LanguageCodeForString(NSString *string) {
 
             break;
         case 4:
-           [self didPressOnExportFile:nil];
             [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
             isPlayAudio = NO;
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString: @"https://www.youtube.com/watch?v=xYXNc1f4jG4"]];
             break;
 
         default:

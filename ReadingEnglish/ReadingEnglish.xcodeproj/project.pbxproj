@@ -25,6 +25,7 @@
 		7D9A113D1E80CDD4001F5127 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F96E981E808C1A0046FD82 /* CoreGraphics.framework */; };
 		7D9A114D1E810724001F5127 /* RDConstant.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9A114C1E810724001F5127 /* RDConstant.m */; };
 		935D9CC8CD3217A16BB31D5C /* libPods-ReadingEnglish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */; };
+		E8407BB01E8F4A6E00C2FCF5 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = E8407BAF1E8F4A6E00C2FCF5 /* Reachability.m */; };
 		E8F96E531E804D750046FD82 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E521E804D750046FD82 /* main.m */; };
 		E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E8F96E551E804D750046FD82 /* AppDelegate.m */; };
 		E8F96E5C1E804D750046FD82 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8F96E5A1E804D750046FD82 /* Main.storyboard */; };
@@ -74,6 +75,8 @@
 		E09A2C081696FCC4EBF1C441 /* Pods-ReadingEnglish.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.debug.xcconfig"; sourceTree = "<group>"; };
 		E0F5A174196CCCC6C1CB07AF /* Pods-ReadingEnglish.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ReadingEnglish.release.xcconfig"; path = "Pods/Target Support Files/Pods-ReadingEnglish/Pods-ReadingEnglish.release.xcconfig"; sourceTree = "<group>"; };
 		E5A95C45EF3A424AE63FCCA8 /* libPods-ReadingEnglish.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ReadingEnglish.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E8407BAE1E8F4A6E00C2FCF5 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		E8407BAF1E8F4A6E00C2FCF5 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		E8F96E4E1E804D750046FD82 /* ReadingEnglish.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReadingEnglish.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F96E521E804D750046FD82 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E8F96E541E804D750046FD82 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -264,6 +267,8 @@
 		E8F96E7E1E804DAB0046FD82 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E8407BAE1E8F4A6E00C2FCF5 /* Reachability.h */,
+				E8407BAF1E8F4A6E00C2FCF5 /* Reachability.m */,
 				E8F96E7F1E804DAB0046FD82 /* FDDeviceHardware.h */,
 				E8F96E801E804DAB0046FD82 /* FDDeviceHardware.m */,
 				E8F96E811E804DAB0046FD82 /* NSString+FDEdict.h */,
@@ -420,6 +425,7 @@
 				E8F96E851E804DAB0046FD82 /* FDDeviceHardware.m in Sources */,
 				E8F96E561E804D750046FD82 /* AppDelegate.m in Sources */,
 				7D92FCC41E837E5600320761 /* EdictInfo.m in Sources */,
+				E8407BB01E8F4A6E00C2FCF5 /* Reachability.m in Sources */,
 				E8F96E531E804D750046FD82 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
